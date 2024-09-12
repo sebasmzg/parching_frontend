@@ -84,8 +84,8 @@ const Register: React.FC = () => {
             slotProps={{
               input: {
                 endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={togglePasswordVisibility}>
+                  <InputAdornment position="end" >
+                    <IconButton onClick={togglePasswordVisibility} edge= 'end'>
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -108,14 +108,17 @@ const Register: React.FC = () => {
                 color: 'var(--blue)',
               },
             }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={toggleConfirmPasswordVisibility} edge="end">
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleConfirmPasswordVisibility} edge="end">
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }
             }}
           />
           <Button

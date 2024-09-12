@@ -33,23 +33,20 @@ function NavBar() {
       <AppBar position="static" className="navbar" sx={{backgroundColor: darkMode ? 'undefined' : '#3C4556'}}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Typography
-              variant="h6"
-              noWrap
+          <Box
               component="a"
               href="/"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
-                fontFamily: 'Belleza',
-                fontWeight: 700,
-                letterSpacing: '.1rem',
-                color: 'inherit',
-                textDecoration: 'none',
+                alignItems: 'center',
               }}
             >
-              LOGO
-            </Typography>
+              <img
+                src="/assets/img/parchingHome.png" 
+                style={{ height: '70px', width: '110px' }}
+              />
+            </Box>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {/* Enlaces de navegación */}
               home
