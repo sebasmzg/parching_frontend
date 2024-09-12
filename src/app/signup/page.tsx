@@ -1,20 +1,29 @@
 "use client"
 
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, Link, Paper } from '@mui/material';
-import { useRouter } from 'next/router';
+import { TextField, Button, Typography, Container, Box, Link, Paper, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Register: React.FC = () => {
-  // const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleRegister = () => {
     // Aquí iría la lógica para el registro
     console.log('Email:', email);
     console.log('Password:', password);
     console.log('Confirm Password:', confirmPassword);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -59,7 +68,7 @@ const Register: React.FC = () => {
           />
           <TextField
             label="Contraseña"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
             value={password}
@@ -72,10 +81,21 @@ const Register: React.FC = () => {
                 color: 'var(--blue)',
               },
             }}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={togglePasswordVisibility}>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
           />
           <TextField
             label="Confirmar Contraseña"
-            type="password"
+            type={showConfirmPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
             value={confirmPassword}
@@ -87,6 +107,15 @@ const Register: React.FC = () => {
               '& .MuiInputLabel-root': {
                 color: 'var(--blue)',
               },
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={toggleConfirmPasswordVisibility} edge="end">
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
           />
           <Button
@@ -117,6 +146,7 @@ const Register: React.FC = () => {
                 fontWeight: 'bold',
                 '&:hover': {
                   textDecoration: 'underline',
+                  color: 'var(--blueSoft)',
                 },
               }}
             >
