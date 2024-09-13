@@ -1,15 +1,14 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
-import AccountMenu from './menu/menu';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import AccountMenu from "./menu/menu";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 function NavBar() {
   // Estado del tema (claro u oscuro)
@@ -23,37 +22,54 @@ function NavBar() {
   // Crear tema dinámico basado en el estado
   const theme = createTheme({
     palette: {
-      mode: darkMode ? 'dark' : 'light',
+      mode: darkMode ? "dark" : "light",
     },
   });
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="static" className="navbar" sx={{backgroundColor: darkMode ? 'undefined' : '#3C4556'}}>
+      <AppBar
+        position="static"
+        className="navbar"
+        sx={{
+          backgroundColor: darkMode ? "undefined" : "#3C4556",
+          width: "100%",
+        }}
+      >
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
-          <Box
+          <Toolbar
+            disableGutters
+            sx={{ width: "100%", paddingLeft: 0, paddingRight: 0 }}
+          >
+            <Box
               component="a"
               href="/"
               sx={{
                 mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                alignItems: 'center',
+                display: { xs: "none", md: "flex" },
+                alignItems: "center",
               }}
             >
               <img
-                src="/assets/img/parchingHome.png" 
-                style={{ height: '70px', width: '110px' }}
+                src="/assets/img/parchingHome.png"
+                style={{ height: "70px", width: "110px" }}
               />
             </Box>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {/* Enlaces de navegación */}
+            <Box
+              component="a"
+              href="/"
+              sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
+            >
               home
             </Box>
-            <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
               {/* Icono de cambiar tema */}
-              <IconButton sx={{ ml: 1 }} onClick={toggleDarkMode} color="inherit">
+              <IconButton
+                sx={{ ml: 1 }}
+                onClick={toggleDarkMode}
+                color="inherit"
+              >
                 {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
               {/* Menú del usuario */}

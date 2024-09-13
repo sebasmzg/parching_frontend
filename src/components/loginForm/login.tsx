@@ -2,13 +2,19 @@
 
 import React from 'react';
 import { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, Link, Paper } from '@mui/material';
+import { TextField, Button, Typography, Container, Box, Link, Paper, IconButton } from '@mui/material';
 import { useRouter } from 'next/router';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Login: React.FC = () => {
 //   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleLogin = () => {
     // Aquí iría la lógica para el login
@@ -58,11 +64,20 @@ const Login: React.FC = () => {
           />
           <TextField
             label="Contraseña"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <IconButton onClick={togglePasswordVisibility} edge="end">
+                    {!showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                ),
+              }
+            }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 borderRadius: 3,

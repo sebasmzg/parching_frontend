@@ -1,12 +1,15 @@
+"use client"
+
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, Link } from '@mui/material';
-import { useRouter } from 'next/router';
+import { TextField, Button, Typography, Container, Box, Link, Paper, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Register: React.FC = () => {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleRegister = () => {
     // Aquí iría la lógica para el registro
@@ -15,64 +18,146 @@ const Register: React.FC = () => {
     console.log('Confirm Password:', confirmPassword);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <Container
-      maxWidth="xs"
+      component="main"
+      maxWidth="sm"
       sx={{
-        backgroundColor: 'var(--lightBlue)',
-        borderRadius: 2,
-        padding: 3,
-        boxShadow: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
       }}
     >
-      <Typography variant="h5" align="center" gutterBottom color="var(--blue)">
-        Regístrate
-      </Typography>
-      <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <TextField
-          label="Correo Electrónico"
-          variant="outlined"
-          fullWidth
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          label="Contraseña"
-          type="password"
-          variant="outlined"
-          fullWidth
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <TextField
-          label="Confirmar Contraseña"
-          type="password"
-          variant="outlined"
-          fullWidth
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={handleRegister}
-          sx={{ backgroundColor: 'var(--blue)', color: 'white' }}
-        >
+      <Paper
+        elevation={6}
+        sx={{
+          padding: 4,
+          borderRadius: 4,
+          backgroundColor: 'var(--lightBlue)',
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        <Typography variant="h4" align="center" gutterBottom sx={{ color: 'var(--blue)', fontWeight: 'bold' }}>
           Regístrate
-        </Button>
-      </Box>
-      <Box mt={2} display="flex" justifyContent="center">
-        <Typography variant="body2">
-          ¿Ya tienes una cuenta?{' '}
-          <Link
-            href="/login"
-            underline="hover"
-            sx={{ color: 'var(--blueSoft)', cursor: 'pointer' }}
-          >
-            Inicia sesión
-          </Link>
         </Typography>
-      </Box>
+        <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            label="Correo Electrónico"
+            variant="outlined"
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 3,
+              },
+              '& .MuiInputLabel-root': {
+                color: 'var(--blue)',
+              },
+            }}
+          />
+          <TextField
+            label="Contraseña"
+            type={showPassword ? 'text' : 'password'}
+            variant="outlined"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 3,
+              },
+              '& .MuiInputLabel-root': {
+                color: 'var(--blue)',
+              },
+            }}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end" >
+                    <IconButton onClick={togglePasswordVisibility} edge= 'end'>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+          <TextField
+            label="Confirmar Contraseña"
+            type={showConfirmPassword ? 'text' : 'password'}
+            variant="outlined"
+            fullWidth
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 3,
+              },
+              '& .MuiInputLabel-root': {
+                color: 'var(--blue)',
+              },
+            }}
+            slotProps={{
+              input: {
+
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleConfirmPasswordVisibility} edge="end">
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }
+            }}
+          />
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={handleRegister}
+            sx={{
+              backgroundColor: 'var(--blue)',
+              color: 'white',
+              padding: 1.5,
+              borderRadius: 3,
+              '&:hover': {
+                backgroundColor: 'var(--blueSoft)',
+              },
+            }}
+          >
+            Regístrate
+          </Button>
+        </Box>
+        <Box mt={2} display="flex" justifyContent="center">
+          <Typography variant="body2" sx={{ color: 'var(--violet)' }}>
+            ¿Ya tienes una cuenta?{' '}
+            <Link
+              href="/login"
+              underline="none"
+              sx={{
+                color: 'var(--blueSoft)',
+                fontWeight: 'bold',
+                '&:hover': {
+                  textDecoration: 'underline',
+                  color: 'var(--blueSoft)',
+                },
+              }}
+            >
+              Inicia sesión
+            </Link>
+          </Typography>
+        </Box>
+      </Paper>
     </Container>
   );
 };
