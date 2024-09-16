@@ -99,7 +99,7 @@ const Title = styled(Typography)`
   animation: ${fadeIn} 1.2s ease-out;
 
   @media (max-width: 768px) {
-    font-size: 28px;
+    font-size: 35px;
   }
 `;
 const SubTitle = styled(Typography)`
@@ -126,7 +126,7 @@ const SubTitle = styled(Typography)`
   }
 
   @media (max-width: 768px) {
-    font-size: 18px;
+    font-size: 28px;
   }
 `;
 /* const SubTitle = styled(Typography)`
@@ -177,10 +177,7 @@ const SeccionComponent = () => {
         <SubTitle>Socialize and discover</SubTitle>
         <Description>
           Parching App is a platform that connects people with shared interests
-          through social events and outdoor activities.Discover new
-          experiences, join local groups, and easily organize events in a safe
-          and friendly environment. Our community promotes social engagement,
-          respect for nature, and the creation of lasting connections.
+          through social events and outdoor activities.
         </Description>
       </TextOverlay>
     </SectionContainer>

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Divider } from '@mui/material';
 import SignUp from '@/app/signup/page';
 
 const SectionContainer = styled.div`
@@ -8,20 +7,39 @@ const SectionContainer = styled.div`
     align-items: center;
     justify-content: center;
     height: 100vh;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 `;
 
 const LeftSection = styled.div`
-    flex: 1;
+    width: 50%;
     background-image: url('https://images.pexels.com/photos/1365425/pexels-photo-1365425.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
     background-size: cover;
     background-position: center;
     height: 100%;
+    
+    @media (max-width: 768px) {
+        height: 40%;
+        width: 100%;
+    }
 `;
 
 const RightSection = styled.div`
-    flex: 1;
+    width: 50%;
     background-color: #e0e0e0;
     height: 100%;
+
+    @media (max-width: 768px) {
+         display: flex;
+        height: 60%;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        align-items: center;
+        padding: 20px;
+    }
 `;
 
 const Section5: React.FC = () => {

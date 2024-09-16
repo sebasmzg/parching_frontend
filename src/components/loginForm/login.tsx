@@ -1,13 +1,10 @@
-"use client"
+"use client";
 
-import React from 'react';
-import { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, Link, Paper, IconButton } from '@mui/material';
-import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { TextField, Button, Typography, Container, Box, Link, Paper, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Login: React.FC = () => {
-//   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -44,11 +41,11 @@ const Login: React.FC = () => {
         }}
       >
         <Typography variant="h4" align="center" gutterBottom sx={{ color: 'var(--blue)', fontWeight: 'bold' }}>
-          Iniciar Sesión
+          Sign in
         </Typography>
         <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <TextField
-            label="Correo Electrónico"
+            label="Email"
             variant="outlined"
             fullWidth
             value={email}
@@ -63,7 +60,7 @@ const Login: React.FC = () => {
             }}
           />
           <TextField
-            label="Contraseña"
+            label="Password"
             type={showPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
@@ -72,11 +69,13 @@ const Login: React.FC = () => {
             slotProps={{
               input: {
                 endAdornment: (
-                  <IconButton onClick={togglePasswordVisibility} edge="end">
-                    {!showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
+                  <InputAdornment position="end">
+                    <IconButton onClick={togglePasswordVisibility} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
                 ),
-              }
+              },
             }}
             sx={{
               '& .MuiOutlinedInput-root': {
@@ -101,12 +100,12 @@ const Login: React.FC = () => {
               },
             }}
           >
-            Iniciar Sesión
+            Login
           </Button>
         </Box>
         <Box mt={2} display="flex" justifyContent="center">
           <Typography variant="body2" sx={{ color: 'var(--violet)' }}>
-            ¿Aún no tienes una cuenta?{' '}
+            Dont have an account?{' '}
             <Link
               href="/signup"
               underline="none"
@@ -118,7 +117,7 @@ const Login: React.FC = () => {
                 },
               }}
             >
-              Regístrate aquí
+              Sign up
             </Link>
           </Typography>
         </Box>

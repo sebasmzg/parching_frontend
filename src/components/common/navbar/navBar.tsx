@@ -30,7 +30,7 @@ function NavBar() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar
-        position="static"
+        position="fixed"
         className="navbar"
         sx={{
           backgroundColor: darkMode ? "undefined" : "#3C4556",

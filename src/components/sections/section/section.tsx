@@ -14,19 +14,19 @@ const images: ImageData[] = [
   {
     src: "https://images.pexels.com/photos/2609459/pexels-photo-2609459.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     alt: "trek group",
-    title: "Adventure Awaits",
-    description: "Let's go on an adventure",
+    title: "Discover new experiences",
+    description: "join local groups",
   },
   {
     src: "https://images.pexels.com/photos/4314209/pexels-photo-4314209.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     alt: "Image 2",
-    title: "Adventure Awaits",
-    description: "Let's go on an adventure",
+    title: "Organize events",
+    description: "easily  in a safe and friendly environment",
   },
   {
     src: "https://images.pexels.com/photos/2606532/pexels-photo-2606532.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     alt: "Image 3",
-    title: "Adventure Awaits",
+    title: "Respect for nature",
     description: "Let's go on an adventure",
   },
 ];
@@ -53,30 +53,48 @@ const SlideWrapper = styled.div`
   justify-content: center;
   min-width: 100%;
   height: 100%;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+  }
 `;
 
 const ImageWrapper = styled.div`
   position: relative;
-  width: 50%; /* Ocupa el 50% del espacio disponible */
+  width: 50%;
   height: 100%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 50%;
+  }
 `;
 
 const TextWrapper = styled.div`
-  width: 50%; /* Ocupa el 50% del espacio disponible */
+  width: 50%; 
   padding: 2rem;
-  color: white;
+  color: black;
   text-align: center;
   font-size: 2rem;
   display: flex;
   justify-content: center;
   flex-direction: column;
+  background-color: white;
+  height: 100%;
 
   @media (max-width: 768px) {
     font-size: 1.5rem;
+    width: 100%;
+    height: 50%;
   }
 
   h1 {
     margin-bottom: 1rem;
+    font-size: 2.5rem;
+    font-weight: 700;
   }
 
   p {
@@ -120,7 +138,7 @@ const Carousel: React.FC = () => {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(handleNext, 2500);
+    const intervalId = setInterval(handleNext, 5000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -134,6 +152,10 @@ const Carousel: React.FC = () => {
       >
         {images.map((image) => (
           <SlideWrapper key={image.src}>
+            <TextWrapper>
+              <h1>{image.title}</h1>
+              <p>{image.description}</p>
+            </TextWrapper>
             <ImageWrapper>
               <Image
                 src={image.src}
@@ -142,10 +164,6 @@ const Carousel: React.FC = () => {
                 objectFit="cover"
               />
             </ImageWrapper>
-            <TextWrapper>
-              <h1>{image.title}</h1>
-              <p>{image.description}</p>
-            </TextWrapper>
           </SlideWrapper>
         ))}
       </CarouselContainer>

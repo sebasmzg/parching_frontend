@@ -1,8 +1,72 @@
-"use client"
+"use client";
 
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, Link, Paper, IconButton, InputAdornment } from '@mui/material';
+import { TextField, Button, Typography, Link, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import styled from 'styled-components';
+
+// Styled Components
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 0 20px;
+
+  @media (max-width: 768px) {
+    padding: 0 10px;
+  }
+`;
+
+const StyledPaper = styled.div`
+  padding: 40px;
+  border-radius: 16px;
+  background-color: var(--lightBlue);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+`;
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const StyledButton = styled(Button)`
+  background-color: var(--blue);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: var(--blueSoft);
+  }
+`;
+
+const FooterBox = styled.div`
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+
+  a {
+    color: var(--blueSoft);
+    font-weight: bold;
+    &:hover {
+      text-decoration: underline;
+      color: var(--blueSoft);
+    }
+  }
+`;
+
+const StyledTypography = styled(Typography)`
+  color: var(--violet);
+`;
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -27,32 +91,14 @@ const Register: React.FC = () => {
   };
 
   return (
-    <Container
-      component="main"
-      maxWidth="sm"
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-      }}
-    >
-      <Paper
-        elevation={6}
-        sx={{
-          padding: 4,
-          borderRadius: 4,
-          backgroundColor: 'var(--lightBlue)',
-          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-        }}
-      >
+    <MainContainer>
+      <StyledPaper>
         <Typography variant="h4" align="center" gutterBottom sx={{ color: 'var(--blue)', fontWeight: 'bold' }}>
-          Regístrate
+          Sign Up
         </Typography>
-        <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <StyledForm>
           <TextField
-            label="Correo Electrónico"
+            label="Email"
             variant="outlined"
             fullWidth
             value={email}
@@ -67,7 +113,7 @@ const Register: React.FC = () => {
             }}
           />
           <TextField
-            label="Contraseña"
+            label="Password"
             type={showPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
@@ -84,8 +130,8 @@ const Register: React.FC = () => {
             slotProps={{
               input: {
                 endAdornment: (
-                  <InputAdornment position="end" >
-                    <IconButton onClick={togglePasswordVisibility} edge= 'end'>
+                  <InputAdornment position="end">
+                    <IconButton onClick={togglePasswordVisibility} edge="end">
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -94,7 +140,7 @@ const Register: React.FC = () => {
             }}
           />
           <TextField
-            label="Confirmar Contraseña"
+            label="Confirm password"
             type={showConfirmPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
@@ -110,7 +156,6 @@ const Register: React.FC = () => {
             }}
             slotProps={{
               input: {
-
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton onClick={toggleConfirmPasswordVisibility} edge="end">
@@ -118,47 +163,23 @@ const Register: React.FC = () => {
                     </IconButton>
                   </InputAdornment>
                 ),
-              }
-            }}
-          />
-          <Button
-            variant="contained"
-            fullWidth
-            onClick={handleRegister}
-            sx={{
-              backgroundColor: 'var(--blue)',
-              color: 'white',
-              padding: 1.5,
-              borderRadius: 3,
-              '&:hover': {
-                backgroundColor: 'var(--blueSoft)',
               },
             }}
-          >
-            Regístrate
-          </Button>
-        </Box>
-        <Box mt={2} display="flex" justifyContent="center">
-          <Typography variant="body2" sx={{ color: 'var(--violet)' }}>
-            ¿Ya tienes una cuenta?{' '}
-            <Link
-              href="/login"
-              underline="none"
-              sx={{
-                color: 'var(--blueSoft)',
-                fontWeight: 'bold',
-                '&:hover': {
-                  textDecoration: 'underline',
-                  color: 'var(--blueSoft)',
-                },
-              }}
-            >
-              Inicia sesión
+          />
+          <StyledButton variant="contained" fullWidth onClick={handleRegister}>
+            Resgister
+          </StyledButton>
+        </StyledForm>
+        <FooterBox>
+          <StyledTypography variant="body2">
+            Do you have an account already?{' '}
+            <Link href="/login" underline="none">
+              Login
             </Link>
-          </Typography>
-        </Box>
-      </Paper>
-    </Container>
+          </StyledTypography>
+        </FooterBox>
+      </StyledPaper>
+    </MainContainer>
   );
 };
 

@@ -16,73 +16,103 @@ const colors = {
 
 // Estilos personalizados con styled-components
 const Container = styled.div`
-  max-width: 100%;
   height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
-  padding: 40px;
   background-color: ${colors.containerBackground};
 
-    @media (max-width: 768px) {
-        height: auto;
-    }
+  @media (max-width: 768px) {
+    height: auto;
+  }
+`;
+
+const TextSection = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${colors.sectionBackground};
+  height: 50%;
+
+  h3 {
+    color: ${colors.titleColor};
+    font-weight: bold;
+    font-size: 50px;
+  }
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
 `;
 
 const StyledSection = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  padding: 20px;
   background-color: ${colors.sectionBackground};
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  height: calc(100%/3 - 40px);
-
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  }
+  height: calc(100% / 3);
+  width: 100%;
+  justify-content: center;
+  
 `;
 
-const ImageContainer = styled.div`
+/* const ImageContainer = styled.div`
   flex: 1;
   height: 100%;
   margin-right: 20px;
-  border-radius: 12px;
   overflow: hidden;
-`;
+`; */
 
-const Image = styled.img`
+/* const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
 `;
-
+ */
 const ContentContainer = styled.div`
-  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 const Title = styled(Typography)`
   color: ${colors.titleColor};
   margin-bottom: 20px;
-  font-weight: 600;
+  font-weight: bold;
+  font-size: 30px;
 `;
 
 const Description = styled(Typography)`
   color: ${colors.descriptionColor};
   margin-bottom: 12px;
+  font-size: 18px;
 `;
 
 const IconContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
   color: ${colors.iconColor};
-  font-size: 24px;
-  transition: transform 0.3s ease;
+  justify-content: center;
 `;
 
 interface Seccion {
@@ -119,25 +149,35 @@ const Seccion1: React.FC = () => {
 
   return (
     <Container>
-      <Typography
-        variant="h3"
-        gutterBottom
-        style={{ color: "#003B6F", textAlign: "center", marginBottom: "30px" }}
-      >
-        ¿Para quién es ParchingApp?
-      </Typography>
-      {secciones.map((seccion, index) => (
-        <StyledSection key={index}>
-          <ImageContainer>
-            <Image src={seccion.imagen} alt={seccion.titulo} />
-          </ImageContainer>
-          <ContentContainer>
-            <Title variant="h6">{seccion.titulo}</Title>
-            <Description variant="body1">{seccion.descripcion}</Description>
-            <IconContainer>{seccion.icono}</IconContainer>
-          </ContentContainer>
-        </StyledSection>
-      ))}
+      <ContentWrapper>
+        <TextSection>
+          <Typography
+            variant="h3"
+            gutterBottom
+            style={{
+              color: "#003B6F",
+              textAlign: "center",
+              marginBottom: "30px",
+            }}
+          >
+            ¿Para quién es ParchingApp?
+          </Typography>
+        </TextSection>
+        {secciones.map((seccion, index) => (
+          <StyledSection key={index}>
+            {/* <ImageContainer>
+              <Image src={seccion.imagen} alt={seccion.titulo} />
+            </ImageContainer> */}
+            <ContentContainer>
+              <IconContainer>{seccion.icono}</IconContainer>
+              <TextContainer>
+                <Title variant="h6">{seccion.titulo}</Title>
+                <Description variant="body1">{seccion.descripcion}</Description>
+              </TextContainer>
+            </ContentContainer>
+          </StyledSection>
+        ))}
+      </ContentWrapper>
     </Container>
   );
 };
