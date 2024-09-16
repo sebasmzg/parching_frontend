@@ -2,6 +2,7 @@
 
 import Footer from "@/components/common/footer/footer";
 import NavBar from "@/components/common/navbar/navBar";
+import Section from "@/components/sections/section/section";
 import Seccion1 from "@/components/sections/section1/section1";
 import Seccion2 from "@/components/sections/section2/section2";
 import Seccion3 from "@/components/sections/section3/section3";
@@ -13,8 +14,9 @@ export default function Home() {
     <div>
       <NavBar />
       <main >
-      <Seccion2/>
       <Seccion1/>
+      <Section/>
+      <Seccion2/>
       <Seccion3/>
 {/*       <Seccion4/> */}
       <Section5 />

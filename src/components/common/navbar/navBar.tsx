@@ -53,7 +53,7 @@ function NavBar() {
             >
               <img
                 src="/assets/img/parchingHome.png"
-                style={{ height: "70px", width: "110px" }}
+                style={{ height: "50px", width: "110px" }}
               />
             </Box>
             <Box

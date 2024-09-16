@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
+import Link from 'next/link';
 
 
 export default function AccountMenu() {
@@ -24,7 +25,6 @@ export default function AccountMenu() {
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Typography sx={{ minWidth: 100 }}>About us</Typography>
         <Button variant="contained">Add event</Button>
         <Tooltip title="Account settings">
           <IconButton
@@ -77,7 +77,7 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
+          <Avatar /> <Link href={'/profile'}>Profile</Link>
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>

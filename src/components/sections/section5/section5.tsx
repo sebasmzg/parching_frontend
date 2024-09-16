@@ -29,7 +29,6 @@ const Section5: React.FC = () => {
         <SectionContainer>
             <LeftSection>
             </LeftSection>
-            <Divider orientation="vertical" flexItem />
             <RightSection>
                 <SignUp />
             </RightSection>

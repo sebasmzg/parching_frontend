@@ -1,144 +1,190 @@
 "use client";
 
 import React from "react";
-import { Typography } from "@mui/material";
-import styled from "styled-components";
-import { Hiking, Palette, People } from "@mui/icons-material";
+import styled, {keyframes} from "styled-components";
+import { Box, Typography } from "@mui/material";
 
 // Colores personalizados
 const colors = {
-  containerBackground: "#F0F4F8",
-  sectionBackground: "#FFFFFF",
-  titleColor: "#0A3D62",
-  descriptionColor: "#1F2A38",
-  iconColor: "#34A853",
+  primary: "#165252",
+  secondary: "#D2DEEC",
+  accent: "#78882D",
+  dark: "#3C4556",
+  darker: "#013B58",
 };
 
-// Estilos personalizados con styled-components
-const Container = styled.div`
-  max-width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  padding: 40px;
-  background-color: ${colors.containerBackground};
-
-    @media (max-width: 768px) {
-        height: auto;
-    }
-`;
-
-const StyledSection = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 20px;
-  background-color: ${colors.sectionBackground};
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+// Animación de desvanecimiento
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 `;
 
-const ImageContainer = styled.div`
-  flex: 1;
-  height: 200px;
-  margin-right: 20px;
-  border-radius: 12px;
+// Contenedor principal
+const SectionContainer = styled(Box)`
+  position: relative;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
+
+  // Adaptación para pantallas más grandes
+  @media (min-width: 768px) {
+    height: 100vh;
+  }
 `;
 
-const Image = styled.img`
+// Video de fondo
+const VideoBackground = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 0;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
-const ContentContainer = styled.div`
-  flex: 1;
+const MobileVideoBackground = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  
+  // Ocultar video para pantallas grandes
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+// Contenedor de texto superpuesto
+const TextOverlay = styled(Box)`
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: 20px;
+
+  // Fondo semitransparente para mejorar legibilidad
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+
+  // Adaptación para pantallas más grandes
+  @media (min-width: 768px) {
+    padding: 50px;
+  }
 `;
 
 const Title = styled(Typography)`
-  color: ${colors.titleColor};
-  margin-bottom: 20px;
-  font-weight: 600;
+  color: white;
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  animation: ${fadeIn} 1.2s ease-out;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
+const SubTitle = styled(Typography)`
+  color: white;
+  font-size: 40px;
+  margin-bottom: 20px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  animation: ${fadeIn} 1.7s ease-out;
+  position: relative;
+  font-weight: bold;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 63%;
+    transform: translateX(-50%);
+    width: 130%;
+    height: 55px;
+    background: url('/assets/img/underlineText.png') no-repeat center;
+    background-size: contain;
+    z-index: -1;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+`;
+/* const SubTitle = styled(Typography)`
+  color: white;
+  font-size: 30px;
+  margin-bottom: 20px;
+  background-color: ${colors.accent};
+  padding: 5px 10px;
+  border-radius: 5px;
+  animation: ${fadeIn} 1.7s ease-out;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+`; */
 
 const Description = styled(Typography)`
-  color: ${colors.descriptionColor};
-  margin-bottom: 12px;
+  font-size: 25px;
+  line-height: 1.6;
+  animation: ${fadeIn} 2.2s ease-out;
+  
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
-const IconContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  color: ${colors.iconColor};
-  font-size: 24px;
-  transition: transform 0.3s ease;
-`;
-
-interface Seccion {
-  titulo: string;
-  descripcion: string;
-  imagen: string;
-  icono: React.ReactNode;
-}
-
-const Seccion1: React.FC = () => {
-  const secciones: Seccion[] = [
-    {
-      titulo: "Aventureros:",
-      descripcion:
-        "Si disfrutas de actividades al aire libre como senderismo, ciclismo o deportes acuáticos.",
-      imagen: "/img/aventureros.jpg",
-      icono: <Hiking />,
-    },
-    {
-      titulo: "Amantes del arte y la cultura:",
-      descripcion:
-        "Para quienes desean asistir a talleres creativos, visitas a museos, o eventos culturales.",
-      imagen: "/img/arte y cultura.jpg",
-      icono: <Palette />,
-    },
-    {
-      titulo: "Socializadores:",
-      descripcion:
-        "Perfecto para aquellos que buscan ampliar su círculo social en un ambiente relajado y amistoso.",
-      imagen: "/img/sociables.jpg",
-      icono: <People />,
-    },
-  ];
-
+const SeccionComponent = () => {
   return (
-    <Container>
-      <Typography
-        variant="h3"
-        gutterBottom
-        style={{ color: "#003B6F", textAlign: "center", marginBottom: "30px" }}
-      >
-        ¿Para quién es ParchingApp?
-      </Typography>
-      {secciones.map((seccion, index) => (
-        <StyledSection key={index}>
-          <ImageContainer>
-            <Image src={seccion.imagen} alt={seccion.titulo} />
-          </ImageContainer>
-          <ContentContainer>
-            <Title variant="h6">{seccion.titulo}</Title>
-            <Description variant="body1">{seccion.descripcion}</Description>
-            <IconContainer>{seccion.icono}</IconContainer>
-          </ContentContainer>
-        </StyledSection>
-      ))}
-    </Container>
+    <SectionContainer>
+      <VideoBackground autoPlay loop muted>
+        <source
+          src="https://videos.pexels.com/video-files/2894887/2894887-uhd_2560_1440_24fps.mp4"
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </VideoBackground>
+
+      <MobileVideoBackground autoPlay loop muted>
+        <source
+          src="https://videos.pexels.com/video-files/12072224/12072224-hd_1080_1920_25fps.mp4"
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </MobileVideoBackground>
+
+      <TextOverlay>
+        <Title>Parching App</Title>
+        <SubTitle>Socialize and discover</SubTitle>
+        <Description>
+          Parching App is a platform that connects people with shared interests
+          through social events and outdoor activities.Discover new
+          experiences, join local groups, and easily organize events in a safe
+          and friendly environment. Our community promotes social engagement,
+          respect for nature, and the creation of lasting connections.
+        </Description>
+      </TextOverlay>
+    </SectionContainer>
   );
 };
 
-export default Seccion1;
+export default SeccionComponent;
