@@ -10,8 +10,12 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styled from "styled-components";
+import { useRouter } from "next/navigation";
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase/config";
 
 // Styled Components
+
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -99,26 +103,74 @@ const FooterBox = styled.div`
 `;
 
 const StyledTypography = styled(Typography)`
+  font-family: "Belleza", sans-serif;
   color: var(--violet);
 `;
 
-const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+// Component
 
+const Login: React.FC = () => {
+  interface UserState {
+    email: string;
+    password: string;
+  }
+
+  const initialState: UserState = {
+    email: "",
+    password: "",
+  };
+
+  /* email and passwor login states*/
+  const [user, setUser] = useState<UserState>(initialState);
+  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+  /* login with google */
+  const [signInWithGoogle] = useSignInWithGoogle(auth);
+
+  /* show and hide password */
+  const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = () => {
-    // Aquí iría la lógica para el login
-    console.log("Email:", email);
-    console.log("Password:", password);
+  /* router */
+  const router = useRouter();
+
+  /* cambios initial state */
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleGoogleLoginRegister = () => {
-    // Aquí iría la lógica para iniciar sesión con Google
+  /* email amd password login */
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await signInWithEmailAndPassword(user.email, user.password);
+      console.log(res);
+      sessionStorage.setItem("user", String(true));
+      setUser(initialState);
+      router.push("/");
+    } catch (error) {
+      console.error("Error signing in", error);
+    }
+  };
+
+  /* login with google */
+  const handleGoogleLogin = async () => {
+    try {
+      const res = await signInWithGoogle();
+      console.log(res);
+      sessionStorage.setItem("user", String(true));
+      if(sessionStorage.getItem("user")){
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Error signing in with Google", error);
+    }
     console.log("Login con Google");
   };
 
@@ -138,8 +190,10 @@ const Login: React.FC = () => {
             label="Email"
             variant="outlined"
             fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            type="email"
+            value={user.email}
+            onChange={handleChange}
             sx={{
               "& .MuiOutlinedInput-root": {
                 borderRadius: 3,
@@ -151,11 +205,12 @@ const Login: React.FC = () => {
           />
           <TextField
             label="Password"
+            name="password"
             type={showPassword ? "text" : "password"}
             variant="outlined"
             fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={user.password}
+            onChange={handleChange}
             slotProps={{
               input: {
                 endAdornment: (
@@ -176,7 +231,9 @@ const Login: React.FC = () => {
               },
             }}
           />
-          <StyledButton onClick={handleLogin}>Login</StyledButton>
+          <StyledButton onClick={handleLogin} type="submit">
+            Login
+          </StyledButton>
         </StyledForm>
 
         <Typography
@@ -186,9 +243,9 @@ const Login: React.FC = () => {
           or
         </Typography>
 
-        <GoogleButton onClick={handleGoogleLoginRegister}>
+        <GoogleButton onClick={handleGoogleLogin}>
           <img src="/assets/img/google.png" alt="Google logo" />
-          Sign in with Google
+          Login with Google
         </GoogleButton>
 
         <FooterBox>

@@ -6,14 +6,18 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase/config";
 
 
 export default function AccountMenu() {
+  /* menu functions */
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -22,6 +26,20 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  /* sing out */
+  const [user] = useAuthState(auth);
+  //console.log(user);
+  const router = useRouter();
+  const userSession = sessionStorage.getItem("user");
+
+  /* log out */
+  const handleLogout = async ()=>{
+    await signOut(auth);
+    sessionStorage.removeItem('user');
+    router.push('/');
+  }
+
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -80,7 +98,7 @@ export default function AccountMenu() {
           <Avatar /> <Link href={'/profile'}>Profile</Link>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
