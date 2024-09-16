@@ -6,7 +6,6 @@ import Section from "@/components/sections/section/section";
 import Seccion1 from "@/components/sections/section1/section1";
 import Seccion2 from "@/components/sections/section2/section2";
 import Seccion3 from "@/components/sections/section3/section3";
-import Seccion4 from "@/components/sections/section4/section4";
 import Section5 from "@/components/sections/section5/section5";
 
 export default function Home() {
