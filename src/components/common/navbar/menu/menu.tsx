@@ -10,11 +10,10 @@ import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
 import Link from 'next/link';
-import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase/config";
-
+import { useRouter } from 'next/navigation';
+import { signOut } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/firebase/config';
 
 export default function AccountMenu() {
   /* menu functions */
@@ -27,33 +26,32 @@ export default function AccountMenu() {
     setAnchorEl(null);
   };
 
-  /* sing out */
+  /* sign out */
   const [user] = useAuthState(auth);
-  //console.log(user);
   const router = useRouter();
-  const userSession = sessionStorage.getItem("user");
 
-  /* log out */
-  const handleLogout = async ()=>{
+  const handleLogout = async () => {
     await signOut(auth);
     sessionStorage.removeItem('user');
     router.push('/');
-  }
+  };
 
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Button variant="contained">Add event</Button>
+        <Button variant="contained" color="primary" sx={{ borderRadius: '20px', boxShadow: 3 }}>
+          Add Event
+        </Button>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
             size="small"
-            sx={{ ml: 2 }}
+            sx={{ ml: 2, borderRadius: '50%', bgcolor: 'background.paper', boxShadow: 3 }}
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar sx={{ width: 40, height: 40 }}>M</Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -68,8 +66,9 @@ export default function AccountMenu() {
             elevation: 0,
             sx: {
               overflow: 'visible',
-              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              filter: 'drop-shadow(0px 4px 8px rgba(0,0,0,0.2))',
               mt: 1.5,
+              borderRadius: 2,
               '& .MuiAvatar-root': {
                 width: 32,
                 height: 32,
@@ -95,7 +94,10 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>
-          <Avatar /> <Link href={'/profile'}>Profile</Link>
+          <Avatar sx={{ bgcolor: 'primary.main' }}>M</Avatar>
+          <Link href="/profile" passHref>
+            <Button sx={{ ml: 2, color: 'text.primary' }}>Profile</Button>
+          </Link>
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleLogout}>

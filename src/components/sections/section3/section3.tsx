@@ -1,32 +1,51 @@
 'use client'
 import React from 'react';
-import { Card, CardContent, Typography, Box } from '@mui/material';
 import styled from 'styled-components';
-import ExploreIcon from '@mui/icons-material/Explore';
-import EventIcon from '@mui/icons-material/Event';
-import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+import CustomCard from './customCard';
+import { Explore, Event, People } from '@styled-icons/material';
 
-const Container = styled(Box)`
+const Container = styled.div`
   display: flex;
   height: 100vh;
   width: 100%;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 2rem;
-  background-color: #D2DEEC;
+  background-color: white;
 
   @media (max-width: 768px) {
     height: auto;
   }
 `;
 
-const CardContainer = styled(Box)`
+const TextSection = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const SectionTitle = styled.h2`
+  color: #013B58;
+  font-weight: bold;
+  font-size: 50px;
+`;
+
+const SectionDescription = styled.h4`
+  color: #3C4556;
+  font-size: 20px;
+  margin-top: 1rem;
+`;
+
+const CardContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
-  margin-top: 2rem;
+  background-color: white;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -34,111 +53,37 @@ const CardContainer = styled(Box)`
   }
 `;
 
-const CustomCard = styled(Card)`
-  flex: 1;
-  margin: 1rem;
-  padding: 1rem;
-  text-align: center;
-  background-color: #165252;
-  color: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  }
-
-  @media (max-width: 768px) {
-    width: 80%;
-  }
-`;
-
-const IconContainer = styled(Box)`
-  font-size: 50px;
-  color: #78882D;
-  transition: color 0.3s ease;
-  margin-right: 0.5rem;
-
-  ${CustomCard}:hover & {
-    color: #D2DEEC;
-  }
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-`;
-
-const TitleContainer = styled(Box)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 const Seccion3 = () => {
   return (
     <Container>
-      <Typography variant="h4" component="h2" gutterBottom style={{ color: '#013B58' }}>
-        ¿Cómo Funciona?
-      </Typography>
-      <Typography variant="subtitle1" component="p" gutterBottom style={{ color: '#3C4556' }}>
-        Tres sencillos pasos para empezar a vivir nuevas experiencias.
-      </Typography>
+      <TextSection>
+        <SectionTitle>
+          ¿Cómo Funciona?
+        </SectionTitle>
+        <SectionDescription>
+          Tres sencillos pasos para empezar a vivir nuevas experiencias.
+        </SectionDescription>
+      </TextSection>
 
       <CardContainer>
-        <CustomCard>
-          <Image src="/img/parque.jpg" alt="Explora Actividades" />
-          <CardContent>
-            <TitleContainer>
-              <IconContainer>
-                <ExploreIcon style={{ fontSize: '2rem' }} />
-              </IconContainer>
-              <Typography variant="h6" component="h3">
-                Explora Actividades
-              </Typography>
-            </TitleContainer>
-            <Typography variant="body2" component="p" style={{ color: '#D2DEEC' }}>
-              Usa nuestra herramienta de búsqueda para encontrar actividades cerca de ti o según tus intereses.
-            </Typography>
-          </CardContent>
-        </CustomCard>
-
-        <CustomCard>
-          <Image src="/img/personas.jpg" alt="Únete o Crea un Evento" />
-          <CardContent>
-            <TitleContainer>
-              <IconContainer>
-                <EventIcon style={{ fontSize: '2rem' }} />
-              </IconContainer>
-              <Typography variant="h6" component="h3">
-                Únete o Crea un Evento
-              </Typography>
-            </TitleContainer>
-            <Typography variant="body2" component="p" style={{ color: '#D2DEEC' }}>
-              Encuentra compañeros para unirte a eventos o crea el tuyo propio y permite que otros se sumen.
-            </Typography>
-          </CardContent>
-        </CustomCard>
-
-        <CustomCard>
-          <Image src="/img/copas.jpg" alt="Conecta y Disfruta" />
-          <CardContent>
-            <TitleContainer>
-              <IconContainer>
-                <ConnectWithoutContactIcon style={{ fontSize: '2rem' }} />
-              </IconContainer>
-              <Typography variant="h6" component="h3">
-                Conecta y Disfruta
-              </Typography>
-            </TitleContainer>
-            <Typography variant="body2" component="p" style={{ color: '#D2DEEC' }}>
-              Conéctate con personas afines, comparte momentos y vive experiencias memorables.
-            </Typography>
-          </CardContent>
-        </CustomCard>
+        <CustomCard 
+          imageSrc="https://images.pexels.com/photos/214574/pexels-photo-214574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+          icon={Explore} 
+          title="Explora Actividades" 
+          description="Usa nuestra herramienta de búsqueda para encontrar actividades cerca de ti o según tus intereses."
+        />
+        <CustomCard 
+          imageSrc="https://images.pexels.com/photos/745045/pexels-photo-745045.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+          icon={Event} 
+          title="Únete o Crea un Evento" 
+          description="Encuentra compañeros para unirte a eventos o crea el tuyo propio y permite que otros se sumen."
+        />
+        <CustomCard 
+          imageSrc="https://images.pexels.com/photos/697244/pexels-photo-697244.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+          icon={People} 
+          title="Conecta y Disfruta" 
+          description="Conéctate con personas afines, comparte momentos y vive experiencias memorables."
+        />
       </CardContainer>
     </Container>
   );

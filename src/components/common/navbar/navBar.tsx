@@ -31,10 +31,10 @@ function NavBar() {
       <CssBaseline />
       <AppBar
         position="fixed"
-        className="navbar"
         sx={{
-          backgroundColor: darkMode ? "undefined" : "#3C4556",
+          backgroundColor: darkMode ? "undefined" : "#165252",
           width: "100%",
+          height: "64px", // Ajusta la altura aquí si es necesario
         }}
       >
         <Container maxWidth="xl">

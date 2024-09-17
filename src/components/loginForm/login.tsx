@@ -245,7 +245,6 @@ const Login: React.FC = () => {
 
         <GoogleButton onClick={handleGoogleLogin}>
           <img src="/assets/img/google.png" alt="Google logo" />
-          Login with Google
         </GoogleButton>
 
         <FooterBox>

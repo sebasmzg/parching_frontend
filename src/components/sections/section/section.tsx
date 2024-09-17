@@ -76,7 +76,7 @@ const ImageWrapper = styled.div`
 const TextWrapper = styled.div`
   width: 50%; 
   padding: 2rem;
-  color: black;
+  color: #013B58;
   text-align: center;
   font-size: 2rem;
   display: flex;
@@ -93,12 +93,12 @@ const TextWrapper = styled.div`
 
   h1 {
     margin-bottom: 1rem;
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 700;
   }
 
   p {
-    font-size: 1.2rem;
+    font-size: 2rem;
   }
 `;
 

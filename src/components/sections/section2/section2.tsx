@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Typography } from "@mui/material";
 import styled from "styled-components";
 import { Hiking, Palette, People } from "@mui/icons-material";
 
@@ -34,12 +33,12 @@ const TextSection = styled.div`
   justify-content: center;
   background-color: ${colors.sectionBackground};
   height: 50%;
+`;
 
-  h3 {
-    color: ${colors.titleColor};
-    font-weight: bold;
-    font-size: 50px;
-  }
+const SectionTitle = styled.h2`
+  color: ${colors.titleColor};
+  font-weight: bold;
+  font-size: 50px;
 `;
 
 const ContentWrapper = styled.div`
@@ -58,27 +57,12 @@ const StyledSection = styled.div`
   height: calc(100% / 3);
   width: 100%;
   justify-content: center;
-  
 `;
 
-/* const ImageContainer = styled.div`
-  flex: 1;
-  height: 100%;
-  margin-right: 20px;
-  overflow: hidden;
-`; */
-
-/* const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
- */
 const ContentContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-
 `;
 
 const TextContainer = styled.div`
@@ -96,14 +80,14 @@ const TextContainer = styled.div`
   }
 `;
 
-const Title = styled(Typography)`
+const Title = styled.h3`
   color: ${colors.titleColor};
   margin-bottom: 20px;
   font-weight: bold;
   font-size: 30px;
 `;
 
-const Description = styled(Typography)`
+const Description = styled.p`
   color: ${colors.descriptionColor};
   margin-bottom: 12px;
   font-size: 18px;
@@ -129,21 +113,21 @@ const Seccion1: React.FC = () => {
       descripcion:
         "Si disfrutas de actividades al aire libre como senderismo, ciclismo o deportes acuáticos.",
       imagen: "/img/aventureros.jpg",
-      icono: <Hiking />,
+      icono: <Hiking style={{ fontSize: 50 }} />,
     },
     {
       titulo: "Amantes del arte y la cultura:",
       descripcion:
         "Para quienes desean asistir a talleres creativos, visitas a museos, o eventos culturales.",
       imagen: "/img/arte y cultura.jpg",
-      icono: <Palette />,
+      icono: <Palette style={{ fontSize: 50 }} />,
     },
     {
       titulo: "Socializadores:",
       descripcion:
         "Perfecto para aquellos que buscan ampliar su círculo social en un ambiente relajado y amistoso.",
       imagen: "/img/sociables.jpg",
-      icono: <People />,
+      icono: <People style={{ fontSize: 50 }} />,
     },
   ];
 
@@ -151,28 +135,15 @@ const Seccion1: React.FC = () => {
     <Container>
       <ContentWrapper>
         <TextSection>
-          <Typography
-            variant="h3"
-            gutterBottom
-            style={{
-              color: "#003B6F",
-              textAlign: "center",
-              marginBottom: "30px",
-            }}
-          >
-            ¿Para quién es ParchingApp?
-          </Typography>
+          <SectionTitle>¿Para quién es ParchingApp?</SectionTitle>
         </TextSection>
         {secciones.map((seccion, index) => (
           <StyledSection key={index}>
-            {/* <ImageContainer>
-              <Image src={seccion.imagen} alt={seccion.titulo} />
-            </ImageContainer> */}
             <ContentContainer>
               <IconContainer>{seccion.icono}</IconContainer>
               <TextContainer>
-                <Title variant="h6">{seccion.titulo}</Title>
-                <Description variant="body1">{seccion.descripcion}</Description>
+                <Title>{seccion.titulo}</Title>
+                <Description>{seccion.descripcion}</Description>
               </TextContainer>
             </ContentContainer>
           </StyledSection>

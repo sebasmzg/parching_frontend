@@ -2,20 +2,19 @@
 
 import React from "react";
 import styled from "styled-components";
-import { Box, Typography, Link, IconButton } from "@mui/material";
-import { Facebook, Twitter, Instagram, LinkedIn } from "@mui/icons-material";
+import { Facebook, Twitter, Instagram, Linkedin } from "@styled-icons/fa-brands";
 
 // Colores personalizados
 const colors = {
   primary: "#165252",
   secondary: "#D2DEEC",
   accent: "#78882D",
-  dark: "#3C4556",
+  dark: "#165252",
   darker: "#013B58",
 };
 
 // Contenedor principal del footer
-const FooterContainer = styled(Box)`
+const FooterContainer = styled.footer`
   background-color: ${colors.dark};
   color: ${colors.secondary};
   padding: 40px 20px;
@@ -27,7 +26,7 @@ const FooterContainer = styled(Box)`
 `;
 
 // Contenedor para las secciones
-const FooterSection = styled(Box)`
+const FooterSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,19 +42,24 @@ const FooterSection = styled(Box)`
 `;
 
 // Estilo para los enlaces
-const FooterLink = styled(Link)`
+const FooterLink = styled.a`
   color: ${colors.secondary};
   margin: 5px;
   text-decoration: none;
+  cursor: pointer;
+  
   &:hover {
     text-decoration: underline;
   }
 `;
 
 // Estilo para los íconos de redes sociales
-const SocialIcon = styled(IconButton)`
+const SocialIcon = styled.a`
   color: ${colors.secondary};
   margin: 5px;
+  cursor: pointer;
+  display: inline-block;
+  
   &:hover {
     color: ${colors.accent};
   }
@@ -68,49 +72,54 @@ const FooterLogo = styled.img`
   margin: 20px 0;
 
   @media (min-width: 768px) {
-    height: 100px; s
+    height: 100px;
   }
+`;
+
+// Estilo para el texto de derechos reservados
+const FooterText = styled.p`
+  margin: 0;
+  padding-bottom: 10px;
+  font-size: 14px;
 `;
 
 const Footer = () => {
   return (
-    <FooterContainer sx={{height:'100%'}}>
+    <FooterContainer>
       <FooterSection>
         <FooterLogo src="/assets/img/parchingHome.png" alt="Parching App Logo" />
       </FooterSection>
 
       <FooterSection>
-        <Box>
-          <Typography variant="body2" component="div" sx={{ mb: 2 }}>
-            © {new Date().getFullYear()} Parching App. All rights reserved.
-          </Typography>
-        </Box>
+        <FooterText>
+          © {new Date().getFullYear()} Parching App. All rights reserved.
+        </FooterText>
       </FooterSection>
 
       <FooterSection>
-        <Box>
+        <div>
           <FooterLink href="#">About Us</FooterLink>
           <FooterLink href="#">Services</FooterLink>
           <FooterLink href="#">Contact</FooterLink>
           <FooterLink href="#">Privacy Policy</FooterLink>
-        </Box>
+        </div>
       </FooterSection>
 
       <FooterSection>
-        <Box>
-          <SocialIcon aria-label="Facebook">
-            <Facebook />
+        <div>
+          <SocialIcon href="#" aria-label="Facebook">
+            <Facebook size="32" />
           </SocialIcon>
-          <SocialIcon aria-label="Twitter">
-            <Twitter />
+          <SocialIcon href="#" aria-label="Twitter">
+            <Twitter size="32" />
           </SocialIcon>
-          <SocialIcon aria-label="Instagram">
-            <Instagram />
+          <SocialIcon href="#" aria-label="Instagram">
+            <Instagram size="32" />
           </SocialIcon>
-          <SocialIcon aria-label="LinkedIn">
-            <LinkedIn />
+          <SocialIcon href="#" aria-label="LinkedIn">
+            <Linkedin size="32" />
           </SocialIcon>
-        </Box>
+        </div>
       </FooterSection>
     </FooterContainer>
   );

@@ -305,7 +305,6 @@ const Register: React.FC = () => {
 
         <GoogleButton onClick={handleGoogleLoginRegister}>
           <img src="/assets/img/google.png" alt="Google logo" />
-          Sign up with Google
         </GoogleButton>
 
         <FooterBox>

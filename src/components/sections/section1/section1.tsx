@@ -69,7 +69,7 @@ const MobileVideoBackground = styled.video`
 `;
 
 // Contenedor de texto superpuesto
-const TextOverlay = styled(Box)`
+const TextOverlay = styled.div`
   position: relative;
   z-index: 1;
   display: flex;
@@ -91,7 +91,7 @@ const TextOverlay = styled(Box)`
   }
 `;
 
-const Title = styled(Typography)`
+const Title = styled.h1`
   color: white;
   font-size: 50px;
   font-weight: bold;
@@ -102,7 +102,7 @@ const Title = styled(Typography)`
     font-size: 35px;
   }
 `;
-const SubTitle = styled(Typography)`
+const SubTitle = styled.h2`
   color: white;
   font-size: 40px;
   margin-bottom: 20px;
@@ -143,7 +143,7 @@ const SubTitle = styled(Typography)`
   }
 `; */
 
-const Description = styled(Typography)`
+const Description = styled.h4`
   font-size: 25px;
   line-height: 1.6;
   animation: ${fadeIn} 2.2s ease-out;
