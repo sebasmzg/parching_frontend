@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Avatar } from '@mui/material';
-import EventCard from '@/components/eventCard/EventCard';
+import EventCardProfile from '@/components/eventCard/EventCardProfile';
 import NavBar from '@/components/common/navbar/navBar';
 
 // Paleta de colores
@@ -69,7 +69,7 @@ const ButtonContainer = styled.div`
 
 // Botón personalizado
 const CustomButton = styled.button`
-  background-color: ${colors.accent};
+  background-color: ${colors.primary};
   color: ${colors.white};
   border: none;
   border-radius: 5px;
@@ -78,7 +78,7 @@ const CustomButton = styled.button`
   font-size: 16px;
   transition: background-color 0.3s;
   &:hover {
-    background-color: ${colors.primary};
+    background-color: ${colors.accent};
   }
 `;
 
@@ -155,7 +155,7 @@ const ProfilePage: React.FC = () => {
         <EventsTitle>Eventos Creados</EventsTitle>
         <EventsGrid>
           {createdEvents.map((event, index) => (
-            <EventCard
+            <EventCardProfile
               key={index}
               imageSrc={event.imageSrc}
               name={event.name}
@@ -172,7 +172,7 @@ const ProfilePage: React.FC = () => {
         <EventsTitle>Eventos en los que Participas</EventsTitle>
         <EventsGrid>
           {participatingEvents.map((event, index) => (
-            <EventCard
+            <EventCardProfile
               key={index}
               imageSrc={event.imageSrc}
               name={event.name}
