@@ -7,8 +7,10 @@ import IconButton from "@mui/material/IconButton";
 import AccountMenu from "./menu/menu";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import Translate from '@mui/icons-material/Translate'; // Importa el icono de traducción
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { useTranslation } from 'react-i18next'; 
 
 function NavBar() {
   // Estado del tema (claro u oscuro)
@@ -25,6 +27,13 @@ function NavBar() {
       mode: darkMode ? "dark" : "light",
     },
   });
+
+  // Función para alternar el idioma
+  const { i18n } = useTranslation();
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'es' : 'en';
+    i18n.changeLanguage(newLang);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -64,6 +73,14 @@ function NavBar() {
               home
             </Box>
             <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
+              {/* Botón de traducción */}
+              <IconButton
+                onClick={toggleLanguage}
+                size="small"
+                sx={{ ml: 1 }}
+              >
+                <Translate />
+              </IconButton>
               {/* Icono de cambiar tema */}
               <IconButton
                 sx={{ ml: 1 }}
