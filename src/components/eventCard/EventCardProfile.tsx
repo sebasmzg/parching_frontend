@@ -6,13 +6,13 @@ import { Trash, Edit } from '@styled-icons/boxicons-regular';
 const colors = {
   secondary: "#D2DEEC",
   dark: "#3C4556",
-  accent: "#78882D",
+  accent: "#165252",
   white: "#ffffff",
 };
 
 // Tarjeta de evento
 const EventCardComponent = styled.div`
-  background: linear-gradient(135deg, ${colors.secondary} 0%, ${colors.white} 100%);
+  background: linear-gradient(135deg, ${colors.accent} 0%, ${colors.white} 100%);
   border-radius: 12px;
   padding: 20px;
   display: flex;

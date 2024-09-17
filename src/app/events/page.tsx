@@ -1,4 +1,6 @@
-import EventFormPage from "@/components/eventsF/eventForm";
+'use client'
+
+import EventFormPage from "@/components/eventsForm/eventForm";
 
 
 export default function EventsFormPage() {
@@ -7,4 +9,3 @@ export default function EventsFormPage() {
 );
     
 }
-

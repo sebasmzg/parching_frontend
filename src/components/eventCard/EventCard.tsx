@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import {
-  Button,
   Tooltip,
   IconButton,
   Dialog as MuiDialog,
@@ -11,28 +10,29 @@ import {
 import InfoIcon from "@mui/icons-material/Info";
 import CloseIcon from "@mui/icons-material/Close";
 
-// Paleta de colores similar al ejemplo CustomCard
+// Paleta de colores
 const colors = {
   primary: "#165252",
   accent: "#78882D",
   secondary: "#D2DEEC",
   white: "#ffffff",
+  dark: "#3C4556",
 };
 
 // Contenedor de la tarjeta de evento
 const CardContainer = styled.div`
-  width: 500px;
-  height: 600px;
+  width: 100%
+  height: 100%;
   margin: 1rem;
-  padding: 0 0 1.5rem 0;
+  padding: 0;
   text-align: center;
-  background-color: ${colors.primary};
+  background: linear-gradient(135deg, ${colors.primary} 0%, ${colors.white} 100%);
   color: ${colors.white};
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
-  flex-direction: column; /* Asegura que los elementos internos se apilen verticalmente */
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-10px);
@@ -48,9 +48,9 @@ const CardContainer = styled.div`
 // Imagen del evento
 const ImageContainer = styled.div`
   overflow: hidden;
-  border-bottom: 4px solid ${colors.accent};
+  border-bottom: 4px solid ${colors.primary};
   border-radius: 15px 15px 0 0;
-  height: 60%;
+  height: 400px;
 `;
 
 const EventImage = styled.img`
@@ -64,10 +64,11 @@ const EventImage = styled.img`
 // Contenedor de la información del evento
 const EventDetails = styled.div`
   padding: 16px;
-  flex: 1; /* Permite que el contenedor de detalles ocupe el espacio restante */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Espacia los elementos internos */
+  justify-content: space-between; 
+  height: 40%; 
 `;
 
 // Títulos y texto
@@ -81,18 +82,36 @@ const TitleContainer = styled.div`
 const Title = styled.h2`
   font-size: 24px;
   font-weight: bold;
-  color: ${colors.white};
+  color: black;
   margin-top: 1rem;
-  margin-bottom: 0; /* Elimina el margen inferior para alinearse con el botón */
+  margin-bottom: 0;
 `;
 
 const Text = styled.p`
   font-size: 16px;
-  color: ${colors.secondary};
-  margin: 0.5rem 0; /* Añade un pequeño margen para separar los textos */
+  color: black;
+  margin: 0.5rem 0;
 `;
 
-// Botón para unirse
+// Botón estilizado
+const StyledButton = styled.button`
+  background-color: ${colors.primary};
+  color: ${colors.white};
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%; // Ajusta el botón al ancho del contenedor
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    background-color: ${colors.dark};
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+// Contenedor del botón
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -102,7 +121,7 @@ const ButtonContainer = styled.div`
 // Estilos personalizados para el Dialog
 const Dialog = styled(MuiDialog)`
   .MuiPaper-root {
-    background-color: ${colors.primary};
+    background: linear-gradient(135deg, ${colors.primary} 0%, ${colors.white} 100%);
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
@@ -167,11 +186,6 @@ const EventCard: React.FC<EventCardProps> = ({
         <EventDetails>
           <TitleContainer>
             <Title>{name}</Title>
-            <Tooltip title="More Info">
-              <IconButton onClick={handleClickOpen}>
-                <InfoIcon />
-              </IconButton>
-            </Tooltip>
           </TitleContainer>
           <Text>
             <strong>Spots Available:</strong> {spots}
@@ -183,17 +197,9 @@ const EventCard: React.FC<EventCardProps> = ({
             <strong>Price:</strong> {price}
           </Text>
           <ButtonContainer>
-            <Button
-              variant="contained"
-              style={{
-                backgroundColor: colors.accent,
-                color: colors.white,
-                width: '100%', // Ajusta el botón al ancho del contenedor
-              }}
-              onClick={onJoin}
-            >
-              Join
-            </Button>
+            <StyledButton onClick={handleClickOpen}>
+              Info
+            </StyledButton>
           </ButtonContainer>
         </EventDetails>
       </CardContainer>
@@ -230,17 +236,9 @@ const EventCard: React.FC<EventCardProps> = ({
               <strong>Price:</strong> {price}
             </Text>
             <ButtonContainer>
-              <Button
-                variant="contained"
-                style={{
-                  backgroundColor: colors.accent,
-                  color: colors.white,
-                  width: '100%',
-                }}
-                onClick={onJoin}
-              >
+              <StyledButton onClick={onJoin}>
                 Join
-              </Button>
+              </StyledButton>
             </ButtonContainer>
           </EventDetails>
         </DialogContent>

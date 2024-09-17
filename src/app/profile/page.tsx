@@ -4,7 +4,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Avatar } from '@mui/material';
 import EventCardProfile from '@/components/eventCard/EventCardProfile';
-import NavBar from '@/components/common/navbar/navBar';
 
 // Paleta de colores
 const colors = {
@@ -140,7 +139,6 @@ const participatingEvents = [
 const ProfilePage: React.FC = () => {
   return (
     <ProfileContainer>
-      <NavBar />
       <ProfileSection>
         <StyledAvatar alt="Profile Picture" src="https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
         <Name>Name</Name>

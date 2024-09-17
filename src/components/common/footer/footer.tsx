@@ -23,6 +23,7 @@ const FooterContainer = styled.footer`
   align-items: center;
   justify-content: center;
   text-align: center;
+  height: 200px;
 `;
 
 // Contenedor para las secciones
@@ -32,7 +33,8 @@ const FooterSection = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  height: 100%;
 
   @media (min-width: 768px) {
     flex-direction: row;
@@ -67,13 +69,12 @@ const SocialIcon = styled.a`
 
 // Estilo para la imagen del logo
 const FooterLogo = styled.img`
-  height: 100px; 
+  height: 80px; 
   width: auto;
   margin: 20px 0;
   
   @media (min-width: 768px) {
-    height: 100px;
-    height: 100px;
+    height: 50px;
   }
 `;
 
@@ -109,16 +110,16 @@ const Footer = () => {
       <FooterSection>
         <div>
           <SocialIcon href="#" aria-label="Facebook">
-            <Facebook size="32" />
+            <Facebook size="20" />
           </SocialIcon>
           <SocialIcon href="#" aria-label="Twitter">
-            <Twitter size="32" />
+            <Twitter size="20" />
           </SocialIcon>
           <SocialIcon href="#" aria-label="Instagram">
-            <Instagram size="32" />
+            <Instagram size="20" />
           </SocialIcon>
           <SocialIcon href="#" aria-label="LinkedIn">
-            <Linkedin size="32" />
+            <Linkedin size="20" />
           </SocialIcon>
         </div>
       </FooterSection>
