@@ -70,8 +70,9 @@ const FooterLogo = styled.img`
   height: 100px; 
   width: auto;
   margin: 20px 0;
-
+  
   @media (min-width: 768px) {
+    height: 100px;
     height: 100px;
   }
 `;
