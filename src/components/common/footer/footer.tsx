@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import styled from "styled-components";
+import styled from "styled-components"
 import { Box, Typography, Link, IconButton } from "@mui/material";
 import { Facebook, Twitter, Instagram, LinkedIn } from "@mui/icons-material";
 
@@ -66,9 +66,9 @@ const FooterLogo = styled.img`
   height: 100px; 
   width: auto;
   margin: 20px 0;
-
+  
   @media (min-width: 768px) {
-    height: 100px; s
+    height: 100px;
   }
 `;
 
