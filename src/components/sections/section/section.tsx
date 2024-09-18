@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Image from "next/image";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 interface ImageData {
@@ -71,6 +70,12 @@ const ImageWrapper = styled.div`
     width: 100%;
     height: 50%;
   }
+`;
+
+const SliderImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 const TextWrapper = styled.div`
@@ -157,12 +162,7 @@ const Carousel: React.FC = () => {
               <p>{image.description}</p>
             </TextWrapper>
             <ImageWrapper>
-              <Image
-                src={image.src}
-                alt={image.alt}
-                layout="fill"
-                objectFit="cover"
-              />
+              <SliderImage src={image.src} alt={image.alt} />
             </ImageWrapper>
           </SlideWrapper>
         ))}
@@ -171,10 +171,11 @@ const Carousel: React.FC = () => {
         <FaArrowLeft />
       </NavigationButton>
       <NavigationButton direction="right" onClick={handleNext}>
-      <FaArrowRight />
+        <FaArrowRight />
       </NavigationButton>
     </SectionWrapper>
   );
+  
 };
 
 export default Carousel;

@@ -3,8 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Avatar } from '@mui/material';
-import EventCard from '@/components/eventCard/EventCard';
-import NavBar from '@/components/common/navbar/navBar';
+import EventCardProfile from '@/components/eventCard/EventCardProfile';
 
 // Paleta de colores
 const colors = {
@@ -69,7 +68,7 @@ const ButtonContainer = styled.div`
 
 // Botón personalizado
 const CustomButton = styled.button`
-  background-color: ${colors.accent};
+  background-color: ${colors.primary};
   color: ${colors.white};
   border: none;
   border-radius: 5px;
@@ -78,7 +77,7 @@ const CustomButton = styled.button`
   font-size: 16px;
   transition: background-color 0.3s;
   &:hover {
-    background-color: ${colors.primary};
+    background-color: ${colors.accent};
   }
 `;
 
@@ -140,7 +139,6 @@ const participatingEvents = [
 const ProfilePage: React.FC = () => {
   return (
     <ProfileContainer>
-      <NavBar />
       <ProfileSection>
         <StyledAvatar alt="Profile Picture" src="https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
         <Name>Name</Name>
@@ -155,7 +153,7 @@ const ProfilePage: React.FC = () => {
         <EventsTitle>Eventos Creados</EventsTitle>
         <EventsGrid>
           {createdEvents.map((event, index) => (
-            <EventCard
+            <EventCardProfile
               key={index}
               imageSrc={event.imageSrc}
               name={event.name}
@@ -172,7 +170,7 @@ const ProfilePage: React.FC = () => {
         <EventsTitle>Eventos en los que Participas</EventsTitle>
         <EventsGrid>
           {participatingEvents.map((event, index) => (
-            <EventCard
+            <EventCardProfile
               key={index}
               imageSrc={event.imageSrc}
               name={event.name}
