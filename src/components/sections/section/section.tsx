@@ -11,19 +11,19 @@ interface ImageData {
 
 const images: ImageData[] = [
   {
-    src: "https://images.pexels.com/photos/2609459/pexels-photo-2609459.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    src: "./assets/slideSection/trekGrpup.jpeg",
     alt: "trek group",
     title: "Discover new experiences",
     description: "join local groups",
   },
   {
-    src: "https://images.pexels.com/photos/4314209/pexels-photo-4314209.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    src: "./assets/slideSection/organize.jpeg",
     alt: "Image 2",
     title: "Organize events",
     description: "easily  in a safe and friendly environment",
   },
   {
-    src: "https://images.pexels.com/photos/2606532/pexels-photo-2606532.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    src: "./assets/slideSection/forest.jpeg",
     alt: "Image 3",
     title: "Respect for nature",
     description: "Let's go on an adventure",

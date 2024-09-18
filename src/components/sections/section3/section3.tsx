@@ -67,19 +67,19 @@ const Seccion3 = () => {
 
       <CardContainer>
         <CustomCard 
-          imageSrc="https://images.pexels.com/photos/214574/pexels-photo-214574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+          imageSrc="./assets/section3/img1.jpeg" 
           icon={Explore} 
           title="Explora Actividades" 
           description="Usa nuestra herramienta de búsqueda para encontrar actividades cerca de ti o según tus intereses."
         />
         <CustomCard 
-          imageSrc="https://images.pexels.com/photos/745045/pexels-photo-745045.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+          imageSrc="./assets/section3/img2.jpeg" 
           icon={Event} 
           title="Únete o Crea un Evento" 
           description="Encuentra compañeros para unirte a eventos o crea el tuyo propio y permite que otros se sumen."
         />
         <CustomCard 
-          imageSrc="https://images.pexels.com/photos/697244/pexels-photo-697244.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+          imageSrc="./assets/section3/img3.jpeg" 
           icon={People} 
           title="Conecta y Disfruta" 
           description="Conéctate con personas afines, comparte momentos y vive experiencias memorables."

@@ -2,16 +2,7 @@
 
 import React from "react";
 import styled, {keyframes} from "styled-components";
-import { Box, Typography } from "@mui/material";
-
-// Colores personalizados
-const colors = {
-  primary: "#165252",
-  secondary: "#D2DEEC",
-  accent: "#78882D",
-  dark: "#3C4556",
-  darker: "#013B58",
-};
+import { Box} from "@mui/material";
 
 // Animación de desvanecimiento
 const fadeIn = keyframes`
@@ -46,7 +37,7 @@ const VideoBackground = styled.video`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 0;
+  z-index: -1;
 
   @media (max-width: 768px) {
     display: none;
@@ -60,7 +51,7 @@ const MobileVideoBackground = styled.video`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 0;
+  z-index: -1;
   
   // Ocultar video para pantallas grandes
   @media (min-width: 768px) {
@@ -158,7 +149,7 @@ const SeccionComponent = () => {
     <SectionContainer>
       <VideoBackground autoPlay loop muted>
         <source
-          src="https://videos.pexels.com/video-files/2894887/2894887-uhd_2560_1440_24fps.mp4"
+          src="./assets/section1/video.mp4"
           type="video/mp4"
         />
         Your browser does not support the video tag.
@@ -166,7 +157,7 @@ const SeccionComponent = () => {
 
       <MobileVideoBackground autoPlay loop muted>
         <source
-          src="https://videos.pexels.com/video-files/12072224/12072224-hd_1080_1920_25fps.mp4"
+          src="./assets/section1/video.mp4"
           type="video/mp4"
         />
         Your browser does not support the video tag.

@@ -52,13 +52,7 @@ const EventFormPage = () => {
             
             <Field>
               <Icon><FaUser /></Icon>
-              <Select>
-                {Array.from({ length: 20 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {i + 1} participantes
-                  </option>
-                ))}
-              </Select>
+              <Input type='number' placeholder='Cupos disponibles'/>
             </Field>
             
             <Button>Publicar evento</Button>

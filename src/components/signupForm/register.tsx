@@ -17,6 +17,8 @@ import {
 } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
+import { setLoading } from "@/store/authslice";
+import { ApiService } from "@/lib/actions";
 
 // Styled Components
 const MainContainer = styled.div`
@@ -37,7 +39,7 @@ const StyledPaper = styled.div`
   flex-direction: column;
   padding: 40px;
   border-radius: 16px;
-  background-color: var(--lightBlue);
+  background: linear-gradient(135deg, #165252 0%, #ffffff 100%);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 500px;
@@ -127,6 +129,7 @@ const Register: React.FC = () => {
     confirmPassword: "",
   };
 
+  /* user initial state */
   const [user, setUser] = useState<UserState>(initialState);
 
   /* login with email and password */
@@ -139,6 +142,12 @@ const Register: React.FC = () => {
   /* show and hide password */
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  /* loading state */
+  const [loading, setLoading] = useState(false);
+
+  /* instancia API */
+  const apiService = new ApiService();
 
   /* router */
   const router = useRouter();
@@ -153,37 +162,16 @@ const Register: React.FC = () => {
     }));
   };
 
-  /* función para realizar el registro del usuario al dar click en submit */
 
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const res = await createUserWithEmailAndPassword(
-        user.email,
-        user.password
-      );
-      console.log(res);
-      sessionStorage.setItem("user", String(true));
-      setUser(initialState);
+  /* funciones */
 
-      if (sessionStorage.getItem("user")) {
-        router.push("/login");
-      }
-    } catch (error) {
-      console.error("Error signing up", error);
-    }
-
-    console.log("Email:", user.email);
-    console.log("Password:", user.password);
-    console.log("Confirm Password:", user.confirmPassword);
-  };
 
   /* login with google */
   const handleGoogleLoginRegister = async () => {
     try {
       const res = await signInWithGoogle;
       console.log(res);
-      sessionStorage.setItem("user", String(true));
+      sessionStorage.setItem("user", "true");
       if (sessionStorage.getItem("user")) {
         router.push("/");
       }
@@ -191,7 +179,6 @@ const Register: React.FC = () => {
       console.error("Error signing in with Google", error);
     }
     console.log("Login con Google");
-
   };
 
   /* show password */
@@ -204,6 +191,44 @@ const Register: React.FC = () => {
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
+
+
+  /* función para realizar el registro del usuario al dar click en submit */
+
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      /* crear usuario firebase */
+      const firebaseUser = await createUserWithEmailAndPassword(
+        user.email,
+        user.password
+      );
+      console.log("firebase user: "+firebaseUser);
+
+      /* crear usuario base de datos */
+      const apiResponse = await apiService.createUser({
+        email: user.email,
+        password: user.password,
+      })
+      console.log("API response: "+apiResponse);
+
+      /* almacenar estado de sesión */
+      sessionStorage.setItem("user", "true");
+      setUser(initialState);
+
+      router.push("/login");
+
+    } catch (error) {
+      console.error("Error signing up", error);
+    } finally {
+      setLoading(false);
+    }
+
+    console.log("Email:", user.email);
+    console.log("Password:", user.password);
+    console.log("Confirm Password:", user.confirmPassword);
+  };
+  
 
   return (
     <MainContainer>
@@ -293,7 +318,7 @@ const Register: React.FC = () => {
               },
             }}
           />
-          <StyledButton type="submit">Register</StyledButton>
+          <StyledButton type="submit" disabled={loading}>{loading ? "Loading..." : "Register"}</StyledButton>
         </StyledForm>
 
         <Typography

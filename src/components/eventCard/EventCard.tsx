@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import {
-  Tooltip,
   IconButton,
   Dialog as MuiDialog,
   DialogTitle as MuiDialogTitle,
   DialogContent as MuiDialogContent,
 } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
 import CloseIcon from "@mui/icons-material/Close";
 
 // Paleta de colores
@@ -41,7 +39,8 @@ const CardContainer = styled.div`
 
   @media (max-width: 768px) {
     width: 100%;
-    height: auto; /* Permite que la tarjeta se ajuste al ancho en pantallas pequeñas */
+    height: auto;
+    margin: auto;
   }
 `;
 

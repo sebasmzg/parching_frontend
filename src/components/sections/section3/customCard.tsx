@@ -7,7 +7,7 @@ const CardWrapper = styled.div`
   margin: 1rem;
   padding: 0 0 1.5rem 0;
   text-align: center;
-  background-color: #165252;
+  background: linear-gradient(135deg, #165252 0%, #ffffff 100%);
   color: white;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
@@ -25,7 +25,6 @@ const CardWrapper = styled.div`
 
 const IconContainer = styled.div`
   font-size: 50px;
-  color: #78882d;
   margin-bottom: 1rem;
 `;
 
@@ -43,12 +42,12 @@ const CardTitle = styled.h3`
   font-size: 24px;
   font-weight: bold;
   margin-top: 1rem;
-  color: #ffffff;
+  color: black;
 `;
 
 const CardDescription = styled.p`
   font-size: 16px;
-  color: #d2deec;
+  color: black;
 `;
 
 // Interfaz para definir las propiedades del componente
@@ -70,7 +69,7 @@ const CustomCard: React.FC<CustomCardProps> = ({
       <Image src={imageSrc} alt={title} />
       <TitleContainer>
         <IconContainer>
-          <Icon size="50px" style={{ color: "#78882D" }} />
+          <Icon size="50px" style={{ color: "#34A853" }} />
         </IconContainer>
         <CardTitle>{title}</CardTitle>
       </TitleContainer>

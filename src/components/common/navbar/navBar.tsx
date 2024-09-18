@@ -1,4 +1,5 @@
-'use client'
+// navBar.tsx
+"use client";
 
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
@@ -9,54 +10,47 @@ import IconButton from "@mui/material/IconButton";
 import AccountMenu from "./menu/menu";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import Translate from '@mui/icons-material/Translate';
-import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
+import Translate from "@mui/icons-material/Translate";
 import CssBaseline from "@mui/material/CssBaseline";
+import { useTheme } from "@mui/material";
 
-function NavBar() {
-  // Estado del tema (claro u oscuro)
-  const [darkMode, setDarkMode] = React.useState(false);
+const NavBar: React.FC = () => {
+  const [darkMode, setDarkMode] = React.useState<boolean>(false);
+  const theme = useTheme();
 
-  // Alternar entre claro y oscuro
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+  const toggleDarkMode = React.useCallback(() => {
+    setDarkMode((prevMode) => !prevMode);
+  }, []);
 
-  // Crear tema dinámico basado en el estado
-  const theme = createTheme({
-    palette: {
-      mode: darkMode ? "dark" : "light",
-    },
-  });
-
+  React.useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+  }, [darkMode]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CssBaseline />
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: darkMode ? theme.palette.background.default : "#165252",
+          backgroundColor: darkMode ? "#1a1a1a" : "#165252",
           width: "100%",
           height: "64px",
         }}
       >
         <Container maxWidth="xl">
-          <Toolbar
-            disableGutters
-            sx={{ width: "100%", paddingLeft: 0, paddingRight: 0 }}
-          >
+          <Toolbar disableGutters>
             <Box
               component="a"
               href="/"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                alignItems: "center",
-              }}
+              sx={{ mr: 2, display: { xs: "none", md: "flex" }, alignItems: "center" }}
             >
               <img
                 src="/assets/img/parchingHome.png"
+                alt="Logo"
                 style={{ height: "50px", width: "110px" }}
               />
             </Box>
@@ -68,14 +62,9 @@ function NavBar() {
               home
             </Box>
             <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
-              {/* Botón de traducción */}
-              <IconButton
-                size="small"
-                sx={{ ml: 1 }}
-              >
+              <IconButton size="small" sx={{ ml: 1 }}>
                 <Translate />
               </IconButton>
-              {/* Icono de cambiar tema */}
               <IconButton
                 sx={{ ml: 1 }}
                 onClick={toggleDarkMode}
@@ -83,13 +72,12 @@ function NavBar() {
               >
                 {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
-              {/* Menú del usuario */}
               <AccountMenu />
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
-    </ThemeProvider>
+    </>
   );
 }
 

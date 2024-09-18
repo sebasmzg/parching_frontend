@@ -102,7 +102,6 @@ const IconContainer = styled.div`
 interface Seccion {
   titulo: string;
   descripcion: string;
-  imagen: string;
   icono: React.ReactNode;
 }
 
@@ -112,21 +111,18 @@ const Seccion1: React.FC = () => {
       titulo: "Aventureros:",
       descripcion:
         "Si disfrutas de actividades al aire libre como senderismo, ciclismo o deportes acuáticos.",
-      imagen: "/img/aventureros.jpg",
       icono: <Hiking style={{ fontSize: 50 }} />,
     },
     {
       titulo: "Amantes del arte y la cultura:",
       descripcion:
         "Para quienes desean asistir a talleres creativos, visitas a museos, o eventos culturales.",
-      imagen: "/img/arte y cultura.jpg",
       icono: <Palette style={{ fontSize: 50 }} />,
     },
     {
       titulo: "Socializadores:",
       descripcion:
         "Perfecto para aquellos que buscan ampliar su círculo social en un ambiente relajado y amistoso.",
-      imagen: "/img/sociables.jpg",
       icono: <People style={{ fontSize: 50 }} />,
     },
   ];

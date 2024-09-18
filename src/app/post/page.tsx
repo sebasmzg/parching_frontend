@@ -3,6 +3,8 @@
 import React from "react";
 import EventCard from "@/components/eventCard/EventCard";
 import styled from "styled-components";
+import NavBar from "@/components/common/navbar/navBar";
+import Footer from "@/components/common/footer/footer";
 
 // Paleta de colores
 const colors = {
@@ -30,7 +32,7 @@ const CardContainer = styled.div`
   gap: 10px;
   width: 100%;
   box-sizing: border-box;
-  
+
   @media (max-width: 1200px) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -143,24 +145,28 @@ const mockEvents = [
 
 const PostPage: React.FC = () => {
   return (
-    <HomeContainer>
-      <h1 style={{ color: colors.dark }}>Upcoming Events</h1>
-      <CardContainer>
-        {mockEvents.map((event, index) => (
-          <EventCard
-            key={index}
-            imageSrc={event.imageSrc}
-            name={event.name}
-            description={event.description}
-            spots={event.spots}
-            creator={event.creator}
-            date={event.date}
-            price={event.price}
-            onJoin={event.onJoin || (() => {})}
-          />
-        ))}
-      </CardContainer>
-    </HomeContainer>
+    <>
+      <NavBar />
+      <HomeContainer>
+        <h1 style={{ color: colors.dark }}>Upcoming Events</h1>
+        <CardContainer>
+          {mockEvents.map((event, index) => (
+            <EventCard
+              key={index}
+              imageSrc={event.imageSrc}
+              name={event.name}
+              description={event.description}
+              spots={event.spots}
+              creator={event.creator}
+              date={event.date}
+              price={event.price}
+              onJoin={event.onJoin || (() => {})}
+            />
+          ))}
+        </CardContainer>
+      </HomeContainer>
+      <Footer />
+    </>
   );
 };
 

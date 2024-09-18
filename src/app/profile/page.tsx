@@ -1,9 +1,11 @@
-'use client'
+"use client";
 
-import React from 'react';
-import styled from 'styled-components';
-import { Avatar } from '@mui/material';
-import EventCardProfile from '@/components/eventCard/EventCardProfile';
+import React from "react";
+import styled from "styled-components";
+import { Avatar } from "@mui/material";
+import EventCardProfile from "@/components/eventCard/EventCardProfile";
+import NavBar from "@/components/common/navbar/navBar";
+import Footer from "@/components/common/footer/footer";
 
 // Paleta de colores
 const colors = {
@@ -81,13 +83,6 @@ const CustomButton = styled.button`
   }
 `;
 
-// Contenedor de eventos
-const EventsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
 // Título de eventos
 const EventsTitle = styled.h2`
   font-size: 1.5rem;
@@ -107,82 +102,89 @@ const EventsGrid = styled.div`
 // Datos de prueba para los eventos
 const createdEvents = [
   {
-    imageSrc: 'https://via.placeholder.com/250',
-    name: 'Created Event 1',
-    category: 'Music',
-    date: '2024-10-01',
+    imageSrc: "https://via.placeholder.com/250",
+    name: "Created Event 1",
+    category: "Music",
+    date: "2024-10-01",
   },
   {
-    imageSrc: 'https://via.placeholder.com/250',
-    name: 'Created Event 2',
-    category: 'Art',
-    date: '2024-10-15',
+    imageSrc: "https://via.placeholder.com/250",
+    name: "Created Event 2",
+    category: "Art",
+    date: "2024-10-15",
   },
 ];
 
 const participatingEvents = [
   {
-    imageSrc: 'https://via.placeholder.com/250',
-    name: 'Participating Event 1',
-    category: 'Sports',
-    date: '2024-09-25',
+    imageSrc: "https://via.placeholder.com/250",
+    name: "Participating Event 1",
+    category: "Sports",
+    date: "2024-09-25",
   },
   {
-    imageSrc: 'https://via.placeholder.com/250',
-    name: 'Participating Event 2',
-    category: 'Technology',
-    date: '2024-10-05',
+    imageSrc: "https://via.placeholder.com/250",
+    name: "Participating Event 2",
+    category: "Technology",
+    date: "2024-10-05",
   },
 ];
 
 // Componente principal del perfil
 const ProfilePage: React.FC = () => {
   return (
-    <ProfileContainer>
-      <ProfileSection>
-        <StyledAvatar alt="Profile Picture" src="https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
-        <Name>Name</Name>
-        <Username>@username</Username>
-        <ButtonContainer>
-          <CustomButton>Settings</CustomButton>
-          <CustomButton>Logout</CustomButton>
-        </ButtonContainer>
-      </ProfileSection>
-      
-      <ProfileSection>
-        <EventsTitle>Eventos Creados</EventsTitle>
-        <EventsGrid>
-          {createdEvents.map((event, index) => (
-            <EventCardProfile
-              key={index}
-              imageSrc={event.imageSrc}
-              name={event.name}
-              category={event.category}
-              date={event.date}
-              onEdit={() => alert('Edit event')}
-              onDelete={() => alert('Delete event')}
-            />
-          ))}
-        </EventsGrid>
-      </ProfileSection>
-      
-      <ProfileSection>
-        <EventsTitle>Eventos en los que Participas</EventsTitle>
-        <EventsGrid>
-          {participatingEvents.map((event, index) => (
-            <EventCardProfile
-              key={index}
-              imageSrc={event.imageSrc}
-              name={event.name}
-              category={event.category}
-              date={event.date}
-              onEdit={() => alert('Edit event')}
-              onDelete={() => alert('Delete event')}
-            />
-          ))}
-        </EventsGrid>
-      </ProfileSection>
-    </ProfileContainer>
+    <>
+      <NavBar />
+      <ProfileContainer>
+        <ProfileSection>
+          <StyledAvatar
+            alt="Profile Picture"
+            src="https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          />
+          <Name>Name</Name>
+          <Username>@username</Username>
+          <ButtonContainer>
+            <CustomButton>Settings</CustomButton>
+            <CustomButton>Logout</CustomButton>
+          </ButtonContainer>
+        </ProfileSection>
+
+        <ProfileSection>
+          <EventsTitle>Eventos Creados</EventsTitle>
+          <EventsGrid>
+            {createdEvents.map((event, index) => (
+              <EventCardProfile
+                key={index}
+                imageSrc={event.imageSrc}
+                name={event.name}
+                category={event.category}
+                date={event.date}
+                onEdit={() => alert("Edit event")}
+                onDelete={() => alert("Delete event")}
+              />
+            ))}
+          </EventsGrid>
+        </ProfileSection>
+
+        <ProfileSection>
+          <EventsTitle>Eventos en los que Participas</EventsTitle>
+          <EventsGrid>
+            {participatingEvents.map((event, index) => (
+              <EventCardProfile
+                key={index}
+                imageSrc={event.imageSrc}
+                name={event.name}
+                category={event.category}
+                date={event.date}
+                onEdit={() => alert("Edit event")}
+                onDelete={() => alert("Delete event")}
+              />
+            ))}
+          </EventsGrid>
+        </ProfileSection>
+      </ProfileContainer>
+      <Footer />
+    </>
   );
 };
 

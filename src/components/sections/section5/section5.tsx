@@ -15,7 +15,7 @@ const SectionContainer = styled.div`
 
 const LeftSection = styled.div`
   width: 50%;
-  background-image: url("https://images.pexels.com/photos/1365425/pexels-photo-1365425.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+  background-image: url("./assets/img/trekMount.jpeg");
   background-size: cover;
   background-position: center;
   height: 100%;

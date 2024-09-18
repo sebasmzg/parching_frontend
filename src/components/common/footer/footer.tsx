@@ -24,6 +24,7 @@ const FooterContainer = styled.footer`
   justify-content: center;
   text-align: center;
   height: 200px;
+
 `;
 
 // Contenedor para las secciones
@@ -74,7 +75,7 @@ const FooterLogo = styled.img`
   margin: 20px 0;
   
   @media (min-width: 768px) {
-    height: 50px;
+    height: 40px;
   }
 `;
 
