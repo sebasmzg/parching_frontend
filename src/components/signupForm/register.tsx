@@ -8,6 +8,7 @@ import {
   Link,
   IconButton,
   InputAdornment,
+  MenuItem,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styled from "styled-components";
@@ -117,16 +118,26 @@ const GoogleButton = styled.button`
 
 const Register: React.FC = () => {
   interface UserState {
+    name: string;
     email: string;
     password: string;
     confirmPassword?: string;
+    address: string;
+    birthDate: string;
+    gender: string;
+    locationDescription: string;
   }
 
   /* initial state */
   const initialState: UserState = {
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    address: "",
+    birthDate: "",
+    gender: "",
+    locationDescription: "",
   };
 
   /* user initial state */
@@ -162,9 +173,7 @@ const Register: React.FC = () => {
     }));
   };
 
-
   /* funciones */
-
 
   /* login with google */
   const handleGoogleLoginRegister = async () => {
@@ -192,43 +201,61 @@ const Register: React.FC = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  /* funcion crear usuario firebase */
+  const createUserFirebase = async () => {
+    try {
+      const res = await createUserWithEmailAndPassword(
+        user.email,
+        user.password
+      );
+      console.log(res);
+    } catch (error) {
+      console.error("Error FB signing up ", error);
+    }
+  }
 
   /* función para realizar el registro del usuario al dar click en submit */
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (user.password !== user.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  if (!user.name || !user.email || !user.password) {
+    alert("Please fill in all required fields");
+    return;
+  }
     try {
-      /* crear usuario firebase */
-      const firebaseUser = await createUserWithEmailAndPassword(
-        user.email,
-        user.password
-      );
-      console.log("firebase user: "+firebaseUser);
+      setLoading(true);
+
+      /* crear usuario en firebase */
+      createUserFirebase();
 
       /* crear usuario base de datos */
       const apiResponse = await apiService.createUser({
+        name: user.name,
         email: user.email,
         password: user.password,
-      })
-      console.log("API response: "+apiResponse);
+        address: user.address,
+        birthDate: user.birthDate,
+        gender: user.gender,
+        locationDescription: user.locationDescription || "deafault",
+      });
+      console.log("API response: " + apiResponse);
 
       /* almacenar estado de sesión */
       sessionStorage.setItem("user", "true");
       setUser(initialState);
 
       router.push("/login");
-
     } catch (error) {
       console.error("Error signing up", error);
     } finally {
       setLoading(false);
     }
-
-    console.log("Email:", user.email);
-    console.log("Password:", user.password);
-    console.log("Confirm Password:", user.confirmPassword);
   };
-  
 
   return (
     <MainContainer>
@@ -242,6 +269,14 @@ const Register: React.FC = () => {
           Sign Up
         </Typography>
         <StyledForm onSubmit={handleRegister}>
+          <TextField
+            label="Name"
+            variant="outlined"
+            name="name"
+            fullWidth
+            value={user.name}
+            onChange={handleChange}
+          />
           <TextField
             label="Email"
             variant="outlined"
@@ -318,7 +353,45 @@ const Register: React.FC = () => {
               },
             }}
           />
-          <StyledButton type="submit" disabled={loading}>{loading ? "Loading..." : "Register"}</StyledButton>
+          <TextField
+            label="Address"
+            variant="outlined"
+            name="address"
+            fullWidth
+            value={user.address}
+            onChange={handleChange}
+          />
+          <TextField
+            label="Birth Date"
+            variant="outlined"
+            name="birthDate"
+            type="date"
+            fullWidth
+            value={user.birthDate}
+            onChange={handleChange}
+            slotProps={{
+              inputLabel: {
+                shrink: true, 
+              },
+            }}  
+          />
+          <TextField
+            label="Gender"
+            variant="outlined"
+            name="gender"
+            fullWidth
+            select
+            value={user.gender}
+            onChange={handleChange}
+          >
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+            <MenuItem value="Non-Binary">Non-Binary</MenuItem>
+            <MenuItem value="PreferNotToSay">Rather Not Say</MenuItem>
+          </TextField>
+          <StyledButton type="submit" disabled={loading}>
+            {loading ? "Loading..." : "Register"}
+          </StyledButton>
         </StyledForm>
 
         <Typography
