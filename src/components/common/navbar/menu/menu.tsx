@@ -180,6 +180,12 @@ export default function AccountMenu() {
             </Link>
           </MenuItem>
           <Divider />
+          <MenuItem onClick={handleClose}>
+          <Link href="/post" passHref>
+            <Button sx={{ ml: 2, color: "text.primary" }}>Events</Button>
+          </Link>
+          </MenuItem>
+          <Divider />
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <Logout fontSize="small" />
