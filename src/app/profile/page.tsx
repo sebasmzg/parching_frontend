@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Avatar } from "@mui/material";
 import EventCardProfile from "@/components/eventCard/EventCardProfile";
@@ -69,8 +69,8 @@ const ButtonContainer = styled.div`
 `;
 
 // Botón personalizado
-const CustomButton = styled.button`
-  background-color: ${colors.primary};
+const CustomButton = styled.button<{ active: boolean }>`
+  background-color: ${({ active }) => (active ? colors.accent : colors.primary)};
   color: ${colors.white};
   border: none;
   border-radius: 5px;
@@ -132,6 +132,8 @@ const participatingEvents = [
 
 // Componente principal del perfil
 const ProfilePage: React.FC = () => {
+  const [showCreatedEvents, setShowCreatedEvents] = useState(true); // Estado para controlar qué eventos mostrar
+
   return (
     <>
       <NavBar />
@@ -144,42 +146,39 @@ const ProfilePage: React.FC = () => {
           <Name>Name</Name>
           <Username>@username</Username>
           <ButtonContainer>
-            <CustomButton>Settings</CustomButton>
-            <CustomButton>Logout</CustomButton>
+            <CustomButton
+              active={showCreatedEvents}
+              onClick={() => setShowCreatedEvents(true)}
+            >
+              Created
+            </CustomButton>
+            <CustomButton
+              active={!showCreatedEvents}
+              onClick={() => setShowCreatedEvents(false)}
+            >
+              Joined
+            </CustomButton>
           </ButtonContainer>
         </ProfileSection>
 
         <ProfileSection>
-          <EventsTitle>Eventos Creados</EventsTitle>
+          <EventsTitle>
+            {showCreatedEvents ? "Eventos Creados" : "Eventos en los que Participas"}
+          </EventsTitle>
           <EventsGrid>
-            {createdEvents.map((event, index) => (
-              <EventCardProfile
-                key={index}
-                imageSrc={event.imageSrc}
-                name={event.name}
-                category={event.category}
-                date={event.date}
-                onEdit={() => alert("Edit event")}
-                onDelete={() => alert("Delete event")}
-              />
-            ))}
-          </EventsGrid>
-        </ProfileSection>
-
-        <ProfileSection>
-          <EventsTitle>Eventos en los que Participas</EventsTitle>
-          <EventsGrid>
-            {participatingEvents.map((event, index) => (
-              <EventCardProfile
-                key={index}
-                imageSrc={event.imageSrc}
-                name={event.name}
-                category={event.category}
-                date={event.date}
-                onEdit={() => alert("Edit event")}
-                onDelete={() => alert("Delete event")}
-              />
-            ))}
+            {(showCreatedEvents ? createdEvents : participatingEvents).map(
+              (event, index) => (
+                <EventCardProfile
+                  key={index}
+                  imageSrc={event.imageSrc}
+                  name={event.name}
+                  category={event.category}
+                  date={event.date}
+                  onEdit={() => alert("Edit event")}
+                  onDelete={() => alert("Delete event")}
+                />
+              )
+            )}
           </EventsGrid>
         </ProfileSection>
       </ProfileContainer>

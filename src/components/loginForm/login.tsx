@@ -153,7 +153,7 @@ const Login: React.FC = () => {
       console.log(res);
       sessionStorage.setItem("user", String(true));
       setUser(initialState);
-      router.push("/");
+      router.push("/post");
     } catch (error) {
       console.error("Error signing in", error);
     }
@@ -166,7 +166,7 @@ const Login: React.FC = () => {
       console.log(res);
       sessionStorage.setItem("user", String(true));
       if(sessionStorage.getItem("user")){
-        router.push("/");
+        router.push("/post");
       }
     } catch (error) {
       console.error("Error signing in with Google", error);

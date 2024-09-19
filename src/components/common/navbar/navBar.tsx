@@ -1,4 +1,3 @@
-// navBar.tsx
 "use client";
 
 import * as React from "react";
@@ -12,23 +11,20 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Translate from "@mui/icons-material/Translate";
 import CssBaseline from "@mui/material/CssBaseline";
-import { useTheme } from "@mui/material";
+import { auth } from "@/app/firebase/config";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Button } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const NavBar: React.FC = () => {
-  const [darkMode, setDarkMode] = React.useState<boolean>(false);
-  const theme = useTheme();
+  /* const [darkMode, setDarkMode] = React.useState<boolean>(false);
 
   const toggleDarkMode = React.useCallback(() => {
     setDarkMode((prevMode) => !prevMode);
   }, []);
-
-  React.useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
-    }
-  }, [darkMode]);
+ */
+  const [user] = useAuthState(auth);
+  const router = useRouter();
 
   return (
     <>
@@ -36,17 +32,26 @@ const NavBar: React.FC = () => {
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: darkMode ? "#1a1a1a" : "#165252",
+          /* backgroundColor: darkMode ? "#1a1a1a" : "#165252", */
           width: "100%",
           height: "64px",
+          backgroundColor: "#165252",
         }}
       >
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
+          <Toolbar
+            disableGutters
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            {/* Logo alineado a la izquierda */}
             <Box
               component="a"
               href="/"
-              sx={{ mr: 2, display: { xs: "none", md: "flex" }, alignItems: "center" }}
+              sx={{ display: "flex", alignItems: "center" }}
             >
               <img
                 src="/assets/img/parchingHome.png"
@@ -54,24 +59,40 @@ const NavBar: React.FC = () => {
                 style={{ height: "50px", width: "110px" }}
               />
             </Box>
-            <Box
-              component="a"
-              href="/"
-              sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
-            >
-              home
-            </Box>
-            <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
+
+            {/* Contenedor de botones alineado a la derecha */}
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {user && (
+                <Box
+                  component="a"
+                  href="/post"
+                  sx={{
+                    marginRight: 2,
+                    display: { xs: "none", md: "flex" },
+                    textDecoration: "none",
+                    color: "white",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    color="inherit"
+                    sx={{ borderRadius: "20px", boxShadow: 3 }}
+                    onClick={() => router.push("/post")}
+                  >
+                    Events
+                  </Button>
+                </Box>
+              )}
               <IconButton size="small" sx={{ ml: 1 }}>
                 <Translate />
               </IconButton>
-              <IconButton
+              {/* <IconButton
                 sx={{ ml: 1 }}
                 onClick={toggleDarkMode}
                 color="inherit"
               >
                 {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
-              </IconButton>
+              </IconButton> */}
               <AccountMenu />
             </Box>
           </Toolbar>
@@ -79,6 +100,6 @@ const NavBar: React.FC = () => {
       </AppBar>
     </>
   );
-}
+};
 
 export default NavBar;
