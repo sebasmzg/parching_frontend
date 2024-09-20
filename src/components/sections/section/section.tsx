@@ -98,8 +98,9 @@ const TextWrapper = styled.div`
 
   h1 {
     margin-bottom: 1rem;
-    font-size: 3rem;
-    font-weight: 700;
+    font-size: 4rem;
+    font-weight: bold;
+    color: #013b58
   }
 
   p {

@@ -61,21 +61,6 @@ const Login: React.FC = () => {
     }));
   };
 
-  /* email and password login */
-
-  const LoginFirebase = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await signInWithEmailAndPassword(user.email, user.password);
-      console.log(res);
-      sessionStorage.setItem("user", String(true));
-      setUser(initialState);
-      router.push("/post");
-    } catch (error) {
-      console.error("Error signing in", error);
-    }
-  };
-
   /* login with google */
   const handleGoogleLogin = async () => {
     try {
@@ -181,7 +166,7 @@ const Login: React.FC = () => {
           align="center"
           sx={{ margin: "20px 0", color: "var(--blue)" }}
         >
-          or
+          or login with
         </Typography>
 
         <GoogleButton onClick={handleGoogleLogin}>
@@ -217,7 +202,7 @@ const StyledPaper = styled.div`
   flex-direction: column;
   padding: 40px;
   border-radius: 16px;
-  background-color: var(--lightBlue);
+  background: linear-gradient(135deg, #165252 0%, #ffffff 100%);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 500px;

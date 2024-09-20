@@ -15,7 +15,7 @@ const colors = {
 
 // Contenedor principal del footer
 const FooterContainer = styled.footer`
-  background-color: ${colors.dark};
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.99), ${colors.dark});
   color: ${colors.secondary};
   padding: 40px 20px;
   display: flex;
@@ -24,7 +24,6 @@ const FooterContainer = styled.footer`
   justify-content: center;
   text-align: center;
   height: 200px;
-
 `;
 
 // Contenedor para las secciones
@@ -34,7 +33,6 @@ const FooterSection = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-bottom: 10px;
   height: 100%;
 
   @media (min-width: 768px) {
@@ -72,10 +70,11 @@ const SocialIcon = styled.a`
 const FooterLogo = styled.img`
   height: 50px; 
   width: auto;
-  margin: 20px 0;
+  margin: 10px 0;
   
   @media (min-width: 768px) {
-    height: 60px;
+    height: 100px;
+    width: auto;
   }
 `;
 

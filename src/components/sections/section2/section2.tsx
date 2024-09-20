@@ -8,8 +8,8 @@ import { Hiking, Palette, People } from "@mui/icons-material";
 const colors = {
   containerBackground: "#F0F4F8",
   sectionBackground: "#FFFFFF",
-  titleColor: "#0A3D62",
-  descriptionColor: "#1F2A38",
+  titleColor: "#013b58",
+  descriptionColor: "#165252",
   iconColor: "#34A853",
 };
 
@@ -39,7 +39,7 @@ const TextSection = styled.div`
 const SectionTitle = styled.h2`
   color: ${colors.titleColor};
   font-weight: bold;
-  font-size: 50px;
+  font-size: 4rem;
 `;
 
 const ContentWrapper = styled.div`
@@ -85,13 +85,13 @@ const Title = styled.h3`
   color: ${colors.titleColor};
   margin-bottom: 20px;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 3rem;
 `;
 
 const Description = styled.p`
   color: ${colors.descriptionColor};
   margin-bottom: 12px;
-  font-size: 18px;
+  font-size: 1.5rem;
 `;
 
 const IconContainer = styled.div`

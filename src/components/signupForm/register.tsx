@@ -84,7 +84,7 @@ const Register: React.FC = () => {
   /* funciones */
 
   /* login with google */
-  const handleGoogleLoginRegister = async () => {
+  const handleGoogleLogin = async () => {
     try {
       const res = await signInWithGoogle;
       console.log(res);
@@ -305,10 +305,10 @@ const Register: React.FC = () => {
           align="center"
           sx={{ margin: "20px 0", color: "var(--blue)" }}
         >
-          or
+          or login with
         </Typography>
 
-        <GoogleButton onClick={handleGoogleLoginRegister}>
+        <GoogleButton onClick={handleGoogleLogin}>
           <img src="/assets/img/google.png" alt="Google logo" />
         </GoogleButton>
 
@@ -331,7 +331,7 @@ const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   padding: 0 20px;
   box-sizing: border-box;
 
@@ -343,7 +343,7 @@ const MainContainer = styled.div`
 const StyledPaper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 40px;
+  padding: 32px;
   border-radius: 16px;
   background: linear-gradient(135deg, #165252 0%, #ffffff 100%);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
@@ -351,7 +351,7 @@ const StyledPaper = styled.div`
   max-width: 500px;
 
   @media (max-width: 768px) {
-    padding: 20px;
+    padding: 24px;
   }
 `;
 
@@ -367,6 +367,8 @@ const StyledButton = styled.button`
   padding: 12px;
   border-radius: 8px;
   font-size: 1rem;
+  border: none;
+  cursor: pointer;
 
   &:hover {
     background-color: var(--blueSoft);
@@ -400,7 +402,7 @@ const GoogleButton = styled.button`
   border-radius: 8px;
   font-weight: bold;
   border: none;
-  font-size: 20px;
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -414,8 +416,8 @@ const GoogleButton = styled.button`
 
   img {
     margin-right: 8px;
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
   }
 `;
 

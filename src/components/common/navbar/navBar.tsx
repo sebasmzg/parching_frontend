@@ -17,12 +17,6 @@ import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 const NavBar: React.FC = () => {
-  /* const [darkMode, setDarkMode] = React.useState<boolean>(false);
-
-  const toggleDarkMode = React.useCallback(() => {
-    setDarkMode((prevMode) => !prevMode);
-  }, []);
- */
   const [user] = useAuthState(auth);
   const router = useRouter();
   const apiUser = sessionStorage.getItem("user");
@@ -33,10 +27,11 @@ const NavBar: React.FC = () => {
       <AppBar
         position="fixed"
         sx={{
-          /* backgroundColor: darkMode ? "#1a1a1a" : "#165252", */
           width: "100%",
-          height: "64px",
-          backgroundColor: "#165252",
+          background: "linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0))",
+          display: "flex",
+          alignItems: "center",
+          boxShadow: 0,
         }}
       >
         <Container maxWidth="xl">
@@ -48,7 +43,7 @@ const NavBar: React.FC = () => {
               alignItems: "center",
             }}
           >
-            {/* Logo alineado a la izquierda */}
+            {/* Logo aligned to the left */}
             <Box
               component="a"
               href="/"
@@ -57,43 +52,36 @@ const NavBar: React.FC = () => {
               <img
                 src="/assets/img/parchingHome.png"
                 alt="Logo"
-                style={{ height: "50px", width: "110px" }}
+                style={{ height: "110px", width: "auto" }}
               />
             </Box>
 
-            {/* Contenedor de botones alineado a la derecha */}
+            {/* Button container aligned to the right */}
             <Box sx={{ display: "flex", alignItems: "center" }}>
-                {(user || apiUser) && (
+              {(user || apiUser) && (
                 <Box
                   component="a"
                   href="/post"
                   sx={{
-                  marginRight: 2,
-                  display: { xs: "none", md: "flex" },
-                  textDecoration: "none",
-                  color: "white",
+                    marginRight: 2,
+                    display: { xs: "none", md: "flex" },
+                    textDecoration: "none",
+                    color: "white",
                   }}
                 >
                   <Button
-                  variant="outlined"
-                  color="inherit"
-                  sx={{ borderRadius: "20px" }}
-                  onClick={() => router.push("/post")}
+                    variant="outlined"
+                    color="inherit"
+                    sx={{ borderRadius: "20px" }}
+                    onClick={() => router.push("/post")}
                   >
-                  Events
+                    Events
                   </Button>
                 </Box>
-                )}
-              <IconButton size="small" sx={{ mx:2 }}>
+              )}
+              <IconButton size="small" sx={{ mx: 2, color: 'black' }}>
                 <Translate />
               </IconButton>
-              {/* <IconButton
-                sx={{ ml: 1 }}
-                onClick={toggleDarkMode}
-                color="inherit"
-              >
-                {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
-              </IconButton> */}
               <AccountMenu />
             </Box>
           </Toolbar>

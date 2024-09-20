@@ -35,7 +35,7 @@ const SectionTitle = styled.h2`
 `;
 
 const SectionDescription = styled.h4`
-  color: #3C4556;
+  color: #013B58;
   font-size: 20px;
   margin-top: 1rem;
 `;

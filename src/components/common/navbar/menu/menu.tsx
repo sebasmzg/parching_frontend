@@ -18,6 +18,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import LoginForm from "@/components/loginForm/login";
 import CloseIcon from "@mui/icons-material/Close";
+import Register from "@/components/signupForm/register";
 
 export default function AccountMenu() {
   /* menu functions */
@@ -42,20 +43,27 @@ export default function AccountMenu() {
   };
 
   /* login modal state */
-  const [openModal, setOpenModal] = React.useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const [openModalLogin, setOpenModalLogin] = React.useState(false);
+  const [openModalRegister, setOpenModalRegister] = React.useState(false);
+  const handleOpenModalLogin = () => setOpenModalLogin(true);
+  const handleOpenModalRegister = () => setOpenModalRegister(true);
+  const handleCloseModalLogin = () => setOpenModalLogin(false);
+  const handleCloseModalRegister = () => setOpenModalRegister(false);
 
   return (
     <>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         {/* user verification */}
-        {(user || apiUser) ? (
+        {user || apiUser ? (
           <>
             <Button
               variant="contained"
               color="primary"
-              sx={{ borderRadius: "20px", boxShadow: 3 }}
+              sx={{
+                borderRadius: "20px",
+                boxShadow: 3,
+                backgroundColor: "#165252",
+              }}
               onClick={() => router.push("/events")}
             >
               Add Event
@@ -79,21 +87,54 @@ export default function AccountMenu() {
             </Tooltip>
           </>
         ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ borderRadius: "20px", boxShadow: 3 }}
-            onClick={handleOpenModal}
-          >
-            Login
-          </Button>
+          <Box>
+            <Button
+              variant="outlined"
+              color="primary"
+              sx={{
+                borderRadius: "20px",
+                boxShadow: 3,
+                mr: 2,
+                color: "#165252",
+                fontWeight: "bold",
+                borderColor: "#165252",
+                backgroundColor: "#d2deec",
+                "&:hover": {
+                  backgroundColor: "#013b58",
+                  color: "white",
+                  borderColor: "#013b58",
+                },
+              }}
+              onClick={handleOpenModalLogin}
+            >
+              Login
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                borderRadius: "20px",
+                boxShadow: 3,
+                backgroundColor: "#165252",
+                fontWeight: "bold",
+                "&:hover":{
+                  backgroundColor: "#013b58",
+                  color: "white",
+                  borderColor: "#013b58",
+                }
+              }}
+              onClick={handleOpenModalRegister}
+            >
+              Sign up
+            </Button>
+          </Box>
         )}
       </Box>
 
       {/* Modal para Login */}
       <Modal
-        open={openModal}
-        onClose={handleCloseModal}
+        open={openModalLogin}
+        onClose={handleCloseModalLogin}
         aria-labelledby="login-modal"
         aria-describedby="login-modal-description"
         sx={{
@@ -118,7 +159,7 @@ export default function AccountMenu() {
         >
           {/* Botón de cerrar */}
           <IconButton
-            onClick={handleCloseModal}
+            onClick={handleCloseModalLogin}
             sx={{
               position: "absolute",
               top: 10,
@@ -131,6 +172,50 @@ export default function AccountMenu() {
 
           {/* Formulario de login */}
           <LoginForm />
+        </Box>
+      </Modal>
+
+      {/* Modal para Register */}
+      <Modal
+        open={openModalRegister}
+        onClose={handleOpenModalRegister}
+        aria-labelledby="login-modal"
+        aria-describedby="login-modal-description"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backdropFilter: "blur(5px)",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+            bgcolor: "transparent",
+            boxSizing: "border-box",
+            width: "100%",
+            maxWidth: "450px",
+            maxHeight: "600px",
+          }}
+        >
+          {/* Botón de cerrar */}
+          <IconButton
+            onClick={handleCloseModalRegister}
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              color: "white",
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          {/* Formulario de register */}
+          <Register />
         </Box>
       </Modal>
 
@@ -182,9 +267,9 @@ export default function AccountMenu() {
           </MenuItem>
           <Divider />
           <MenuItem onClick={handleClose}>
-          <Link href="/post" passHref>
-            <Button sx={{ ml: 2, color: "text.primary" }}>Events</Button>
-          </Link>
+            <Link href="/post" passHref>
+              <Button sx={{ ml: 2, color: "text.primary" }}>Events</Button>
+            </Link>
           </MenuItem>
           <Divider />
           <MenuItem onClick={handleLogout}>

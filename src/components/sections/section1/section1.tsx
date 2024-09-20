@@ -79,23 +79,33 @@ const TextOverlay = styled.div`
   // Adaptación para pantallas más grandes
   @media (min-width: 768px) {
     padding: 50px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
   }
 `;
 
 const Title = styled.h1`
-  color: white;
-  font-size: 50px;
-  font-weight: bold;
   margin-bottom: 30px;
   animation: ${fadeIn} 1.2s ease-out;
 
+  img {
+    width: 100%;
+    max-width: 400px; // Adjust as needed
+    height: auto;
+  }
+
   @media (max-width: 768px) {
     font-size: 35px;
+
+    img {
+      max-width: 200px;
+    }
   }
 `;
 const SubTitle = styled.h2`
   color: white;
-  font-size: 40px;
+  font-size: 4rem;
   margin-bottom: 20px;
   padding: 5px 10px;
   border-radius: 5px;
@@ -106,7 +116,7 @@ const SubTitle = styled.h2`
   &::after {
     content: "";
     position: absolute;
-    bottom: -10px;
+    bottom: 0px;
     left: 63%;
     transform: translateX(-50%);
     width: 130%;
@@ -118,24 +128,15 @@ const SubTitle = styled.h2`
 
   @media (max-width: 768px) {
     font-size: 28px;
+    &::after {
+      width: 120%;
+      height: 30px;
+    }
   }
 `;
-/* const SubTitle = styled(Typography)`
-  color: white;
-  font-size: 30px;
-  margin-bottom: 20px;
-  background-color: ${colors.accent};
-  padding: 5px 10px;
-  border-radius: 5px;
-  animation: ${fadeIn} 1.7s ease-out;
-
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
-`; */
 
 const Description = styled.h4`
-  font-size: 25px;
+  font-size: 1.6rem;
   line-height: 1.6;
   animation: ${fadeIn} 2.2s ease-out;
   
@@ -164,7 +165,9 @@ const SeccionComponent = () => {
       </MobileVideoBackground>
 
       <TextOverlay>
-        <Title>Parching App</Title>
+        <Title>
+          <img src="/assets/img/parchingHomeWhite.png" alt="Parching Home" />
+        </Title>
         <SubTitle>Socialize and discover</SubTitle>
         <Description>
           Parching App is a platform that connects people with shared interests
