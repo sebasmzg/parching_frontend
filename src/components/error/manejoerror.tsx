@@ -1,1 +1,0 @@
-//Componentes para manejar errores

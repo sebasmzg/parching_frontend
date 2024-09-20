@@ -4,19 +4,13 @@ import styled from "styled-components";
 const colors = {
   primary: "#165252",
   accent: "#78882D",
-  secondary: "#D2DEEC",
+  secondary: "#fdfeff",
   white: "#ffffff",
   dark: "#3C4556",
 };
 
 const itemData = [
-  { img: "/img/mountain.jpg", title: "Mountain" },
-  { img: "/img/arte y cultura.jpg", title: "Forest" },
-  { img: "/img/parque.jpg", title: "Desert" },
-  { img: "/img/parque.jpg", title: "Desert" },
-  { img: "/img/parque.jpg", title: "Desert" },
-  { img: "/img/parque.jpg", title: "Desert" },
-  // Agrega más imágenes según sea necesario
+  { img: "/img/adventure-1.jpg", title: "Mountain" },
 ];
 
 const EventFormPage = () => {
@@ -25,23 +19,11 @@ const EventFormPage = () => {
       <ContentWrapper>
         <ImageSection>
           <ImageList>
-            {itemData.slice(0, 3).map((item) => (
+            {itemData.map((item) => (
               <ImageListItem key={item.img}>
                 <img
-                  srcSet={`${item.img}?w=161&fit=crop&auto=format&dpr=2 2x`}
-                  src={`${item.img}?w=161&fit=crop&auto=format`}
-                  alt={item.title}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
-          <ImageList>
-            {itemData.slice(3, 6).map((item) => (
-              <ImageListItem key={item.img}>
-                <img
-                  srcSet={`${item.img}?w=161&fit=crop&auto=format&dpr=2 2x`}
-                  src={`${item.img}?w=161&fit=crop&auto=format`}
+                  srcSet={`${item.img}?w=600&fit=crop&auto=format&dpr=2 2x`}
+                  src={`${item.img}?w=600&fit=crop&auto=format`}
                   alt={item.title}
                   loading="lazy"
                 />
@@ -50,29 +32,33 @@ const EventFormPage = () => {
           </ImageList>
           <OverlayText>
             ¡Inspírate y crea un evento inolvidable! <br />
-            Comparte la aventura con el mundo.
           </OverlayText>
         </ImageSection>
         <FormSection>
           <FormContainer>
             <Form>
               <Field>
+                <Label>Título</Label>
                 <Input type="text" placeholder="Título del evento" />
               </Field>
 
               <Field>
+                <Label>Descripción</Label>
                 <TextArea placeholder="Descripción del evento" />
               </Field>
 
               <Field>
+                <Label>Fecha</Label>
                 <Input type="date" />
               </Field>
 
               <Field>
+                <Label>Ubicación</Label>
                 <Input type="text" placeholder="Ubicación" />
               </Field>
 
               <Field>
+                <Label>Categoría</Label>
                 <Select>
                   <option>Elige una categoría</option>
                   <option>Naturaleza y aire libre</option>
@@ -87,6 +73,7 @@ const EventFormPage = () => {
               </Field>
 
               <Field>
+                <Label>Cupos disponibles</Label>
                 <Select>
                   <option value="">Cupos disponibles</option>
                   {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
@@ -114,7 +101,7 @@ const PageWrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: ${colors.white};
+  background-color: ${colors.secondary};
   padding: 20px;
 `;
 
@@ -145,10 +132,10 @@ const ImageSection = styled.div`
 
 const ImageList = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: 1fr;
+  gap: 0;
   width: 100%;
-  height: 50%;
+  height: 100%;
 `;
 
 const ImageListItem = styled.div`
@@ -176,27 +163,26 @@ const OverlayText = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.6);
-  color: ${colors.white};
+  color: #ffffff;
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  font-size: 18px;
+  font-size: 22px;
   line-height: 1.5;
 `;
 
 const FormSection = styled.div`
   flex: 1;
   width: 100%;
-  height: 100%;
-  margin: 1rem;
+  margin: 6rem;
   padding: 0;
   text-align: center;
   background: linear-gradient(
     135deg,
-    ${colors.primary} 0%,
+    ${colors.primary} 5%,
     ${colors.white} 100%
   );
-  color: ${colors.white};
+  color: #165252;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -211,39 +197,49 @@ const FormSection = styled.div`
 
 const FormContainer = styled.div`
   width: 100%;
-  padding: 20px;
+  max-width: 320px;  // Ajusta el ancho máximo del formulario
+  padding: 15px;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;  
 `;
 
 const Field = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;  
+`;
+
+const Label = styled.label`
+  font-size: 14px;
+  color: ${colors.dark};
+  margin-bottom: 5px;  
 `;
 
 const Input = styled.input`
-  padding: 12px;
+  width: 100%;  
+  padding: 10px;  
   border: 2px solid ${colors.primary};
   border-radius: 8px;
-  font-size: 16px;
-  color: ${colors.dark};
+  font-size: 14px;  
+  color: ${colors.dark};  
 
   &::placeholder {
-    color: ${colors.secondary};
+    color: ${colors.secondary};  // Color del placeholder
   }
 `;
 
 const TextArea = styled.textarea`
-  padding: 12px;
+  width: 100%;  // Ancho completo
+  padding: 10px;  
   border: 2px solid ${colors.primary};
   border-radius: 8px;
-  font-size: 16px;
-  color: ${colors.dark};
-  height: 100px;
+  font-size: 14px; 
+  color: ${colors.dark};  // Color del texto de entrada
+  height: 70px;  
   resize: none;
 
   &::placeholder {
@@ -252,20 +248,21 @@ const TextArea = styled.textarea`
 `;
 
 const Select = styled.select`
-  padding: 12px;
+  width: 100%;  
+  padding: 10px;  
   border: 2px solid ${colors.primary};
   border-radius: 8px;
-  font-size: 16px;
-  color: ${colors.dark};
+  font-size: 14px;  // Reduce el tamaño de la fuente
+  color: ${colors.dark};  
 `;
 
 const Button = styled.button`
-  padding: 12px;
+  padding: 10px;  
   background-color: ${colors.accent};
   color: ${colors.white};
   border: none;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 15px;  
   cursor: pointer;
   transition: background-color 0.3s ease;
 
