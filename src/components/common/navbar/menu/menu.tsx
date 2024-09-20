@@ -32,6 +32,7 @@ export default function AccountMenu() {
 
   /* sign out */
   const [user] = useAuthState(auth);
+  const apiUser = sessionStorage.getItem("user");
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -49,7 +50,7 @@ export default function AccountMenu() {
     <>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         {/* user verification */}
-        {user ? (
+        {(user || apiUser) ? (
           <>
             <Button
               variant="contained"
@@ -134,7 +135,7 @@ export default function AccountMenu() {
       </Modal>
 
       {/* menu items */}
-      {user && (
+      {(user || apiUser) && (
         <Menu
           anchorEl={anchorEl}
           id="account-menu"

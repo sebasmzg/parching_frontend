@@ -23,6 +23,10 @@ export interface IUserRegister {
     locationDescription: string;
 }
 
+export interface IUserLogin {
+    email:    string;
+    password: string;
+}
 
 export interface Client {
     createdAt:           Date;

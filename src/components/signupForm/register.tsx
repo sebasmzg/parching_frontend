@@ -18,101 +18,9 @@ import {
 } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
-import { setLoading } from "@/store/authslice";
-import { ApiService } from "@/lib/actions";
+import { ApiService } from "@/lib/authActions";
 
-// Styled Components
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  padding: 0 20px;
 
-  @media (max-width: 768px) {
-    padding: 0 10px;
-  }
-`;
-
-const StyledPaper = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #165252 0%, #ffffff 100%);
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
-
-  @media (max-width: 768px) {
-    padding: 20px;
-  }
-`;
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const StyledButton = styled.button`
-  background-color: var(--blue);
-  color: white;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 1rem;
-
-  &:hover {
-    background-color: var(--blueSoft);
-  }
-`;
-
-const FooterBox = styled.div`
-  margin-top: 16px;
-  display: flex;
-  justify-content: center;
-
-  a {
-    color: var(--blueSoft);
-    font-weight: bold;
-    &:hover {
-      text-decoration: underline;
-      color: var(--blueSoft);
-    }
-  }
-`;
-
-const StyledTypography = styled(Typography)`
-  color: var(--violet);
-  font-family: "Belleza", sans-serif;
-`;
-
-const GoogleButton = styled.button`
-  background-color: transparent;
-  color: #db4437;
-  padding: 12px;
-  border-radius: 8px;
-  font-weight: bold;
-  border: none;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #c23321;
-    color: white;
-  }
-
-  img {
-    margin-right: 8px;
-    width: 40px;
-    height: 40px;
-  }
-`;
 
 // Component
 
@@ -140,6 +48,9 @@ const Register: React.FC = () => {
     locationDescription: "",
   };
 
+  /* Api instance */
+  const apiService = new ApiService();
+
   /* user initial state */
   const [user, setUser] = useState<UserState>(initialState);
 
@@ -156,9 +67,6 @@ const Register: React.FC = () => {
 
   /* loading state */
   const [loading, setLoading] = useState(false);
-
-  /* instancia API */
-  const apiService = new ApiService();
 
   /* router */
   const router = useRouter();
@@ -245,8 +153,7 @@ const Register: React.FC = () => {
       });
       console.log("API response: " + apiResponse);
 
-      /* almacenar estado de sesión */
-      sessionStorage.setItem("user", "true");
+
       setUser(initialState);
 
       router.push("/login");
@@ -417,5 +324,99 @@ const Register: React.FC = () => {
     </MainContainer>
   );
 };
+
+// Styled Components
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 0 20px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 0 10px;
+  }
+`;
+
+const StyledPaper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #165252 0%, #ffffff 100%);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+`;
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const StyledButton = styled.button`
+  background-color: var(--blue);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+
+  &:hover {
+    background-color: var(--blueSoft);
+  }
+`;
+
+const FooterBox = styled.div`
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+
+  a {
+    color: var(--blueSoft);
+    font-weight: bold;
+    &:hover {
+      text-decoration: underline;
+      color: var(--blueSoft);
+    }
+  }
+`;
+
+const StyledTypography = styled(Typography)`
+  color: var(--violet);
+  font-family: "Belleza", sans-serif;
+`;
+
+const GoogleButton = styled.button`
+  background-color: transparent;
+  color: #db4437;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #c23321;
+    color: white;
+  }
+
+  img {
+    margin-right: 8px;
+    width: 40px;
+    height: 40px;
+  }
+`;
 
 export default Register;

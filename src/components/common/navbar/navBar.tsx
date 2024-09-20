@@ -25,6 +25,7 @@ const NavBar: React.FC = () => {
  */
   const [user] = useAuthState(auth);
   const router = useRouter();
+  const apiUser = sessionStorage.getItem("user");
 
   return (
     <>
@@ -62,28 +63,28 @@ const NavBar: React.FC = () => {
 
             {/* Contenedor de botones alineado a la derecha */}
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              {user && (
+                {(user || apiUser) && (
                 <Box
                   component="a"
                   href="/post"
                   sx={{
-                    marginRight: 2,
-                    display: { xs: "none", md: "flex" },
-                    textDecoration: "none",
-                    color: "white",
+                  marginRight: 2,
+                  display: { xs: "none", md: "flex" },
+                  textDecoration: "none",
+                  color: "white",
                   }}
                 >
                   <Button
-                    variant="outlined"
-                    color="inherit"
-                    sx={{ borderRadius: "20px", boxShadow: 3 }}
-                    onClick={() => router.push("/post")}
+                  variant="outlined"
+                  color="inherit"
+                  sx={{ borderRadius: "20px" }}
+                  onClick={() => router.push("/post")}
                   >
-                    Events
+                  Events
                   </Button>
                 </Box>
-              )}
-              <IconButton size="small" sx={{ ml: 1 }}>
+                )}
+              <IconButton size="small" sx={{ mx:2 }}>
                 <Translate />
               </IconButton>
               {/* <IconButton

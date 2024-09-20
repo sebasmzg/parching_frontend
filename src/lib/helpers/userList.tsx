@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ApiService } from "../actions";
+import { ApiService } from "../authActions";
 import { IUsers } from "../models";
 
 const UsersList: React.FC = () => {
@@ -40,6 +40,9 @@ const UsersList: React.FC = () => {
               <p>
                 <strong>Role:</strong> {user.role.name}
               </p>
+              <p>
+                <strong>Id:</strong> {user.id}
+              </p>
             </li>
           ))}
         </ul>
@@ -49,3 +52,4 @@ const UsersList: React.FC = () => {
 };
 
 export default UsersList;
+
