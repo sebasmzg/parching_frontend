@@ -70,12 +70,12 @@ const SocialIcon = styled.a`
 
 // Estilo para la imagen del logo
 const FooterLogo = styled.img`
-  height: 80px; 
+  height: 50px; 
   width: auto;
   margin: 20px 0;
   
   @media (min-width: 768px) {
-    height: 40px;
+    height: 60px;
   }
 `;
 

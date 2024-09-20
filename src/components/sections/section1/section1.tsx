@@ -157,7 +157,7 @@ const SeccionComponent = () => {
 
       <MobileVideoBackground autoPlay loop muted>
         <source
-          src="./assets/section1/video.mp4"
+          src="./assets/section1/videoMobile.mp4"
           type="video/mp4"
         />
         Your browser does not support the video tag.

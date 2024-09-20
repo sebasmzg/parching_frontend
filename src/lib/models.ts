@@ -13,6 +13,21 @@ export interface IUsers {
     role:                  Role;
 }
 
+export interface IUserRegister {
+    name:                string;
+    email:               string;
+    password:            string;
+    address:             string;
+    birthDate:           string;
+    gender:              string;
+    locationDescription: string;
+}
+
+export interface IUserLogin {
+    email:    string;
+    password: string;
+}
+
 export interface Client {
     createdAt:           Date;
     updatedAt:           Date;

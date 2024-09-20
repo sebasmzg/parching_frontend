@@ -8,6 +8,7 @@ import {
   Link,
   IconButton,
   InputAdornment,
+  MenuItem,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styled from "styled-components";
@@ -17,8 +18,312 @@ import {
 } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
-import { setLoading } from "@/store/authslice";
-import { ApiService } from "@/lib/actions";
+import { ApiService } from "@/lib/authActions";
+
+
+
+// Component
+
+const Register: React.FC = () => {
+  interface UserState {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword?: string;
+    address: string;
+    birthDate: string;
+    gender: string;
+    locationDescription: string;
+  }
+
+  /* initial state */
+  const initialState: UserState = {
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    address: "",
+    birthDate: "",
+    gender: "",
+    locationDescription: "",
+  };
+
+  /* Api instance */
+  const apiService = new ApiService();
+
+  /* user initial state */
+  const [user, setUser] = useState<UserState>(initialState);
+
+  /* login with email and password */
+  const [createUserWithEmailAndPassword] =
+    useCreateUserWithEmailAndPassword(auth);
+
+  /* login with google */
+  const [signInWithGoogle] = useSignInWithGoogle(auth);
+
+  /* show and hide password */
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  /* loading state */
+  const [loading, setLoading] = useState(false);
+
+  /* router */
+  const router = useRouter();
+
+  /* función para manejar los cambios en los datos de registro del usuario */
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  /* funciones */
+
+  /* login with google */
+  const handleGoogleLoginRegister = async () => {
+    try {
+      const res = await signInWithGoogle;
+      console.log(res);
+      sessionStorage.setItem("user", "true");
+      if (sessionStorage.getItem("user")) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.error("Error signing in with Google", error);
+    }
+    console.log("Login con Google");
+  };
+
+  /* show password */
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  /* hide password */
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  /* funcion crear usuario firebase */
+  const createUserFirebase = async () => {
+    try {
+      const res = await createUserWithEmailAndPassword(
+        user.email,
+        user.password
+      );
+      console.log(res);
+    } catch (error) {
+      console.error("Error FB signing up ", error);
+    }
+  }
+
+  /* función para realizar el registro del usuario al dar click en submit */
+
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (user.password !== user.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  if (!user.name || !user.email || !user.password) {
+    alert("Please fill in all required fields");
+    return;
+  }
+    try {
+      setLoading(true);
+
+      /* crear usuario en firebase */
+      createUserFirebase();
+
+      /* crear usuario base de datos */
+      const apiResponse = await apiService.createUser({
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        address: user.address,
+        birthDate: user.birthDate,
+        gender: user.gender,
+        locationDescription: user.locationDescription || "deafault",
+      });
+      console.log("API response: " + apiResponse);
+
+
+      setUser(initialState);
+
+      router.push("/login");
+    } catch (error) {
+      console.error("Error signing up", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <MainContainer>
+      <StyledPaper>
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ color: "var(--blue)", fontWeight: "bold" }}
+        >
+          Sign Up
+        </Typography>
+        <StyledForm onSubmit={handleRegister}>
+          <TextField
+            label="Name"
+            variant="outlined"
+            name="name"
+            fullWidth
+            value={user.name}
+            onChange={handleChange}
+          />
+          <TextField
+            label="Email"
+            variant="outlined"
+            name="email"
+            type="email"
+            fullWidth
+            value={user.email}
+            onChange={handleChange}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 3,
+              },
+              "& .MuiInputLabel-root": {
+                color: "var(--blue)",
+              },
+            }}
+          />
+          <TextField
+            label="Password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            variant="outlined"
+            fullWidth
+            value={user.password}
+            onChange={handleChange}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 3,
+              },
+              "& .MuiInputLabel-root": {
+                color: "var(--blue)",
+              },
+            }}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={togglePasswordVisibility} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+          <TextField
+            label="Confirm password"
+            name="confirmPassword"
+            type={showConfirmPassword ? "text" : "password"}
+            variant="outlined"
+            fullWidth
+            value={user.confirmPassword}
+            onChange={handleChange}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 3,
+              },
+              "& .MuiInputLabel-root": {
+                color: "var(--blue)",
+              },
+            }}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={toggleConfirmPasswordVisibility}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+          <TextField
+            label="Address"
+            variant="outlined"
+            name="address"
+            fullWidth
+            value={user.address}
+            onChange={handleChange}
+          />
+          <TextField
+            label="Birth Date"
+            variant="outlined"
+            name="birthDate"
+            type="date"
+            fullWidth
+            value={user.birthDate}
+            onChange={handleChange}
+            slotProps={{
+              inputLabel: {
+                shrink: true, 
+              },
+            }}  
+          />
+          <TextField
+            label="Gender"
+            variant="outlined"
+            name="gender"
+            fullWidth
+            select
+            value={user.gender}
+            onChange={handleChange}
+          >
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+            <MenuItem value="Non-Binary">Non-Binary</MenuItem>
+            <MenuItem value="PreferNotToSay">Rather Not Say</MenuItem>
+          </TextField>
+          <StyledButton type="submit" disabled={loading}>
+            {loading ? "Loading..." : "Register"}
+          </StyledButton>
+        </StyledForm>
+
+        <Typography
+          align="center"
+          sx={{ margin: "20px 0", color: "var(--blue)" }}
+        >
+          or
+        </Typography>
+
+        <GoogleButton onClick={handleGoogleLoginRegister}>
+          <img src="/assets/img/google.png" alt="Google logo" />
+        </GoogleButton>
+
+        <FooterBox>
+          <StyledTypography variant="body2">
+            Do you have an account already?{" "}
+            <Link href="/login" underline="none">
+              Login
+            </Link>
+          </StyledTypography>
+        </FooterBox>
+      </StyledPaper>
+    </MainContainer>
+  );
+};
 
 // Styled Components
 const MainContainer = styled.div`
@@ -28,6 +333,7 @@ const MainContainer = styled.div`
   justify-content: center;
   height: 100vh;
   padding: 0 20px;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
     padding: 0 10px;
@@ -112,237 +418,5 @@ const GoogleButton = styled.button`
     height: 40px;
   }
 `;
-
-// Component
-
-const Register: React.FC = () => {
-  interface UserState {
-    email: string;
-    password: string;
-    confirmPassword?: string;
-  }
-
-  /* initial state */
-  const initialState: UserState = {
-    email: "",
-    password: "",
-    confirmPassword: "",
-  };
-
-  /* user initial state */
-  const [user, setUser] = useState<UserState>(initialState);
-
-  /* login with email and password */
-  const [createUserWithEmailAndPassword] =
-    useCreateUserWithEmailAndPassword(auth);
-
-  /* login with google */
-  const [signInWithGoogle] = useSignInWithGoogle(auth);
-
-  /* show and hide password */
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  /* loading state */
-  const [loading, setLoading] = useState(false);
-
-  /* instancia API */
-  const apiService = new ApiService();
-
-  /* router */
-  const router = useRouter();
-
-  /* función para manejar los cambios en los datos de registro del usuario */
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUser((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-
-  /* funciones */
-
-
-  /* login with google */
-  const handleGoogleLoginRegister = async () => {
-    try {
-      const res = await signInWithGoogle;
-      console.log(res);
-      sessionStorage.setItem("user", "true");
-      if (sessionStorage.getItem("user")) {
-        router.push("/");
-      }
-    } catch (error) {
-      console.error("Error signing in with Google", error);
-    }
-    console.log("Login con Google");
-  };
-
-  /* show password */
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  /* hide password */
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
-
-
-  /* función para realizar el registro del usuario al dar click en submit */
-
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      /* crear usuario firebase */
-      const firebaseUser = await createUserWithEmailAndPassword(
-        user.email,
-        user.password
-      );
-      console.log("firebase user: "+firebaseUser);
-
-      /* crear usuario base de datos */
-      const apiResponse = await apiService.createUser({
-        email: user.email,
-        password: user.password,
-      })
-      console.log("API response: "+apiResponse);
-
-      /* almacenar estado de sesión */
-      sessionStorage.setItem("user", "true");
-      setUser(initialState);
-
-      router.push("/login");
-
-    } catch (error) {
-      console.error("Error signing up", error);
-    } finally {
-      setLoading(false);
-    }
-
-    console.log("Email:", user.email);
-    console.log("Password:", user.password);
-    console.log("Confirm Password:", user.confirmPassword);
-  };
-  
-
-  return (
-    <MainContainer>
-      <StyledPaper>
-        <Typography
-          variant="h4"
-          align="center"
-          gutterBottom
-          sx={{ color: "var(--blue)", fontWeight: "bold" }}
-        >
-          Sign Up
-        </Typography>
-        <StyledForm onSubmit={handleRegister}>
-          <TextField
-            label="Email"
-            variant="outlined"
-            name="email"
-            type="email"
-            fullWidth
-            value={user.email}
-            onChange={handleChange}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 3,
-              },
-              "& .MuiInputLabel-root": {
-                color: "var(--blue)",
-              },
-            }}
-          />
-          <TextField
-            label="Password"
-            name="password"
-            type={showPassword ? "text" : "password"}
-            variant="outlined"
-            fullWidth
-            value={user.password}
-            onChange={handleChange}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 3,
-              },
-              "& .MuiInputLabel-root": {
-                color: "var(--blue)",
-              },
-            }}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={togglePasswordVisibility} edge="end">
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-          <TextField
-            label="Confirm password"
-            name="confirmPassword"
-            type={showConfirmPassword ? "text" : "password"}
-            variant="outlined"
-            fullWidth
-            value={user.confirmPassword}
-            onChange={handleChange}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 3,
-              },
-              "& .MuiInputLabel-root": {
-                color: "var(--blue)",
-              },
-            }}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={toggleConfirmPasswordVisibility}
-                      edge="end"
-                    >
-                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-          <StyledButton type="submit" disabled={loading}>{loading ? "Loading..." : "Register"}</StyledButton>
-        </StyledForm>
-
-        <Typography
-          align="center"
-          sx={{ margin: "20px 0", color: "var(--blue)" }}
-        >
-          or
-        </Typography>
-
-        <GoogleButton onClick={handleGoogleLoginRegister}>
-          <img src="/assets/img/google.png" alt="Google logo" />
-        </GoogleButton>
-
-        <FooterBox>
-          <StyledTypography variant="body2">
-            Do you have an account already?{" "}
-            <Link href="/login" underline="none">
-              Login
-            </Link>
-          </StyledTypography>
-        </FooterBox>
-      </StyledPaper>
-    </MainContainer>
-  );
-};
 
 export default Register;

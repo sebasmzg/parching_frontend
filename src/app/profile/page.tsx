@@ -1,11 +1,69 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Avatar } from "@mui/material";
 import EventCardProfile from "@/components/eventCard/EventCardProfile";
 import NavBar from "@/components/common/navbar/navBar";
 import Footer from "@/components/common/footer/footer";
+
+
+
+// Componente principal del perfil
+const ProfilePage: React.FC = () => {
+  const [showCreatedEvents, setShowCreatedEvents] = useState(true); // Estado para controlar qué eventos mostrar
+
+  return (
+    <>
+      <NavBar />
+      <ProfileContainer>
+        <ProfileSection>
+          <StyledAvatar
+            alt="Profile Picture"
+            src="https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          />
+          <Name>Name</Name>
+          <ButtonContainer>
+            <CustomButton
+              active={showCreatedEvents}
+              onClick={() => setShowCreatedEvents(true)}
+            >
+              Created
+            </CustomButton>
+            <CustomButton
+              active={!showCreatedEvents}
+              onClick={() => setShowCreatedEvents(false)}
+            >
+              Joined
+            </CustomButton>
+          </ButtonContainer>
+        </ProfileSection>
+
+        <ProfileSection>
+          <EventsTitle>
+            {showCreatedEvents ? "Eventos Creados" : "Eventos en los que Participas"}
+          </EventsTitle>
+          <EventsGrid>
+            {(showCreatedEvents ? createdEvents : participatingEvents).map(
+              (event, index) => (
+                <EventCardProfile
+                  key={index}
+                  imageSrc={event.imageSrc}
+                  name={event.name}
+                  category={event.category}
+                  date={event.date}
+                  onEdit={() => alert("Edit event")}
+                  onDelete={() => alert("Delete event")}
+                />
+              )
+            )}
+          </EventsGrid>
+        </ProfileSection>
+      </ProfileContainer>
+      <Footer />
+    </>
+  );
+};
 
 // Paleta de colores
 const colors = {
@@ -55,12 +113,6 @@ const Name = styled.h1`
   margin: 10px 0;
 `;
 
-const Username = styled.p`
-  font-size: 18px;
-  color: ${colors.dark};
-  margin-bottom: 20px;
-`;
-
 // Contenedor de botones
 const ButtonContainer = styled.div`
   display: flex;
@@ -69,8 +121,8 @@ const ButtonContainer = styled.div`
 `;
 
 // Botón personalizado
-const CustomButton = styled.button`
-  background-color: ${colors.primary};
+const CustomButton = styled.button<{ active: boolean }>`
+  background-color: ${({ active }) => (active ? colors.accent : colors.primary)};
   color: ${colors.white};
   border: none;
   border-radius: 5px;
@@ -129,63 +181,5 @@ const participatingEvents = [
     date: "2024-10-05",
   },
 ];
-
-// Componente principal del perfil
-const ProfilePage: React.FC = () => {
-  return (
-    <>
-      <NavBar />
-      <ProfileContainer>
-        <ProfileSection>
-          <StyledAvatar
-            alt="Profile Picture"
-            src="https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-          />
-          <Name>Name</Name>
-          <Username>@username</Username>
-          <ButtonContainer>
-            <CustomButton>Settings</CustomButton>
-            <CustomButton>Logout</CustomButton>
-          </ButtonContainer>
-        </ProfileSection>
-
-        <ProfileSection>
-          <EventsTitle>Eventos Creados</EventsTitle>
-          <EventsGrid>
-            {createdEvents.map((event, index) => (
-              <EventCardProfile
-                key={index}
-                imageSrc={event.imageSrc}
-                name={event.name}
-                category={event.category}
-                date={event.date}
-                onEdit={() => alert("Edit event")}
-                onDelete={() => alert("Delete event")}
-              />
-            ))}
-          </EventsGrid>
-        </ProfileSection>
-
-        <ProfileSection>
-          <EventsTitle>Eventos en los que Participas</EventsTitle>
-          <EventsGrid>
-            {participatingEvents.map((event, index) => (
-              <EventCardProfile
-                key={index}
-                imageSrc={event.imageSrc}
-                name={event.name}
-                category={event.category}
-                date={event.date}
-                onEdit={() => alert("Edit event")}
-                onDelete={() => alert("Delete event")}
-              />
-            ))}
-          </EventsGrid>
-        </ProfileSection>
-      </ProfileContainer>
-      <Footer />
-    </>
-  );
-};
 
 export default ProfilePage;

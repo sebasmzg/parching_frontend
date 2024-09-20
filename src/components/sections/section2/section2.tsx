@@ -33,6 +33,7 @@ const TextSection = styled.div`
   justify-content: center;
   background-color: ${colors.sectionBackground};
   height: 50%;
+  text-align: center;
 `;
 
 const SectionTitle = styled.h2`
