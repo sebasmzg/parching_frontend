@@ -7,52 +7,47 @@ import {
   Link,
   IconButton,
   InputAdornment,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styled from "styled-components";
 import { useRouter } from "next/navigation";
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
+import {
+  useSignInWithEmailAndPassword,
+  useSignInWithGoogle,
+} from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
-import { ApiService } from "@/lib/authActions";
-import { setLoading } from "@/store/authslice";
-
-
-// Component
+import { ApiService } from "@/services/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess, setLoading, setError } from "@/store/authslice";
+import { RootState } from "@/store/store";
 
 const Login: React.FC = () => {
   interface UserState {
     email: string;
-    password: string;
+    password?: string;
+    id: string;
+    name: string;
+    avatar?: string;
   }
 
   const initialState: UserState = {
     email: "",
     password: "",
+    id: "",
+    name: "",
+    avatar: "",
   };
 
-  /* Api instance */
   const apiService = new ApiService();
-
-
-  /* email and passwor login states*/
   const [user, setUser] = useState<UserState>(initialState);
-  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
-  /* login with google */
   const [signInWithGoogle] = useSignInWithGoogle(auth);
-
-  /* show and hide password */
   const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  /* router */
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state: RootState) => state.auth);
 
-  /* loading state */
-  const [loading, setLoading] = useState(false);
-
-  /* cambios initial state */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUser((prevState) => ({
@@ -61,42 +56,68 @@ const Login: React.FC = () => {
     }));
   };
 
-  /* login with google */
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const storeUserInLocalStorage = (user: UserState) => {
+    localStorage.setItem("userId", user.id);
+    localStorage.setItem("userEmail", user.email);
+    localStorage.setItem("userName", user.name);
+    localStorage.setItem("userAvatar", user.avatar || "");
+  };
+
   const handleGoogleLogin = async () => {
+    dispatch(setLoading(true));
     try {
       const res = await signInWithGoogle();
-      console.log(res);
-      sessionStorage.setItem("user", String(true));
-      if(sessionStorage.getItem("user")){
+      if (res?.user) {
+        const googleUser = {
+          email: res.user.email || "",
+          id: res.user.uid || "",
+          name: res.user.displayName || "",
+          avatar: res.user.photoURL || "",
+        };
+        dispatch(loginSuccess(googleUser));
+        storeUserInLocalStorage(googleUser);
+        setUser(initialState);
         router.push("/post");
       }
     } catch (error) {
+      dispatch(setError("Error signing in with Google"));
       console.error("Error signing in with Google", error);
+    } finally {
+      dispatch(setLoading(false));
     }
-    console.log("Login con Google");
   };
 
-  /* Api login */
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user.email || !user.password) {
-      alert("Please fill all fields");
+      dispatch(setError("Please fill all fields"));
       return;
     }
+    dispatch(setLoading(true));
+
     try {
-      setLoading  (true);
+      const apiResponse = await apiService.loginUser(user.email, user.password);
+      const userIn = await apiService.getUserById(apiResponse);
+      const userLogged = {
+        email: userIn.email,
+        id: userIn.id,
+        avatar: userIn.profilePicture,
+        name: userIn.name,
+      };
 
-      const apiResponse = await apiService.loginUser(user.email,user.password);
-      console.log("API response: " + apiResponse);
-      
-      sessionStorage.setItem("user", String(true));
+      dispatch(loginSuccess(userLogged));
+      storeUserInLocalStorage(userLogged);
       setUser(initialState);
-
       router.push("/post");
     } catch (error) {
+      dispatch(setError("Error signing in"));
       console.error("Error signing in", error);
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -111,6 +132,15 @@ const Login: React.FC = () => {
         >
           Sign in
         </Typography>
+
+        {error && (
+          <Snackbar open={!!error} autoHideDuration={6000}>
+            <Alert severity="error" sx={{ width: "100%" }}>
+              {error}
+            </Alert>
+          </Snackbar>
+        )}
+
         <StyledForm onSubmit={handleLogin}>
           <TextField
             label="Email"
@@ -121,12 +151,8 @@ const Login: React.FC = () => {
             value={user.email}
             onChange={handleChange}
             sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 3,
-              },
-              "& .MuiInputLabel-root": {
-                color: "var(--blue)",
-              },
+              "& .MuiOutlinedInput-root": { borderRadius: 3 },
+              "& .MuiInputLabel-root": { color: "var(--blue)" },
             }}
           />
           <TextField
@@ -149,27 +175,20 @@ const Login: React.FC = () => {
               },
             }}
             sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 3,
-              },
-              "& .MuiInputLabel-root": {
-                color: "var(--blue)",
-              },
+              "& .MuiOutlinedInput-root": { borderRadius: 3 },
+              "& .MuiInputLabel-root": { color: "var(--blue)" },
             }}
           />
           <StyledButton type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Login"}
+            {loading ? "Logging in..." : "Login"}
           </StyledButton>
         </StyledForm>
 
-        <Typography
-          align="center"
-          sx={{ margin: "20px 0", color: "var(--blue)" }}
-        >
+        <Typography align="center" sx={{ margin: "20px 0", color: "var(--blue)" }}>
           or login with
         </Typography>
 
-        <GoogleButton onClick={handleGoogleLogin}>
+        <GoogleButton onClick={handleGoogleLogin} disabled={loading}>
           <img src="/assets/img/google.png" alt="Google logo" />
         </GoogleButton>
 
@@ -186,7 +205,7 @@ const Login: React.FC = () => {
   );
 };
 
-// Styled Components
+// Styled Components (mantener igual)
 
 const MainContainer = styled.div`
   display: flex;
@@ -277,7 +296,8 @@ const FooterBox = styled.div`
 const StyledTypography = styled(Typography)`
   font-family: "Belleza", sans-serif;
   color: var(--violet);
+  text-align: center;
+  font-size: 18px;
 `;
-
 
 export default Login;

@@ -11,15 +11,14 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Translate from "@mui/icons-material/Translate";
 import CssBaseline from "@mui/material/CssBaseline";
-import { auth } from "@/app/firebase/config";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useSelector } from "react-redux"; 
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { RootState } from "@/store/store"; 
 
 const NavBar: React.FC = () => {
-  const [user] = useAuthState(auth);
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
   const router = useRouter();
-  const apiUser = sessionStorage.getItem("user");
 
   return (
     <>
@@ -28,7 +27,8 @@ const NavBar: React.FC = () => {
         position="fixed"
         sx={{
           width: "100%",
-          background: "linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0))",
+          background:
+            "linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0))",
           display: "flex",
           alignItems: "center",
           boxShadow: 0,
@@ -58,7 +58,7 @@ const NavBar: React.FC = () => {
 
             {/* Button container aligned to the right */}
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              {(user || apiUser) && (
+              {isAuth && (
                 <Box
                   component="a"
                   href="/post"
@@ -69,19 +69,29 @@ const NavBar: React.FC = () => {
                     color: "white",
                   }}
                 >
+                  <IconButton size="small" sx={{ mx: 2, color: "black" }}>
+                    <Translate />
+                  </IconButton>
                   <Button
                     variant="outlined"
                     color="inherit"
-                    sx={{ borderRadius: "20px" }}
+                    sx={{
+                      borderRadius: "20px",
+                      borderColor: "#165252",
+                      color: "#165252",
+                      fontWeight: "bold",
+                      "&:hover": {
+                        backgroundColor: "#013b58",
+                        color: "white",
+                      },
+                    }}
                     onClick={() => router.push("/post")}
                   >
                     Events
                   </Button>
                 </Box>
               )}
-              <IconButton size="small" sx={{ mx: 2, color: 'black' }}>
-                <Translate />
-              </IconButton>
+
               <AccountMenu />
             </Box>
           </Toolbar>

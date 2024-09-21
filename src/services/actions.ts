@@ -1,4 +1,7 @@
+import { useDispatch } from "react-redux";
 import { IUserLogin, IUserRegister, IUsers } from "./models";
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 export class ApiService {
   baseUrl: string;
@@ -38,7 +41,7 @@ export class ApiService {
     }
   }
 
-  async loginUser(email: string, password: string): Promise<IUserLogin> {
+  async loginUser(email: string, password: string) {
     try {
       const res = await fetch(`${this.baseUrl}auth/login`, {
         method: "POST",
@@ -55,11 +58,27 @@ export class ApiService {
         );
         throw new Error(errorMessage);
       }
-
+      console.log('res: ',res);
+      
       const result = await res.json();
-      console.log(result);
+      console.log('JWT: ',result);
 
-      return result;
+      const token = result.accessToken;
+      console.log('token: ',token);
+
+      if (!token || typeof token !== 'string') {
+        throw new Error("Token inválido o no proporcionado");
+      }
+
+       // Decodificar el token
+    const decodedToken = jwtDecode<{ userId: string }>(token);
+    console.log("decodedToken: ", decodedToken);
+
+    // Obtener el userId del token decodificado
+    const userId = decodedToken.userId;
+    console.log("userId: ", userId);
+
+    return userId;
     } catch (error) {
       console.error("API error:" + error);
       throw error;
@@ -75,7 +94,11 @@ export class ApiService {
         },
       });
       if (!res.ok) {
-        throw new Error("Error getting users");
+        const errorMessage = await res.text();
+        console.error(
+          `Error fetching users: ${res.status}: ${res.statusText} - ${errorMessage}`
+        );
+        throw new Error(errorMessage);
       }
 
       const users: IUsers[] = await res.json();
@@ -86,33 +109,57 @@ export class ApiService {
     }
   }
 
-  async sendVerificationEmail(email: string, userId: string, verificationToken: string) {
+  async getUserById(id: string): Promise<IUsers> {
     try {
-      const res = await fetch(`${this.baseUrl}notifications/send-verification-email`, {
-        method: "POST",
+      const res = await fetch(`${this.baseUrl}user/${id}`, {
+        method: "GET",
         headers: {
-          'accept': '*/*',
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          "accept": "*/*",
         },
-        body: JSON.stringify({ email, userId, verificationToken }),
+      });
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        console.error(
+          `Error getting user: ${res.status}: ${res.statusText} - ${errorMessage}`
+        );
+        throw new Error(errorMessage);
+      }
+
+      const user: IUsers = await res.json();
+      return user;
+    } catch (error) {
+      console.error("API error:", error);
+      throw error;
+    }
+  }
+
+  async updateUser(id: string, userData: IUsers) {
+    try {
+      const res = await fetch(`${this.baseUrl}user/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*"
+        },
+        body: JSON.stringify(userData),
       });
 
       if (!res.ok) {
         const errorMessage = await res.text();
         console.error(
-          `Error sending verification email: ${res.status}: ${res.statusText} - ${errorMessage}`
+          `Error updating user: ${res.status}: ${res.statusText} - ${errorMessage}`
         );
         throw new Error(errorMessage);
       }
 
-      const result = await res.json();
-      console.log(result);
-
-      return result;
+      const user: IUsers = await res.json();
+      return user;
     } catch (error) {
-      console.error("API error:" + error);
+      console.error("API error:", error);
       throw error;
     }
   }
 
 }
+

@@ -18,7 +18,7 @@ import {
 } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
-import { ApiService } from "@/lib/authActions";
+import { ApiService } from "@/services/actions";
 
 
 

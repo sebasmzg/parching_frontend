@@ -6,12 +6,24 @@ import { Avatar } from "@mui/material";
 import EventCardProfile from "@/components/eventCard/EventCardProfile";
 import NavBar from "@/components/common/navbar/navBar";
 import Footer from "@/components/common/footer/footer";
-
-
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 
 // Componente principal del perfil
 const ProfilePage: React.FC = () => {
-  const [showCreatedEvents, setShowCreatedEvents] = useState(true); // Estado para controlar qué eventos mostrar
+  const [showCreatedEvents, setShowCreatedEvents] = useState(true);
+
+  /* Obtener estado de autenticación desde Redux */
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+
+  let user = { name: "", avatar: "" };
+
+  if (isAuth) {
+    user = {
+      name: localStorage.getItem("userName") || "",
+      avatar: localStorage.getItem("userAvatar") || "",
+    };
+  }
 
   return (
     <>
@@ -19,10 +31,11 @@ const ProfilePage: React.FC = () => {
       <ProfileContainer>
         <ProfileSection>
           <StyledAvatar
-            alt="Profile Picture"
-            src="https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            alt={`${user.name} profile picture`}
+            src={user.avatar ?? undefined}
+            sx={{ width: 200, height: 200 }}
           />
-          <Name>Name</Name>
+          <Name>{user.name}</Name>
           <ButtonContainer>
             <CustomButton
               active={showCreatedEvents}
@@ -41,7 +54,9 @@ const ProfilePage: React.FC = () => {
 
         <ProfileSection>
           <EventsTitle>
-            {showCreatedEvents ? "Eventos Creados" : "Eventos en los que Participas"}
+            {showCreatedEvents
+              ? "Eventos Creados"
+              : "Eventos en los que Participas"}
           </EventsTitle>
           <EventsGrid>
             {(showCreatedEvents ? createdEvents : participatingEvents).map(
@@ -80,9 +95,9 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: ${colors.secondary};
+  margin-top: 100px;
+  background-color: ${colors.white};
   min-height: 100vh;
-  margin-top: 64px;
 `;
 
 // Sección del perfil
@@ -90,9 +105,9 @@ const ProfileSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ${colors.white};
+  background-color: ${colors.secondary};
   border-radius: 8px;
-  padding: 20px;
+  padding: 40px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 1200px;
@@ -101,9 +116,9 @@ const ProfileSection = styled.div`
 
 // Avatar estilizado
 const StyledAvatar = styled(Avatar)`
-  width: 120px;
-  height: 120px;
-  margin-bottom: 20px;
+  width: 150px;
+  height: 150px;
+  margin-top: 50px;
 `;
 
 // Nombre y nombre de usuario estilizados
@@ -122,7 +137,8 @@ const ButtonContainer = styled.div`
 
 // Botón personalizado
 const CustomButton = styled.button<{ active: boolean }>`
-  background-color: ${({ active }) => (active ? colors.accent : colors.primary)};
+  background-color: ${({ active }) =>
+    active ? colors.accent : colors.primary};
   color: ${colors.white};
   border: none;
   border-radius: 5px;

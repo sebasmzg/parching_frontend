@@ -10,7 +10,7 @@ const colors = {
   secondary: "#D2DEEC",
   accent: "#78882D",
   dark: "#165252",
-  darker: "#013B58",
+  darker: "#013B58"
 };
 
 // Contenedor principal del footer

@@ -13,14 +13,29 @@ import Logout from "@mui/icons-material/Logout";
 import { Button, Modal } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase/config";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/store/authslice";
 import LoginForm from "@/components/loginForm/login";
 import CloseIcon from "@mui/icons-material/Close";
 import Register from "@/components/signupForm/register";
+import { RootState } from "@/store/store";
+
 
 export default function AccountMenu() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  /* Obtener estado de autenticación desde Redux */
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+
+  let loggedUser = { name: "", avatar: "" };
+  if(isAuth) {
+    loggedUser = {
+      name: localStorage.getItem("userName") || "",
+      avatar: localStorage.getItem("userAvatar") || "",
+    };
+  }
+
   /* menu functions */
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -32,13 +47,10 @@ export default function AccountMenu() {
   };
 
   /* sign out */
-  const [user] = useAuthState(auth);
-  const apiUser = sessionStorage.getItem("user");
-  const router = useRouter();
-
   const handleLogout = async () => {
-    await signOut(auth);
-    sessionStorage.removeItem("user");
+    dispatch(logout());
+    localStorage.clear();
+    console.log("User signed out");
     router.push("/");
   };
 
@@ -54,7 +66,7 @@ export default function AccountMenu() {
     <>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         {/* user verification */}
-        {user || apiUser ? (
+        {isAuth ? (
           <>
             <Button
               variant="contained"
@@ -63,6 +75,10 @@ export default function AccountMenu() {
                 borderRadius: "20px",
                 boxShadow: 3,
                 backgroundColor: "#165252",
+                fontWeight: "bold",
+                "&:hover": {
+                  backgroundColor: "#013b58",
+                },
               }}
               onClick={() => router.push("/events")}
             >
@@ -82,7 +98,10 @@ export default function AccountMenu() {
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
               >
-                <Avatar sx={{ width: 40, height: 40 }}>M</Avatar>
+                <Avatar
+                  sx={{ width: 40, height: 40 }}
+                  src={loggedUser.avatar || undefined}
+                />
               </IconButton>
             </Tooltip>
           </>
@@ -117,11 +136,11 @@ export default function AccountMenu() {
                 boxShadow: 3,
                 backgroundColor: "#165252",
                 fontWeight: "bold",
-                "&:hover":{
+                "&:hover": {
                   backgroundColor: "#013b58",
                   color: "white",
                   borderColor: "#013b58",
-                }
+                },
               }}
               onClick={handleOpenModalRegister}
             >
@@ -220,7 +239,7 @@ export default function AccountMenu() {
       </Modal>
 
       {/* menu items */}
-      {(user || apiUser) && (
+      {isAuth && (
         <Menu
           anchorEl={anchorEl}
           id="account-menu"
@@ -260,9 +279,14 @@ export default function AccountMenu() {
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
           <MenuItem onClick={handleClose}>
-            <Avatar sx={{ bgcolor: "primary.main" }}>M</Avatar>
+            <Avatar
+              sx={{ bgcolor: "primary.main" }}
+              src={loggedUser.avatar || undefined}
+            />
             <Link href="/profile" passHref>
-              <Button sx={{ ml: 2, color: "text.primary" }}>Profile</Button>
+              <Button sx={{ ml: 2, color: "text.primary" }}>
+                {loggedUser.name}
+              </Button>
             </Link>
           </MenuItem>
           <Divider />
