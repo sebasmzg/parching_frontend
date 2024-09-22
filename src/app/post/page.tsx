@@ -19,9 +19,9 @@ const HomeContainer = styled.div`
   background-color: ${colors.white};
   padding: 20px;
   min-height: 100vh;
-  margin-top: 64px;
   width: 100%;
   height: 100%;
+  padding-top: 100px;
   box-sizing: border-box;
 `;
 

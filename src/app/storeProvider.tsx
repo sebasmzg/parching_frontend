@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import { store } from "../store/store"; // Usamos directamente el store
-import { AppStore } from "../store/store"; // Tipos de store y persistStore
 
 export default function StoreProvider({
   children,

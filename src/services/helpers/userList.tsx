@@ -64,8 +64,8 @@ const styles = {
 const UsersList: React.FC = () => {
   const [users, setUsers] = useState<IUsers[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
-  const [user, setUser] = useState<IUser | null>(null);
-  const [updatedUser, setUpdatedUser] = useState<IUser | null>(null);
+  const [user, setUser] = useState<IUsers | null>(null);
+  const [updatedUser, setUpdatedUser] = useState<IUsers | null>(null);
   const apiService = new ApiService();
 
   useEffect(() => {

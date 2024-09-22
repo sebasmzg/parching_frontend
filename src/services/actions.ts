@@ -1,6 +1,5 @@
-import { useDispatch } from "react-redux";
-import { IUserLogin, IUserRegister, IUsers } from "./models";
-import { useRouter } from "next/navigation";
+
+import { IEvent, IEventCreation, IUserRegister, IUsers } from "./models";
 import { jwtDecode } from "jwt-decode";
 
 export class ApiService {
@@ -163,3 +162,152 @@ export class ApiService {
 
 }
 
+export class ApiServiceEvent {
+  baseUrl: string;
+
+  constructor(){
+    this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://parching-app-backend.onrender.com/api/";
+  }
+
+  async getAllEvents( state: string = "active") {
+    try {
+      const res = await fetch(`${this.baseUrl}events?eventsState=${state}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+        },
+      });
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        console.error(`Error fetching events: ${res.status}: ${res.statusText} - ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+      const events = await res.json();
+      return events;
+    } catch (error) {
+      console.error("API error Events:", error);
+      throw error;
+    }
+  }
+
+  async getEventById(id: string): Promise<IEvent>{
+    try {
+      const res = await fetch(`${this.baseUrl}events/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+        },
+      });
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        console.error(`Error fetching event: ${res.status}: ${res.statusText} - ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+      const event = await res.json();
+      return event;
+    } catch (error) {
+      console.error("API error Event:", error);
+      throw error;
+    }
+  }
+
+  async createEvent(eventData: IEventCreation): Promise<IEvent> {
+    try {
+      const res = await fetch(`${this.baseUrl}events`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+        },
+        body: JSON.stringify(eventData),
+      });
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        console.error(`Error creating event: ${res.status}: ${res.statusText} - ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+      const event = await res.json();
+      return event;
+    } catch (error) {
+      console.error("API error Event:", error);
+      throw error;
+    }
+  }
+
+  async updateEvent(id: string, eventData: IEvent) {
+    try {
+      const res = await fetch(`${this.baseUrl}events/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+        },
+        body: JSON.stringify(eventData),
+      });
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        console.error(`Error updating event: ${res.status}: ${res.statusText} - ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+      const event = await res.json();
+      return event;
+    } catch (error) {
+      console.error("API error Event:", error);
+      throw error;
+    }
+  }
+  
+}
+
+export class ApiServiceCategory {
+  baseUrl: string;
+  constructor(){
+    this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://parching-app-backend.onrender.com/api/";
+  }
+  async getAllCategories() {
+    try {
+      const res = await fetch(`${this.baseUrl}categories`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+        },
+      });
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        console.error(`Error fetching categories: ${res.status}: ${res.statusText} - ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+      const categories = await res.json();
+      return categories;
+    } catch (error) {
+      console.error("API error Categories:", error);
+      throw error;
+    }
+  }
+
+  async getCategoryById(id: string): Promise<{ id: string; name: string }> {
+    try {
+        const res = await fetch(`${this.baseUrl}categories/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "accept": "*/*",
+            },
+        });
+        if (!res.ok) {
+            const errorMessage = await res.text();
+            console.error(`Error fetching category: ${res.status}: ${res.statusText} - ${errorMessage}`);
+            throw new Error(errorMessage);
+        }
+        const category = await res.json();
+        return category; // Asegúrate de que el objeto tenga las propiedades que necesitas
+    } catch (error) {
+        console.error("API error Category:", error);
+        throw error;
+    }
+}
+
+}
