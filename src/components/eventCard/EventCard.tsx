@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { IEvent, EventCategory } from "@/services/models"; // Ajusta la ruta según tu estructura de carpetas
-import { ApiServiceCategory } from "@/services/actions"; // Asegúrate de tener esta importación definida correctamente
+import { IEvent} from "@/services/models"; // Ajusta la ruta según tu estructura de carpetas
 
 // Estilos para la tarjeta del evento
 const CardContainer = styled.div`
@@ -62,51 +61,17 @@ const CategoryList = styled.ul`
 `;
 
 interface EventCardProps extends IEvent {
-  onJoin: () => void;
+  onInfo: () => void;
 }
 
 const EventCard: React.FC<EventCardProps> = ({
   images,
   information,
   capacity,
-  location,
   startDate,
   endDate,
-  eventCategories,
-  onJoin,
+  onInfo,
 }) => {
-  const [categories, setCategories] = useState<string[]>([]); // Para almacenar los nombres de las categorías
-  const apiServiceCategory = new ApiServiceCategory();
-
-  // Efecto para obtener las categorías de eventos
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categoryPromises = eventCategories.map(
-          async (ec: EventCategory) => {
-            if (ec.categoryId) {
-              const category = await apiServiceCategory.getCategoryById(
-                ec.categoryId
-              );
-              return category.name; // Ajusta según la estructura del objeto de categoría
-            }
-            return null;
-          }
-        );
-
-        const fetchedCategories = await Promise.all(categoryPromises);
-        setCategories(
-          fetchedCategories.filter(
-            (category): category is string => category !== null
-          )
-        ); // Filtra valores nulos
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    fetchCategories();
-  }, [eventCategories]);
 
   const mainImage = images && images.length > 0 ? images[0].image : "";
 
@@ -120,20 +85,8 @@ const EventCard: React.FC<EventCardProps> = ({
           <div>{`Location: ${information.location}`}</div>
           <div>{`Start: ${startDate ? new Date(startDate).toLocaleString() : "No date found"}`}</div>
           <div>{`End: ${ endDate ? new Date(endDate).toLocaleString() : "No date found"}`}</div>
-          <div>
-            <strong>Categories:</strong>
-            {categories.length > 0 ? (
-              <CategoryList>
-                {categories.map((category, index) => (
-                  <li key={index}>{category}</li>
-                ))}
-              </CategoryList>
-            ) : (
-              <span>No categories found for this event.</span>
-            )}
-          </div>
         </Info>
-        <Button onClick={onJoin}>Join Event</Button>
+        <Button onClick={onInfo}>Event Info</Button>
       </Content>
     </CardContainer>
   );

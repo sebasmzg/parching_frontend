@@ -118,12 +118,6 @@ const EventDetails: React.FC = () => {
     }
   };
 
-  // Formatear la fecha en formato ISO
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toISOString().slice(0, 16); // Formato "yyyy-MM-ddThh:mm"
-  };
-
   // Enviar el formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

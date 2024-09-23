@@ -52,6 +52,30 @@ export interface Role {
 /* Event models */
 
 export interface IEvent {
+    createdAt:   Date;
+    updatedAt:   Date;
+    id:          string;
+    startDate:   Date;
+    endDate:     Date;
+    capacity:    number;
+    location:    string;
+    information: Information;
+    score:       number;
+    state:       string;
+    hostId:      string;
+    images:      EventImage[];
+}
+
+export interface EventCategory {
+    createdAt:   Date;
+    updatedAt:   Date;
+    id:          string;
+    eventId:     string;
+    categoryId?: string;
+    image?:      string;
+}
+
+export interface IEventID {
     createdAt:       Date;
     updatedAt:       Date;
     id:              string;
@@ -63,17 +87,25 @@ export interface IEvent {
     score:           number;
     state:           string;
     hostId:          string;
+    guests:          EventGuest[];
+    images:          EventImage[];
     eventCategories: EventCategory[];
-    images:          EventCategory[];
 }
-    
-export interface EventCategory {
-    createdAt:   Date;
-    updatedAt:   Date;
-    id:          string;
-    eventId:     string;
-    categoryId?: string;
-    image?:      string;
+
+export interface EventGuest {
+    createdAt: Date;
+    updatedAt: Date;
+    id:        string;
+    eventId:   string;
+    userId:    string;
+}
+
+export interface EventImage {
+    createdAt: Date;
+    updatedAt: Date;
+    id:        string;
+    eventId:   string;
+    image:     string;
 }
 
 export interface Information {

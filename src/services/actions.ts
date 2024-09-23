@@ -1,5 +1,6 @@
 import {
   IEvent,
+  IEventID,
   IEventCreation,
   IEventUpdate,
   IUserRegister,
@@ -175,7 +176,7 @@ export class ApiServiceEvent {
       "https://parching-app-backend.onrender.com/api/";
   }
 
-  async getAllEvents(state: string = "active", userId?: string, categoryId?: string, role?: string) {
+  async getAllEvents(state: string = "active", userId?: string, categoryId?: string, role?: string): Promise<IEvent[]> {
     try {
       const res = await fetch(`${this.baseUrl}events?eventsState=${state}`, {
         method: "GET",
@@ -199,7 +200,7 @@ export class ApiServiceEvent {
     }
   }
 
-  async getEventById(id: string): Promise<IEvent> {
+  async getEventById(id: string): Promise<IEventID> {
     try {
       const res = await fetch(`${this.baseUrl}events/${id}`, {
         method: "GET",
@@ -302,20 +303,32 @@ export class ApiServiceEvent {
           body: JSON.stringify({ userId, eventId }),
         }
       );
+  
+      // Obtener la respuesta como texto
+      const responseText = await res.text();
+  
       if (!res.ok) {
-        const errorMessage = await res.text();
         console.error(
-          `Error subscribing to event: ${res.status}: ${res.statusText} - ${errorMessage}`
+          `Error subscribing to event: ${res.status}: ${res.statusText} - ${responseText}`
         );
-        throw new Error(errorMessage);
+        throw new Error(responseText);
       }
-      const event = await res.json();
-      return event;
+  
+      // Verifica si es JSON o texto
+      try {
+        const responseJson = JSON.parse(responseText); // Intentar parsear como JSON
+        return responseJson;
+      } catch (e) {
+        // Si falla el parseo, devolver el texto como está
+        console.log("Respuesta en texto:", responseText);
+        return { message: responseText };
+      }
     } catch (error) {
       console.error("API error Event:", error);
       throw error;
     }
   }
+  
 }
 
 export class ApiServiceCategory {
