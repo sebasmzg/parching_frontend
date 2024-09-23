@@ -80,7 +80,7 @@ export default function AccountMenu() {
                   backgroundColor: "#013b58",
                 },
               }}
-              onClick={() => router.push("/events")}
+              onClick={() => router.push("/events/create")}
             >
               Add Event
             </Button>

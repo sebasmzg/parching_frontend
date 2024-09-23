@@ -66,7 +66,7 @@ export interface IEvent {
     eventCategories: EventCategory[];
     images:          EventCategory[];
 }
-
+    
 export interface EventCategory {
     createdAt:   Date;
     updatedAt:   Date;
@@ -94,3 +94,23 @@ export interface IEventCreation {
     images:      string[];
 }
 
+export interface IEventUpdate {
+    id?: string;
+    startDate: Date;
+    endDate:   Date;
+    state:     string;
+    capacity:  number;
+    location:  string;
+}
+
+
+
+/* category */
+
+export interface ICategory {
+    createdAt:     Date;
+    updatedAt:     Date;
+    id:            string;
+    name:          string;
+    formTemplates: any[];
+}

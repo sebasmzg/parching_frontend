@@ -1,248 +1,141 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {
-  IconButton,
-  Dialog as MuiDialog,
-  DialogTitle as MuiDialogTitle,
-  DialogContent as MuiDialogContent,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { IEvent, EventCategory } from "@/services/models"; // Ajusta la ruta según tu estructura de carpetas
+import { ApiServiceCategory } from "@/services/actions"; // Asegúrate de tener esta importación definida correctamente
 
-// Paleta de colores
-const colors = {
-  primary: "#165252",
-  accent: "#78882D",
-  secondary: "#D2DEEC",
-  white: "#ffffff",
-  dark: "#3C4556",
-};
-
-// Contenedor de la tarjeta de evento
+// Estilos para la tarjeta del evento
 const CardContainer = styled.div`
-  width: 100%
-  height: 100%;
-  margin: 1rem;
-  padding: 0;
-  text-align: center;
-  background: linear-gradient(135deg, ${colors.primary} 0%, ${colors.white} 100%);
-  color: ${colors.white};
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    height: auto;
-    margin: auto;
-  }
-`;
-
-// Imagen del evento
-const ImageContainer = styled.div`
+  border: 1px solid #ccc;
+  border-radius: 10px;
   overflow: hidden;
-  border-bottom: 4px solid ${colors.primary};
-  border-radius: 15px 15px 0 0;
-  height: 400px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
-const EventImage = styled.img`
+const Image = styled.img`
   width: 100%;
-  height: 100%;
-  border-radius: 15px 15px 0 0;
-  object-fit: cover;
-  object-position: center;
+  height: auto;
 `;
 
-// Contenedor de la información del evento
-const EventDetails = styled.div`
-  padding: 16px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; 
-  height: 40%; 
-`;
-
-// Títulos y texto
-const TitleContainer = styled.div`
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+const Content = styled.div`
+  padding: 15px;
 `;
 
 const Title = styled.h2`
-  font-size: 24px;
-  font-weight: bold;
-  color: black;
-  margin-top: 1rem;
-  margin-bottom: 0;
+  font-size: 1.5em;
+  color: #333;
+  margin: 0 0 10px;
 `;
 
-const Text = styled.p`
-  font-size: 16px;
-  color: black;
-  margin: 0.5rem 0;
+const Description = styled.p`
+  font-size: 1em;
+  color: #666;
+  margin: 0 0 10px;
 `;
 
-// Botón estilizado
-const StyledButton = styled.button`
-  background-color: ${colors.primary};
-  color: ${colors.white};
+const Info = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+`;
+
+const Button = styled.button`
+  background-color: #78882d;
+  color: white;
   border: none;
-  border-radius: 4px;
-  padding: 12px 20px;
-  font-size: 16px;
+  padding: 10px 15px;
+  border-radius: 5px;
   cursor: pointer;
-  width: 100%; // Ajusta el botón al ancho del contenedor
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  
+  transition: background-color 0.3s;
+
   &:hover {
-    background-color: ${colors.dark};
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #6a7c25;
   }
 `;
 
-// Contenedor del botón
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
+const CategoryList = styled.ul`
+  list-style-type: none;
+  padding: 0;
 `;
 
-// Estilos personalizados para el Dialog
-const Dialog = styled(MuiDialog)`
-  .MuiPaper-root {
-    background: linear-gradient(135deg, ${colors.primary} 0%, ${colors.white} 100%);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  }
-`;
-
-const DialogTitle = styled(MuiDialogTitle)`
-  display: flex;
-  align-items: center;
-  color: ${colors.white};
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 16px;
-
-  .MuiTypography-root {
-    flex: 1;
-  }
-`;
-
-const DialogContent = styled(MuiDialogContent)`
-  color: ${colors.secondary};
-`;
-
-// Props del componente de tarjeta de evento
-interface EventCardProps {
-  imageSrc: string;
-  name: string;
-  description: string;
-  spots: number | undefined;
-  creator: string | undefined;
-  date: string | undefined;
-  price: string | undefined;
+interface EventCardProps extends IEvent {
   onJoin: () => void;
 }
 
 const EventCard: React.FC<EventCardProps> = ({
-  imageSrc,
-  name,
-  description,
-  spots,
-  creator,
-  date,
-  price,
+  images,
+  information,
+  capacity,
+  location,
+  startDate,
+  endDate,
+  eventCategories,
   onJoin,
 }) => {
-  const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]); // Para almacenar los nombres de las categorías
+  const apiServiceCategory = new ApiServiceCategory();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  // Efecto para obtener las categorías de eventos
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoryPromises = eventCategories.map(
+          async (ec: EventCategory) => {
+            if (ec.categoryId) {
+              const category = await apiServiceCategory.getCategoryById(
+                ec.categoryId
+              );
+              return category.name; // Ajusta según la estructura del objeto de categoría
+            }
+            return null;
+          }
+        );
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+        const fetchedCategories = await Promise.all(categoryPromises);
+        setCategories(
+          fetchedCategories.filter(
+            (category): category is string => category !== null
+          )
+        ); // Filtra valores nulos
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, [eventCategories]);
+
+  const mainImage = images && images.length > 0 ? images[0].image : "";
 
   return (
-    <>
-      <CardContainer>
-        <ImageContainer>
-          <EventImage src={imageSrc} alt={name} />
-        </ImageContainer>
-        <EventDetails>
-          <TitleContainer>
-            <Title>{name}</Title>
-          </TitleContainer>
-          <Text>
-            <strong>Spots Available:</strong> {spots}
-          </Text>
-          <Text>
-            <strong>Date:</strong> {date}
-          </Text>
-          <Text>
-            <strong>Price:</strong> {price}
-          </Text>
-          <ButtonContainer>
-            <StyledButton onClick={handleClickOpen}>
-              Info
-            </StyledButton>
-          </ButtonContainer>
-        </EventDetails>
-      </CardContainer>
-
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>
-          Event Details
-          <IconButton
-            edge="end"
-            color="inherit"
-            onClick={handleClose}
-            aria-label="close"
-            style={{ marginLeft: 'auto' }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <ImageContainer>
-            <EventImage src={imageSrc} alt={name} />
-          </ImageContainer>
-          <EventDetails>
-            <Title>{name}</Title>
-            <Text>
-              <strong>Description:</strong> {description}
-            </Text>
-            <Text>
-              <strong>Creator:</strong> {creator}
-            </Text>
-            <Text>
-              <strong>Date:</strong> {date}
-            </Text>
-            <Text>
-              <strong>Price:</strong> {price}
-            </Text>
-            <ButtonContainer>
-              <StyledButton onClick={onJoin}>
-                Join
-              </StyledButton>
-            </ButtonContainer>
-          </EventDetails>
-        </DialogContent>
-      </Dialog>
-    </>
+    <CardContainer>
+      {mainImage && <Image src={mainImage} alt={information.name} />}
+      <Content>
+        <Title>{information ? information.name : "No Name"}</Title>
+        <Info>
+          <div>{`Capacity: ${capacity}`}</div>
+          <div>{`Location: ${information.location}`}</div>
+          <div>{`Start: ${startDate ? new Date(startDate).toLocaleString() : "No date found"}`}</div>
+          <div>{`End: ${ endDate ? new Date(endDate).toLocaleString() : "No date found"}`}</div>
+          <div>
+            <strong>Categories:</strong>
+            {categories.length > 0 ? (
+              <CategoryList>
+                {categories.map((category, index) => (
+                  <li key={index}>{category}</li>
+                ))}
+              </CategoryList>
+            ) : (
+              <span>No categories found for this event.</span>
+            )}
+          </div>
+        </Info>
+        <Button onClick={onJoin}>Join Event</Button>
+      </Content>
+    </CardContainer>
   );
 };
 

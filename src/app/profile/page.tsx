@@ -95,7 +95,7 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  margin-top: 100px;
+  padding-top: 100px;
   background-color: ${colors.white};
   min-height: 100vh;
 `;
@@ -105,7 +105,7 @@ const ProfileSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ${colors.secondary};
+  background-color: rgba(210, 222, 236, 0.1);
   border-radius: 8px;
   padding: 40px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

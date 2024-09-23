@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ApiServiceEvent, ApiServiceCategory, ApiService } from "../actions";
-import { IEvent } from "../models";
+import { ApiServiceEvent, ApiServiceCategory, ApiService } from "../actions"; // Asegúrate de tener estas importaciones definidas correctamente
+import { IEvent } from "../models"; // Modelo del evento
+import { IEventUpdate } from "../models/IEventUpdate"; // Modelo de actualización del evento
+import { useRouter } from "next/navigation";
 
 const styles = {
   container: {
@@ -45,18 +47,20 @@ const styles = {
 };
 
 const EventDetails: React.FC = () => {
-  const [events, setEvents] = useState<IEvent[]>([]);
-  const [eventId, setEventId] = useState<string | null>(null);
-  const [event, setEvent] = useState<IEvent | null>(null);
-  const [categories, setCategories] = useState<any[]>([]);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [formData, setFormData] = useState<IEvent | null>(null);
-  const [hostName, setHostName] = useState<string | null>(null);
+  const [events, setEvents] = useState<IEvent[]>([]); // Lista de eventos
+  const [eventId, setEventId] = useState<string | null>(null); // ID del evento seleccionado
+  const [event, setEvent] = useState<IEvent | null>(null); // Evento actual
+  const [categories, setCategories] = useState<any[]>([]); // Categorías del evento
+  const [isEditing, setIsEditing] = useState<boolean>(false); // Estado de edición
+  const [formData, setFormData] = useState<IEventUpdate | null>(null); // Datos del formulario
+  const [hostName, setHostName] = useState<string | null>(null); // Nombre del host
 
   const apiServiceEvent = new ApiServiceEvent();
   const apiServiceCategory = new ApiServiceCategory();
   const apiService = new ApiService();
+  const router = useRouter();
 
+  // Efecto para obtener todos los eventos
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -66,38 +70,45 @@ const EventDetails: React.FC = () => {
         console.error("Error fetching events:", error);
       }
     };
-
     fetchEvents();
   }, []);
 
+  // Efecto para obtener un evento por su ID
   useEffect(() => {
     const fetchEventById = async () => {
       if (eventId) {
         try {
           const eventData = await apiServiceEvent.getEventById(eventId);
-          setEvent(eventData);
-          setFormData(eventData);
+          const defaultEventData: IEventUpdate = {
+            startDate: eventData.startDate || "",
+            endDate: eventData.endDate || "",
+            capacity: eventData.capacity || 1,
+            location: eventData.location || "",
+            state: eventData.state || "active",
+          };
 
-          // Cargar categorías
-          const categoryIds = eventData.eventCategories.map((ec: any) => ec.categoryId);
+          setEvent(eventData);
+          setFormData(defaultEventData);
+
+          // Obtener categorías relacionadas
+          const categoryIds = eventData.eventCategories?.map((ec: any) => ec.categoryId) || [];
           const categoryPromises = categoryIds.map((id) => apiServiceCategory.getCategoryById(id));
           const fetchedCategories = await Promise.all(categoryPromises);
           setCategories(fetchedCategories);
 
           // Obtener nombre del host
           const hostName = await apiService.getUserById(eventData.hostId);
-          console.log("hostName", hostName);
-            setHostName(hostName.name);
+          setHostName(hostName.name);
         } catch (error) {
           console.error("Error fetching event by ID:", error);
         }
       }
     };
-
     fetchEventById();
   }, [eventId]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Manejador del cambio de input
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (formData) {
       setFormData({
@@ -107,36 +118,41 @@ const EventDetails: React.FC = () => {
     }
   };
 
+  // Formatear la fecha en formato ISO
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toISOString().slice(0, 16); // Formato "yyyy-MM-ddThh:mm"
+  };
+
+  // Enviar el formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData && eventId) {
       try {
-        const { information, location, startDate, endDate, capacity } = formData;
-
-        const updatedData = {
-          information: {
-            name: information.name,
-          },
-          location,
+        const { startDate, endDate, capacity, location, state } = formData;
+        const validatedCapacity = Math.max(1, Math.floor(capacity)); // Valida que la capacidad sea al menos 1
+        const updatedData: IEventUpdate = {
           startDate,
           endDate,
-          capacity: capacity > 0 ? capacity : undefined,
-          images: Array.isArray(formData.images) ? formData.images.map(image => String(image)) : [],
+          capacity: validatedCapacity,
+          location,
+          state: state || "active",
         };
 
-        const cleanedData = Object.fromEntries(
-          Object.entries(updatedData).filter(([key]) => {
-            return !["createdAt", "updatedAt", "id", "score", "hostId", "eventCategories"].includes(key);
-          })
-        );
-
-        const updatedEvent = await apiServiceEvent.updateEvent(eventId, cleanedData);
+        const updatedEvent = await apiServiceEvent.updateEvent(eventId, updatedData);
         setEvent(updatedEvent);
         setIsEditing(false);
+        console.log("Event updated:", updatedEvent);
       } catch (error) {
         console.error("Error updating event:", error);
       }
     }
+  };
+
+  const handleEdit = () => {
+    console.log("to edit event:");
+    localStorage.setItem("eventToEdit", JSON.stringify(event));
+    router.push(`/events/edit/${event?.id}`);
   };
 
   return (
@@ -152,7 +168,7 @@ const EventDetails: React.FC = () => {
                 <strong>Name:</strong> {event.information.name}
               </div>
               <div style={styles.eventInfo}>
-                <strong>Location:</strong> {event.location}
+                <strong>Location:</strong> {event.information.location}
               </div>
               <div style={styles.eventInfo}>
                 <strong>Date:</strong> {`${event.startDate} to ${event.endDate}`}
@@ -177,19 +193,19 @@ const EventDetails: React.FC = () => {
       {event && !isEditing && (
         <div style={styles.eventInfo}>
           <h3 style={styles.header}>Selected Event</h3>
-          <p>
+          <div>
             <strong>Name:</strong> {event.information.name}
-          </p>
-          <p>
-            <strong>Location:</strong> {event.location}
-          </p>
-          <p>
+          </div>
+          <div>
+            <strong>Location:</strong> {event.information.location}
+          </div>
+          <div>
             <strong>Date:</strong> {`${event.startDate} to ${event.endDate}`}
-          </p>
-          <p>
+          </div>
+          <div>
             <strong>Capacity:</strong> {event.capacity}
-          </p>
-          <p>
+          </div>
+          <div>
             <strong>Categories:</strong>
             {categories.length > 0 ? (
               <ul>
@@ -198,73 +214,66 @@ const EventDetails: React.FC = () => {
                 ))}
               </ul>
             ) : (
-              <p>No categories found for this event.</p>
+              <span>No categories found for this event.</span>
             )}
-          </p>
-          <button style={styles.button} onClick={() => setIsEditing(true)}>
-            Edit Event
-          </button>
+          </div>
+          <button onClick={handleEdit}>Edit Event</button>
         </div>
       )}
 
-      {isEditing && formData && (
-        <form style={styles.form} onSubmit={handleSubmit}>
+      {isEditing && (
+        <div style={styles.form}>
           <h3>Edit Event</h3>
-          <div>
-            <label>Name:</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.information.name}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Location:</label>
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Start Date:</label>
-            <input
-              type="datetime-local"
-              name="startDate"
-              value={new Date(formData.startDate).toISOString().slice(0, 16)}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <label>End Date:</label>
-            <input
-              type="datetime-local"
-              name="endDate"
-              value={new Date(formData.endDate).toISOString().slice(0, 16)}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Capacity:</label>
-            <input
-              type="number"
-              name="capacity"
-              value={formData.capacity}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <button type="submit" style={styles.button}>Update Event</button>
-          <button type="button" style={styles.button} onClick={() => setIsEditing(false)}>
-            Cancel
-          </button>
-        </form>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label>Start Date:</label>
+              <input
+                type="datetime-local"
+                name="startDate"
+                value={formData?.startDate || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label>End Date:</label>
+              <input
+                type="datetime-local"
+                name="endDate"
+                value={formData?.endDate || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label>Capacity:</label>
+              <input
+                type="number"
+                name="capacity"
+                value={formData?.capacity || ""}
+                onChange={handleInputChange}
+                min="1"
+              />
+            </div>
+            <div>
+              <label>Location:</label>
+              <input
+                type="text"
+                name="location"
+                value={formData?.location || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label>State:</label>
+              <select name="state" value={formData?.state || ""} onChange={handleInputChange}>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+            <button type="submit" style={styles.button}>
+              Update Event
+            </button>
+          </form>
+        </div>
       )}
     </div>
   );

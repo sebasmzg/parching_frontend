@@ -1,5 +1,10 @@
-
-import { IEvent, IEventCreation, IUserRegister, IUsers } from "./models";
+import {
+  IEvent,
+  IEventCreation,
+  IEventUpdate,
+  IUserRegister,
+  IUsers,
+} from "./models";
 import { jwtDecode } from "jwt-decode";
 
 export class ApiService {
@@ -57,27 +62,27 @@ export class ApiService {
         );
         throw new Error(errorMessage);
       }
-      console.log('res: ',res);
-      
+      console.log("res: ", res);
+
       const result = await res.json();
-      console.log('JWT: ',result);
+      console.log("JWT: ", result);
 
       const token = result.accessToken;
-      console.log('token: ',token);
+      console.log("token: ", token);
 
-      if (!token || typeof token !== 'string') {
+      if (!token || typeof token !== "string") {
         throw new Error("Token inválido o no proporcionado");
       }
 
-       // Decodificar el token
-    const decodedToken = jwtDecode<{ userId: string }>(token);
-    console.log("decodedToken: ", decodedToken);
+      // Decodificar el token
+      const decodedToken = jwtDecode<{ userId: string }>(token);
+      console.log("decodedToken: ", decodedToken);
 
-    // Obtener el userId del token decodificado
-    const userId = decodedToken.userId;
-    console.log("userId: ", userId);
+      // Obtener el userId del token decodificado
+      const userId = decodedToken.userId;
+      console.log("userId: ", userId);
 
-    return userId;
+      return userId;
     } catch (error) {
       console.error("API error:" + error);
       throw error;
@@ -114,7 +119,7 @@ export class ApiService {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "accept": "*/*",
+          accept: "*/*",
         },
       });
       if (!res.ok) {
@@ -139,7 +144,7 @@ export class ApiService {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          "accept": "*/*"
+          accept: "*/*",
         },
         body: JSON.stringify(userData),
       });
@@ -159,28 +164,31 @@ export class ApiService {
       throw error;
     }
   }
-
 }
 
 export class ApiServiceEvent {
   baseUrl: string;
 
-  constructor(){
-    this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://parching-app-backend.onrender.com/api/";
+  constructor() {
+    this.baseUrl =
+      process.env.NEXT_PUBLIC_API_URL ||
+      "https://parching-app-backend.onrender.com/api/";
   }
 
-  async getAllEvents( state: string = "active") {
+  async getAllEvents(state: string = "active", userId?: string, categoryId?: string, role?: string) {
     try {
       const res = await fetch(`${this.baseUrl}events?eventsState=${state}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "accept": "*/*",
+          accept: "*/*",
         },
       });
       if (!res.ok) {
         const errorMessage = await res.text();
-        console.error(`Error fetching events: ${res.status}: ${res.statusText} - ${errorMessage}`);
+        console.error(
+          `Error fetching events: ${res.status}: ${res.statusText} - ${errorMessage}`
+        );
         throw new Error(errorMessage);
       }
       const events = await res.json();
@@ -191,18 +199,20 @@ export class ApiServiceEvent {
     }
   }
 
-  async getEventById(id: string): Promise<IEvent>{
+  async getEventById(id: string): Promise<IEvent> {
     try {
       const res = await fetch(`${this.baseUrl}events/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "accept": "*/*",
+          accept: "*/*",
         },
       });
       if (!res.ok) {
         const errorMessage = await res.text();
-        console.error(`Error fetching event: ${res.status}: ${res.statusText} - ${errorMessage}`);
+        console.error(
+          `Error fetching event: ${res.status}: ${res.statusText} - ${errorMessage}`
+        );
         throw new Error(errorMessage);
       }
       const event = await res.json();
@@ -213,42 +223,90 @@ export class ApiServiceEvent {
     }
   }
 
-  async createEvent(eventData: IEventCreation): Promise<IEvent> {
+  async createEvent(eventData: IEventCreation) {
     try {
       const res = await fetch(`${this.baseUrl}events`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "accept": "*/*",
+          accept: "*/*",
         },
         body: JSON.stringify(eventData),
       });
+      const responseText = await res.text();
       if (!res.ok) {
         const errorMessage = await res.text();
-        console.error(`Error creating event: ${res.status}: ${res.statusText} - ${errorMessage}`);
+        console.error(
+          `Error creating event: ${res.status}: ${res.statusText} - ${errorMessage}`
+        );
         throw new Error(errorMessage);
       }
-      const event = await res.json();
-      return event;
+      if (responseText.startsWith("{")) {
+        const event = JSON.parse(responseText);
+        return event;
+      } else {
+        console.log("Successful creation:", responseText);
+      }
     } catch (error) {
       console.error("API error Event:", error);
       throw error;
     }
   }
 
-  async updateEvent(id: string, eventData: IEvent) {
+  async updateEvent(id: string, eventData: IEventUpdate) {
     try {
       const res = await fetch(`${this.baseUrl}events/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          "accept": "*/*",
+          Accept: "*/*",
         },
         body: JSON.stringify(eventData),
       });
+
+      const responseText = await res.text();
+
+      if (!res.ok) {
+        console.error(
+          `Error updating event: ${res.status}: ${res.statusText} - ${responseText}`
+        );
+        throw new Error(responseText);
+      }
+
+      console.log("Response Text:", responseText);
+
+      // Verifica si es JSON o texto
+      if (responseText.startsWith("{")) {
+        const event = JSON.parse(responseText);
+        return event;
+      } else {
+        console.log("Successful update:", responseText);
+        return { message: responseText };
+      }
+    } catch (error) {
+      console.error("API error:", error);
+      throw error;
+    }
+  }
+
+  async suscribeEvent(eventId: string, userId: string) {
+    try {
+      const res = await fetch(
+        `${this.baseUrl}events/subscribe?userId=${userId}&eventId=${eventId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "*/*",
+          },
+          body: JSON.stringify({ userId, eventId }),
+        }
+      );
       if (!res.ok) {
         const errorMessage = await res.text();
-        console.error(`Error updating event: ${res.status}: ${res.statusText} - ${errorMessage}`);
+        console.error(
+          `Error subscribing to event: ${res.status}: ${res.statusText} - ${errorMessage}`
+        );
         throw new Error(errorMessage);
       }
       const event = await res.json();
@@ -258,13 +316,14 @@ export class ApiServiceEvent {
       throw error;
     }
   }
-  
 }
 
 export class ApiServiceCategory {
   baseUrl: string;
-  constructor(){
-    this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://parching-app-backend.onrender.com/api/";
+  constructor() {
+    this.baseUrl =
+      process.env.NEXT_PUBLIC_API_URL ||
+      "https://parching-app-backend.onrender.com/api/";
   }
   async getAllCategories() {
     try {
@@ -272,12 +331,14 @@ export class ApiServiceCategory {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "accept": "*/*",
+          accept: "*/*",
         },
       });
       if (!res.ok) {
         const errorMessage = await res.text();
-        console.error(`Error fetching categories: ${res.status}: ${res.statusText} - ${errorMessage}`);
+        console.error(
+          `Error fetching categories: ${res.status}: ${res.statusText} - ${errorMessage}`
+        );
         throw new Error(errorMessage);
       }
       const categories = await res.json();
@@ -290,24 +351,25 @@ export class ApiServiceCategory {
 
   async getCategoryById(id: string): Promise<{ id: string; name: string }> {
     try {
-        const res = await fetch(`${this.baseUrl}categories/${id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "accept": "*/*",
-            },
-        });
-        if (!res.ok) {
-            const errorMessage = await res.text();
-            console.error(`Error fetching category: ${res.status}: ${res.statusText} - ${errorMessage}`);
-            throw new Error(errorMessage);
-        }
-        const category = await res.json();
-        return category; // Asegúrate de que el objeto tenga las propiedades que necesitas
+      const res = await fetch(`${this.baseUrl}categories/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "*/*",
+        },
+      });
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        console.error(
+          `Error fetching category: ${res.status}: ${res.statusText} - ${errorMessage}`
+        );
+        throw new Error(errorMessage);
+      }
+      const category = await res.json();
+      return category; // Asegúrate de que el objeto tenga las propiedades que necesitas
     } catch (error) {
-        console.error("API error Category:", error);
-        throw error;
+      console.error("API error Category:", error);
+      throw error;
     }
-}
-
+  }
 }
