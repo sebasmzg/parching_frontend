@@ -1,29 +1,42 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Avatar } from "@mui/material";
-import EventCardProfile from "@/components/eventCard/EventCardProfile";
 import NavBar from "@/components/common/navbar/navBar";
 import Footer from "@/components/common/footer/footer";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
+import { ApiServiceEvent } from "@/services/actions"; // Importa la función para obtener eventos
+import { IEvent } from "@/services/models"; // Asegúrate de importar tu tipo IEvent
 
-// Componente principal del perfil
 const ProfilePage: React.FC = () => {
   const [showCreatedEvents, setShowCreatedEvents] = useState(true);
-
-  /* Obtener estado de autenticación desde Redux */
+  const [events, setEvents] = useState<IEvent[]>([]);
+  
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const apiServicesEvent = new ApiServiceEvent();
 
-  let user = { name: "", avatar: "" };
-
+  let userId = "";
   if (isAuth) {
-    user = {
-      name: localStorage.getItem("userName") || "",
-      avatar: localStorage.getItem("userAvatar") || "",
-    };
+    userId = localStorage.getItem("userId") || "";
   }
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const role = showCreatedEvents ? "host" : "guest";
+      try {
+        const fetchedEvents = await apiServicesEvent.getEventsByUser(userId, role);
+        setEvents(fetchedEvents);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    if (userId) {
+      fetchEvents();
+    }
+  }, [showCreatedEvents, userId]);
 
   return (
     <>
@@ -31,20 +44,20 @@ const ProfilePage: React.FC = () => {
       <ProfileContainer>
         <ProfileSection>
           <StyledAvatar
-            alt={`${user.name} profile picture`}
-            src={user.avatar ?? undefined}
+            alt="Profile picture"
+            src={localStorage.getItem("userAvatar") || ""}
             sx={{ width: 200, height: 200 }}
           />
-          <Name>{user.name}</Name>
+          <Name>{localStorage.getItem("userName") || "User"}</Name>
           <ButtonContainer>
             <CustomButton
-              active={showCreatedEvents}
+              style={{ backgroundColor: showCreatedEvents ? colors.accent : colors.primary }}
               onClick={() => setShowCreatedEvents(true)}
             >
               Created
             </CustomButton>
             <CustomButton
-              active={!showCreatedEvents}
+              style={{ backgroundColor: !showCreatedEvents ? colors.accent : colors.primary }}
               onClick={() => setShowCreatedEvents(false)}
             >
               Joined
@@ -59,18 +72,16 @@ const ProfilePage: React.FC = () => {
               : "Eventos en los que Participas"}
           </EventsTitle>
           <EventsGrid>
-            {(showCreatedEvents ? createdEvents : participatingEvents).map(
-              (event, index) => (
-                <EventCardProfile
-                  key={index}
-                  imageSrc={event.imageSrc}
-                  name={event.name}
-                  category={event.category}
-                  date={event.date}
-                  onEdit={() => alert("Edit event")}
-                  onDelete={() => alert("Delete event")}
-                />
-              )
+            {events.length > 0 ? (
+              events.map((event, index) => (
+                <EventCard key={index}>
+                  <EventImage src={event.images[0]} alt={event.information.name} />
+                  <EventName>{event.information.name}</EventName>
+                  <EventDate>{event.startDate}</EventDate>
+                </EventCard>
+              ))
+            ) : (
+              <NoEventsMessage>No hay eventos disponibles.</NoEventsMessage>
             )}
           </EventsGrid>
         </ProfileSection>
@@ -88,6 +99,48 @@ const colors = {
   dark: "#3C4556",
   white: "#ffffff",
 };
+
+// Estilos de la sección de eventos
+const EventCard = styled.div`
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const EventImage = styled.img`
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+`;
+
+const EventName = styled.h3`
+  font-size: 1.2rem;
+  color: ${colors.primary};
+`;
+
+const EventCategory = styled.p`
+  font-size: 0.9rem;
+  color: ${colors.dark};
+`;
+
+const EventDate = styled.p`
+  font-size: 0.9rem;
+  color: ${colors.secondary};
+`;
+
+const NoEventsMessage = styled.p`
+  font-size: 1rem;
+  color: ${colors.dark};
+  text-align: center;
+  padding: 20px;
+`;
 
 // Contenedor principal del perfil
 const ProfileContainer = styled.div`
@@ -136,9 +189,7 @@ const ButtonContainer = styled.div`
 `;
 
 // Botón personalizado
-const CustomButton = styled.button<{ active: boolean }>`
-  background-color: ${({ active }) =>
-    active ? colors.accent : colors.primary};
+const CustomButton = styled.button`
   color: ${colors.white};
   border: none;
   border-radius: 5px;
@@ -146,6 +197,7 @@ const CustomButton = styled.button<{ active: boolean }>`
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s;
+
   &:hover {
     background-color: ${colors.accent};
   }
@@ -166,36 +218,5 @@ const EventsGrid = styled.div`
   gap: 20px;
   width: 100%;
 `;
-
-// Datos de prueba para los eventos
-const createdEvents = [
-  {
-    imageSrc: "https://via.placeholder.com/250",
-    name: "Created Event 1",
-    category: "Music",
-    date: "2024-10-01",
-  },
-  {
-    imageSrc: "https://via.placeholder.com/250",
-    name: "Created Event 2",
-    category: "Art",
-    date: "2024-10-15",
-  },
-];
-
-const participatingEvents = [
-  {
-    imageSrc: "https://via.placeholder.com/250",
-    name: "Participating Event 1",
-    category: "Sports",
-    date: "2024-09-25",
-  },
-  {
-    imageSrc: "https://via.placeholder.com/250",
-    name: "Participating Event 2",
-    category: "Technology",
-    date: "2024-10-05",
-  },
-];
 
 export default ProfilePage;

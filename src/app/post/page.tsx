@@ -7,6 +7,7 @@ import NavBar from "@/components/common/navbar/navBar";
 import Footer from "@/components/common/footer/footer";
 import { IEvent, IEventID } from "@/services/models";
 import { ApiServiceEvent, ApiServiceCategory } from "@/services/actions";
+import CategoryButton from "@/components/categories/buttons";
 
 // Paleta de colores
 const colors = {
@@ -46,57 +47,70 @@ const CardContainer = styled.div`
 
 const PostPage: React.FC = () => {
   const [events, setEvents] = useState<IEvent[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<IEventID | null>(null);
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null); // Estado para la categoría activa
   const apiServiceEvent = new ApiServiceEvent();
   const apiServiceCategory = new ApiServiceCategory();
 
-  // Llamada a la API para obtener todos los eventos
+  // Llamada a la API para obtener todos los eventos y las categorías
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchData = async () => {
       try {
-        const eventsData = await apiServiceEvent.getAllEvents();
+        const [eventsData, categoriesData] = await Promise.all([
+          apiServiceEvent.getAllEvents(),
+          apiServiceCategory.getAllCategories(), // Obtener todas las categorías
+        ]);
         setEvents(eventsData);
+        setCategories(categoriesData);
       } catch (error) {
-        console.error("Error fetching events:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEvents();
+    fetchData();
   }, []);
 
-  // Obtener evento y categorías por id
-  useEffect(() => {
-    const fetchEventDetails = async () => {
-      if (selectedEvent) {
-        try {
-          const eventData = await apiServiceEvent.getEventById(selectedEvent.id);
-          setSelectedEvent(eventData);
+  // Manejar el clic en un botón de categoría
+  const handleCategoryClick = async (categoryId: string) => {
+    setActiveCategory(categoryId); // Actualiza la categoría activa
 
-          // Traer categorías
-          const categoryIds =
-            eventData.eventCategories?.map((ec: any) => ec.categoryId) || [];
-          const categoryPromises = categoryIds.map((id) =>
-            apiServiceCategory.getCategoryById(id)
-          );
-          const fetchedCategories = await Promise.all(categoryPromises);
-          setCategories(fetchedCategories);
-        } catch (error) {
-          console.error("Error fetching event details:", error);
-        }
-      }
-    };
+    try {
+      const filteredEvents = await apiServiceEvent.getEventsByCategory(categoryId);
+      setEvents(filteredEvents);
+    } catch (error) {
+      console.error("Error fetching filtered events:", error);
+    }
+  };
 
-    fetchEventDetails();
-  }, [selectedEvent?.id]);
+  // Manejar el clic para mostrar todos los eventos (sin filtros)
+  const handleShowAll = async () => {
+    setActiveCategory(null); // Restablecer la categoría activa al mostrar todos los eventos
 
-  const handleInfoClick = (event: IEventID) => {
+    try {
+      const allEvents = await apiServiceEvent.getAllEvents();
+      setEvents(allEvents);
+    } catch (error) {
+      console.error("Error fetching all events:", error);
+    }
+  };
+
+  // Obtener evento por id
+  const handleInfoClick = async (event: IEventID) => {
     if (selectedEvent?.id !== event.id) {
       setSelectedEvent(event);
       localStorage.setItem("eventId", event.id);
+
+      // Fetch event details if necessary
+      try {
+        const eventData = await apiServiceEvent.getEventById(event.id);
+        setSelectedEvent(eventData);
+      } catch (error) {
+        console.error("Error fetching event details:", error);
+      }
     }
   };
 
@@ -125,6 +139,24 @@ const PostPage: React.FC = () => {
       <NavBar />
       <HomeContainer>
         <h1 style={{ color: colors.dark }}>Upcoming Events</h1>
+
+        {/* Botones de filtro por categoría */}
+        <div>
+          <CategoryButton
+            category={{ id: "", name: "Show All Events" }}
+            onClick={handleShowAll}
+            isActive={activeCategory === null}
+          />
+          {categories.map((category) => (
+            <CategoryButton
+              key={category.id}
+              category={category}
+              onClick={handleCategoryClick}
+              isActive={activeCategory === category.id}
+            />
+          ))}
+        </div>
+
         <CardContainer>
           {events.map((event) => (
             <EventCard
@@ -140,26 +172,13 @@ const PostPage: React.FC = () => {
               state={event.state}
               startDate={event.startDate}
               endDate={event.endDate}
-              onInfo={() => handleInfoClick({
-                id: event.id,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                startDate: new Date(),
-                endDate: new Date(),
-                capacity: 0,
-                location: "",
-                information: {
-                  name: "",
-                  location: "",
-                  email: "",
-                },
-                score: 0,
-                state: "",
-                hostId: "",
-                guests: [],
-                images: [],
-                eventCategories: [],
-              })} createdAt={new Date()} updatedAt={new Date()} id={""} location={""} hostId={""}            />
+              onInfo={() => handleInfoClick(event)}
+              createdAt={new Date()}
+              updatedAt={new Date()}
+              id={""}
+              location={""}
+              hostId={""}
+            />
           ))}
           {selectedEvent && (
             <div>
@@ -172,9 +191,7 @@ const PostPage: React.FC = () => {
                       <img
                         key={index}
                         src={image.image}
-                        alt={`${selectedEvent.information.name} image ${
-                          index + 1
-                        }`}
+                        alt={`${selectedEvent.information.name} image ${index + 1}`}
                         style={{
                           width: "100px",
                           height: "100px",
@@ -198,20 +215,18 @@ const PostPage: React.FC = () => {
               <div>
                 <strong>Date:</strong>{" "}
                 {`${new Date(selectedEvent?.startDate).toLocaleString() ||
-                  "No start date"} to ${
-                  new Date(selectedEvent?.endDate).toLocaleString() ||
-                  "No end date"
-                }`}
+                  "No start date"} to ${new Date(selectedEvent?.endDate).toLocaleString() ||
+                  "No end date"}`}
               </div>
               <div>
                 <strong>Capacity:</strong> {selectedEvent?.capacity || "No capacity"}
               </div>
               <div>
                 <strong>Categories:</strong>
-                {categories.length > 0 ? (
+                {selectedEvent?.eventCategories && selectedEvent.eventCategories.length > 0 ? (
                   <ul>
-                    {categories.map((category) => (
-                      <li key={category.id}>{category.name}</li>
+                    {selectedEvent.eventCategories.map((ec) => (
+                      <li key={ec.categoryId}>{categories.find(c => c.id === ec.categoryId)?.name}</li>
                     ))}
                   </ul>
                 ) : (

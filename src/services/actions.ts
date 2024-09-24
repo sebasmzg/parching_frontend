@@ -199,6 +199,54 @@ export class ApiServiceEvent {
       throw error;
     }
   }
+  
+  async getEventsByCategory(categoryId: string): Promise<IEvent[]> {
+    try {
+      const res = await fetch(`${this.baseUrl}events?categoryId=${categoryId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "*/*",
+        },
+      });
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        console.error(
+          `Error fetching events by category: ${res.status}: ${res.statusText} - ${errorMessage}`
+        );
+        throw new Error(errorMessage);
+      }
+      const events = await res.json();
+      return events;
+    } catch (error) {
+      console.error("API error Events:", error);
+      throw error;
+    }
+  }
+
+  async getEventsByUser(userId: string, role: string): Promise<IEvent[]> {
+    try {
+      const res = await fetch(`${this.baseUrl}events?userType=${role}&userId=${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "*/*",
+        },
+      });
+      if (!res.ok) {
+        const errorMessage = await res.text();
+        console.error(
+          `Error fetching events by user: ${res.status}: ${res.statusText} - ${errorMessage}`
+        );
+        throw new Error(errorMessage);
+      }
+      const events = await res.json();
+      return events;
+    } catch (error) {
+      console.error("API error Events:", error);
+      throw error;
+    }
+  }
 
   async getEventById(id: string): Promise<IEventID> {
     try {
