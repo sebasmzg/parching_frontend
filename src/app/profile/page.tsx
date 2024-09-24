@@ -58,13 +58,13 @@ const ProfilePage: React.FC = () => {
           <Name>{localStorage.getItem("userName") || "User"}</Name>
           <ButtonContainer>
             <CustomButton
-              style={{ backgroundColor: showCreatedEvents ? colors.accent : colors.primary }}
+              style={{ backgroundColor: showCreatedEvents ? colors.accent : colors.dark }}
               onClick={() => setShowCreatedEvents(true)}
             >
               Created
             </CustomButton>
             <CustomButton
-              style={{ backgroundColor: !showCreatedEvents ? colors.accent : colors.primary }}
+              style={{ backgroundColor: !showCreatedEvents ? colors.accent : colors.dark }}
               onClick={() => setShowCreatedEvents(false)}
             >
               Joined

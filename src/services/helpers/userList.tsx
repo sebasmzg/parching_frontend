@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import React, { useEffect, useState } from "react";
 import { ApiService } from "../actions";
@@ -299,4 +299,4 @@ const UsersList: React.FC = () => {
   );
 };
 
-export default UsersList;
+export default UsersList; */
