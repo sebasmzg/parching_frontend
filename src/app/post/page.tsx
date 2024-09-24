@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import EventCard from "@/components/eventCard/EventCard";
 import styled from "styled-components";
 import NavBar from "@/components/common/navbar/navBar";
@@ -75,12 +76,26 @@ const DialogContent = styled.div`
   overflow: hidden;
   height: 60vh;
 
+  @media (max-width: 768px) {
+    flex-direction: column; 
+    height: auto;
+
+  }
+
   .event-image {
     flex: 1;
+    position: relative;
+    max-width: 50%; 
+    min-width: 300px; 
+    height: auto;  
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+    @media (max-width: 768px) {
+      max-width: 100%;
+      min-width: 100%;
     }
   }
 
@@ -139,7 +154,7 @@ const PostPage: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [apiServiceEvent, apiServiceCategory]);
 
   // Manejar el clic en un botón de categoría
   const handleCategoryClick = async (categoryId: string) => {
@@ -269,17 +284,20 @@ const PostPage: React.FC = () => {
             {selectedEvent && (
               <>
                 <div className="event-image">
-                    {selectedEvent.images && selectedEvent.images.length > 0 ? (
-                    <Image
-                      src={selectedEvent.images[0].image}
-                      alt={selectedEvent.information.name}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                    ) : (
-                    <span>No image available for this event.</span>
-                    )}
-                </div>
+                {selectedEvent.images && selectedEvent.images[0]?.image ? (
+                  <Image
+                    src={selectedEvent.images[0].image}
+                    alt={selectedEvent.information.name}
+                    width={300} // Ancho máximo de la imagen
+                    height={400} // Altura máxima de la imagen
+                    objectFit="cover"
+                    quality={100}
+                    
+                  />
+                ) : (
+                  <span>No image available for this event.</span>
+                )}
+              </div>
                 <div className="event-details">
                   <Typography variant="h2" component="h2">
                     {selectedEvent.information.name || "No Name"}

@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import React, { useEffect, useState } from "react";
 import { ApiServiceCategory } from "../actions";
@@ -115,3 +115,4 @@ const CategoriesList: React.FC = () => {
 };
 
 export default CategoriesList;
+ */
