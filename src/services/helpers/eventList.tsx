@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ApiServiceEvent, ApiServiceCategory, ApiService } from "../actions"; // Asegúrate de tener estas importaciones definidas correctamente
 import { IEvent } from "../models"; // Modelo del evento
-import { IEventUpdate } from "../models/IEventUpdate"; // Modelo de actualización del evento
+import { IEventUpdate } from "@/services/models"; // Modelo de actualización del evento
 import { useRouter } from "next/navigation";
 
 const styles = {
@@ -224,7 +224,7 @@ const EventDetails: React.FC = () => {
               <input
                 type="datetime-local"
                 name="startDate"
-                value={formData?.startDate || ""}
+                value={formData?.startDate instanceof Date ? formData.startDate.toISOString().slice(0, 16) : formData?.startDate || ""}
                 onChange={handleInputChange}
               />
             </div>
@@ -233,7 +233,7 @@ const EventDetails: React.FC = () => {
               <input
                 type="datetime-local"
                 name="endDate"
-                value={formData?.endDate || ""}
+                value={formData?.endDate instanceof Date ? formData.endDate.toISOString().slice(0, 16) : formData?.endDate || ""}
                 onChange={handleInputChange}
               />
             </div>

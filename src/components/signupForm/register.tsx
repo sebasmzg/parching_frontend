@@ -86,7 +86,7 @@ const Register: React.FC = () => {
   /* login with google */
   const handleGoogleLogin = async () => {
     try {
-      const res = await signInWithGoogle;
+      const res = await signInWithGoogle();
       console.log(res);
       sessionStorage.setItem("user", "true");
       if (sessionStorage.getItem("user")) {
@@ -95,7 +95,6 @@ const Register: React.FC = () => {
     } catch (error) {
       console.error("Error signing in with Google", error);
     }
-    console.log("Login con Google");
   };
 
   /* show password */

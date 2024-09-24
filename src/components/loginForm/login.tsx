@@ -14,14 +14,14 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styled from "styled-components";
 import { useRouter } from "next/navigation";
 import {
-  useSignInWithEmailAndPassword,
-  useSignInWithGoogle,
+  useSignInWithGoogle
 } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { ApiService } from "@/services/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, setLoading, setError } from "@/store/authslice";
 import { RootState } from "@/store/store";
+
 
 const Login: React.FC = () => {
   interface UserState {
@@ -74,10 +74,16 @@ const Login: React.FC = () => {
       if (res?.user) {
         const googleUser = {
           email: res.user.email || "",
-          id: res.user.uid || "",
+          id: res.user.uid || uuidv4(),
           name: res.user.displayName || "",
           avatar: res.user.photoURL || "",
         };
+        /* const token = await res.user.getIdToken();
+        const userIn = await apiService.loginUser(googleUser.email, token); */
+        /* console.log("User in:", userIn); */
+        console.log("Google user id:", googleUser.id);
+        console.log("google user: ", googleUser);
+        
         dispatch(loginSuccess(googleUser));
         storeUserInLocalStorage(googleUser);
         setUser(initialState);
@@ -301,3 +307,7 @@ const StyledTypography = styled(Typography)`
 `;
 
 export default Login;
+
+function uuidv4(): string {
+  throw new Error("Function not implemented.");
+}

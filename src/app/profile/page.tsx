@@ -7,8 +7,10 @@ import NavBar from "@/components/common/navbar/navBar";
 import Footer from "@/components/common/footer/footer";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
-import { ApiServiceEvent } from "@/services/actions"; // Importa la función para obtener eventos
-import { IEvent } from "@/services/models"; // Asegúrate de importar tu tipo IEvent
+import { ApiServiceEvent } from "@/services/actions"; 
+import { IEvent } from "@/services/models"; 
+import EventCardProfileHost from "@/components/eventCard/EventCardProfileHost"; 
+import EventCardProfileGuest from "@/components/eventCard/EventCardProfileGuest"; 
 
 const ProfilePage: React.FC = () => {
   const [showCreatedEvents, setShowCreatedEvents] = useState(true);
@@ -27,6 +29,10 @@ const ProfilePage: React.FC = () => {
       const role = showCreatedEvents ? "host" : "guest";
       try {
         const fetchedEvents = await apiServicesEvent.getEventsByUser(userId, role);
+        console.log("userid: ", userId, "role: ", role);
+        
+        console.log("Fetched events:", fetchedEvents);
+        
         setEvents(fetchedEvents);
       } catch (error) {
         console.error("Error fetching events:", error);
@@ -68,17 +74,23 @@ const ProfilePage: React.FC = () => {
         <ProfileSection>
           <EventsTitle>
             {showCreatedEvents
-              ? "Eventos Creados"
-              : "Eventos en los que Participas"}
+              ? "Events created by you"
+              : "Events you have joined"}
           </EventsTitle>
           <EventsGrid>
             {events.length > 0 ? (
               events.map((event, index) => (
-                <EventCard key={index}>
-                  <EventImage src={event.images[0]} alt={event.information.name} />
-                  <EventName>{event.information.name}</EventName>
-                  <EventDate>{event.startDate}</EventDate>
-                </EventCard>
+                showCreatedEvents ? (
+                  <EventCardProfileHost 
+                    key={index} 
+                    event={event} 
+                  />
+                ) : (
+                  <EventCardProfileGuest 
+                    key={index} 
+                    event={event} 
+                  />
+                )
               ))
             ) : (
               <NoEventsMessage>No hay eventos disponibles.</NoEventsMessage>
@@ -93,54 +105,12 @@ const ProfilePage: React.FC = () => {
 
 // Paleta de colores
 const colors = {
-  primary: "#165252",
+  primary: "#013b58",
   secondary: "#D2DEEC",
-  accent: "#78882D",
+  accent: "#165252",
   dark: "#3C4556",
   white: "#ffffff",
 };
-
-// Estilos de la sección de eventos
-const EventCard = styled.div`
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  text-align: center;
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-`;
-
-const EventImage = styled.img`
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-`;
-
-const EventName = styled.h3`
-  font-size: 1.2rem;
-  color: ${colors.primary};
-`;
-
-const EventCategory = styled.p`
-  font-size: 0.9rem;
-  color: ${colors.dark};
-`;
-
-const EventDate = styled.p`
-  font-size: 0.9rem;
-  color: ${colors.secondary};
-`;
-
-const NoEventsMessage = styled.p`
-  font-size: 1rem;
-  color: ${colors.dark};
-  text-align: center;
-  padding: 20px;
-`;
 
 // Contenedor principal del perfil
 const ProfileContainer = styled.div`
@@ -164,38 +134,38 @@ const ProfileSection = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 1200px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 `;
 
 // Avatar estilizado
 const StyledAvatar = styled(Avatar)`
-  width: 150px;
-  height: 150px;
-  margin-top: 50px;
+  margin-bottom: 20px;
 `;
 
-// Nombre y nombre de usuario estilizados
+// Nombre del usuario
 const Name = styled.h1`
-  font-size: 28px;
   color: ${colors.primary};
-  margin: 10px 0;
+  font-size: 2.5rem;
 `;
 
 // Contenedor de botones
 const ButtonContainer = styled.div`
   display: flex;
-  gap: 20px;
-  margin-top: 20px;
+  justify-content: center;
+  gap: 3rem;
+  width: 100%;
+  margin-top: 2rem;
 `;
 
-// Botón personalizado
+// Botón estilizado
 const CustomButton = styled.button`
+  background-color: ${colors.primary};
   color: ${colors.white};
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   transition: background-color 0.3s;
 
   &:hover {
@@ -205,18 +175,23 @@ const CustomButton = styled.button`
 
 // Título de eventos
 const EventsTitle = styled.h2`
-  font-size: 1.5rem;
   color: ${colors.primary};
-  margin-bottom: 10px;
-  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 `;
 
-// Contenedor de tarjetas de eventos
+// Cuadrícula de eventos
 const EventsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   width: 100%;
+`;
+
+// Mensaje cuando no hay eventos
+const NoEventsMessage = styled.p`
+  color: ${colors.dark};
+  text-align: center;
 `;
 
 export default ProfilePage;

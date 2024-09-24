@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Belleza } from "next/font/google";
 import "./globals.css";
-import ClientProvider from "@/components/ClientProvider";
+import StoreProvider from "./storeProvider";
 
 const belleza = Belleza({ subsets: ["latin"], weight: ["400"] });
 
@@ -25,9 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${belleza.className} antialiased`}>
-        <ClientProvider>
+        <StoreProvider>
           {children}
-        </ClientProvider>
+        </StoreProvider>
       </body>
     </html>
   );

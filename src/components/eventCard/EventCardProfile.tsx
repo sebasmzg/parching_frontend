@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Trash, Edit } from '@styled-icons/boxicons-regular';
+import { Edit } from '@styled-icons/boxicons-regular';
+import { IEvent } from '@/services/models'; // Asegúrate de importar la interfaz IEvent
 
 // Paleta de colores
 const colors = {
@@ -41,26 +42,18 @@ const EventImage = styled.img`
 // Contenedor para íconos
 const IconContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end; // Alinea los íconos a la derecha
   margin-top: 10px;
   align-items: center;
+  cursor: pointer;
 `;
 
 // Iconos estilizados
-const StyledTrash = styled(Trash)`
-  width: 24px;
-  color: ${colors.dark};
-  cursor: pointer;
-
-  &:hover {
-    color: ${colors.accent};
-  }
-`;
-
 const StyledEdit = styled(Edit)`
   width: 24px;
   color: ${colors.dark};
   cursor: pointer;
+  margin-left: 10px; // Añade un margen izquierdo para espaciar íconos
 
   &:hover {
     color: ${colors.accent};
@@ -72,6 +65,9 @@ const EventName = styled.h3`
   font-size: 20px;
   color: ${colors.dark};
   margin: 10px 0;
+  display: flex; // Cambiado a flex para alinear íconos y texto
+  justify-content: space-between; // Espacio entre texto y íconos
+  align-items: center; // Centra verticalmente el contenido
 `;
 
 const EventCategory = styled.p`
@@ -87,26 +83,25 @@ const EventDate = styled.p`
 
 // Props para el componente
 interface EventCardProps {
-  imageSrc: string;
-  name: string;
-  category: string;
-  date: string;
-  onEdit: () => void;
-  onDelete: () => void;
+  event: IEvent; 
+  icon?: React.ReactNode;
+  onEdit?: () => void;
+  onDetails?: () => void;
 }
 
 // Componente de tarjeta de evento
-const EventCardProfile: React.FC<EventCardProps> = ({ imageSrc, name, category, date, onEdit, onDelete }) => {
+const EventCardProfile: React.FC<EventCardProps> = ({ event, icon, onEdit, onDetails }) => {
   return (
     <EventCardComponent>
-      <EventImage src={imageSrc} alt="Event" />
-      <EventName>{name}</EventName>
-      <EventCategory>Category: {category}</EventCategory>
-      <EventDate>Date: {date}</EventDate>
-      <IconContainer>
-        <StyledEdit onClick={onEdit} />
-        <StyledTrash onClick={onDelete} />
-      </IconContainer>
+      <EventImage src={event.images[0]?.image} alt="Event" /> {/* Muestra la primera imagen */}
+      <EventName>
+        {event.information.name}
+        <IconContainer>
+          {icon}
+        </IconContainer>
+      </EventName>
+      <EventCategory>Category: {event.state}</EventCategory> {/* Puedes ajustar esto según tus necesidades */}
+      <EventDate>Date: {new Date(event.startDate).toLocaleDateString()}</EventDate>
     </EventCardComponent>
   );
 };

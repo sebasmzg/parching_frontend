@@ -9,8 +9,8 @@ type CategoryButtonProps = {
       <button
         onClick={() => onClick(category!.id)}
         style={{
-          backgroundColor: isActive ? "#78882D" : "#D2DEEC",
-          color: isActive ? "#ffffff" : "#3C4556",
+          backgroundColor: isActive ? "#013b58" : "#D2DEEC",
+          color: isActive ? "#ffffff" : "#013b58",
           padding: "10px 20px",
           margin: "5px",
           border: "none",

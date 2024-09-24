@@ -14,6 +14,7 @@ import {
   OutlinedInput,
   Snackbar,
   Alert,
+  SelectChangeEvent,
 } from "@mui/material";
 import { ApiServiceCategory, ApiServiceEvent } from "@/services/actions";
 import styled from "styled-components";
@@ -25,14 +26,12 @@ const CreateEventForm: React.FC = () => {
   const apiService = new ApiServiceEvent();
   const router = useRouter();
 
-  const [categories, setCategories] = useState<{ id: string; name: string }[]>(
-    []
-  );
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [eventData, setEventData] = useState<IEventCreation>({
     startDate: new Date(),
     endDate: new Date(),
-    capacity: 1, // Inicializar con 1
+    capacity: 1,
     location: "",
     information: {
       name: "",
@@ -40,9 +39,9 @@ const CreateEventForm: React.FC = () => {
       location: "",
     },
     categories: [],
-    isAdmin: false,
+    isAdmin: true,
     host: localStorage.getItem("userId") || "",
-    images: [],
+    images: [], // Se mantienen para almacenar URLs de imágenes
   });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
@@ -70,9 +69,7 @@ const CreateEventForm: React.FC = () => {
     }));
   };
 
-  const handleCategoryChange = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
+  const handleCategoryChange = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value as string[];
     setSelectedCategories(value);
     setEventData((prevState) => ({
@@ -81,12 +78,15 @@ const CreateEventForm: React.FC = () => {
     }));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setEventData((prevState) => ({
-      ...prevState,
-      images: files.map((file) => URL.createObjectURL(file)), // Guardar URLs de las imágenes
-    }));
+  // Nueva función para manejar el cambio de URL de la imagen
+  const handleImageUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value;
+    if (url) {
+      setEventData((prevState) => ({
+        ...prevState,
+        images: [url], // Guardar la URL ingresada en el estado
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -175,7 +175,7 @@ const CreateEventForm: React.FC = () => {
               }));
             }
           }}
-          InputProps={{ inputProps: { min: 1 } }} // Permitir solo valores mayores a 0
+          InputProps={{ inputProps: { min: 1 } }}
         />
 
         <TextField
@@ -252,11 +252,12 @@ const CreateEventForm: React.FC = () => {
           </Select>
         </FormControl>
 
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleImageChange}
+        {/* Campo para ingresar URL de la imagen */}
+        <TextField
+          label="Image URL"
+          fullWidth
+          onChange={handleImageUrlChange}
+          placeholder="Enter image URL"
         />
 
         <StyledButton type="submit" disabled={loading}>

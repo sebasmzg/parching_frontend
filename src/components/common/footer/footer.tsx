@@ -57,10 +57,8 @@ const FooterLink = styled.a`
 // Estilo para los íconos de redes sociales
 const SocialIcon = styled.a`
   color: ${colors.secondary};
-  margin: 5px;
   cursor: pointer;
   display: inline-block;
-  
   &:hover {
     color: ${colors.accent};
   }
