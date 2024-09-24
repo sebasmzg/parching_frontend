@@ -47,7 +47,7 @@ const EventCardProfileGuest: React.FC<EventCardProfileGuestProps> = ({ event }) 
   const [selectedEvent, setSelectedEvent] = useState<IEventID | null>(null);
 
   const handleViewDetails = async () => {
-    setSelectedEvent(event);
+    setSelectedEvent(event as IEventID);
     setModalOpen(true);
   };
 

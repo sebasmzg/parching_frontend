@@ -59,10 +59,10 @@ const Seccion3 = () => {
     <Container>
       <TextSection>
         <SectionTitle>
-          ¿Cómo Funciona?
+          How it works?
         </SectionTitle>
         <SectionDescription>
-          Tres sencillos pasos para empezar a vivir nuevas experiencias.
+          3 simple steps to connect with people and enjoy activities.
         </SectionDescription>
       </TextSection>
 
@@ -70,20 +70,20 @@ const Seccion3 = () => {
         <CustomCard 
           imageSrc="./assets/section3/img1.jpeg" 
           icon={Explore} 
-          title="Explora Actividades" 
-          description="Usa nuestra herramienta de búsqueda para encontrar actividades cerca de ti o según tus intereses."
+          title="Explore Activities" 
+          description="Use our search tool to find activities near you or based on your interests."
         />
         <CustomCard 
           imageSrc="./assets/section3/img2.jpeg" 
           icon={Event} 
-          title="Únete o Crea un Evento" 
-          description="Encuentra compañeros para unirte a eventos o crea el tuyo propio y permite que otros se sumen."
+          title="Join or Create Events" 
+          description="Find companions to join events or create your own and allow others to join."
         />
         <CustomCard 
           imageSrc="./assets/section3/img3.jpeg" 
           icon={People} 
-          title="Conecta y Disfruta" 
-          description="Conéctate con personas afines, comparte momentos y vive experiencias memorables."
+          title="Connect and Enjoy" 
+          description="Connect with like-minded people, share moments, and create memorable experiences."
         />
       </CardContainer>
     </Container>

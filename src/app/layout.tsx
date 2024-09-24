@@ -3,6 +3,7 @@ import { Belleza } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "./storeProvider";
 
+
 const belleza = Belleza({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {

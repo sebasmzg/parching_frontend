@@ -9,6 +9,7 @@ import { IEvent, IEventID } from "@/services/models";
 import { ApiServiceEvent, ApiServiceCategory } from "@/services/actions";
 import CategoryButton from "@/components/categories/buttons";
 import { Dialog, Button, Typography } from "@mui/material";
+import LoadingScreen from "@/components/common/loadingScreen";
 
 // Paleta de colores
 const colors = {
@@ -71,10 +72,11 @@ const DialogContent = styled.div`
   background-color: ${colors.secondary};
   color: ${colors.dark};
   border-radius: 8px;
-  overflow: hidden; // Asegura que la imagen y el contenido no desborden
+  overflow: hidden;
+  height: 60vh;
 
   .event-image {
-    flex: 1; /* Toma la mitad del ancho */
+    flex: 1;
     img {
       width: 100%;
       height: 100%;
@@ -88,23 +90,22 @@ const DialogContent = styled.div`
 
     h2 {
       margin: 0 0 10px;
-      font-family: "Belleza", sans-serif; /* Usar tipografía Belleza */
+      font-size: 1rem;
+      color: #013b58;
     }
 
     .join-button {
+      display: flex;
+      justify-content: center;
+      text-align: center;
       margin-top: 20px;
       background-color: ${colors.buttonColor};
       color: ${colors.white};
       font-weight: bold;
-      font-family: "Belleza", sans-serif; /* Usar tipografía Belleza */
+      font-family: "Belleza", sans-serif;
       &:hover {
         background-color: ${colors.dark};
       }
-    }
-
-    // Estilo de texto
-    p {
-      font-family: "Belleza", sans-serif; /* Usar tipografía Belleza */
     }
   }
 `;
@@ -205,7 +206,7 @@ const PostPage: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Cargando eventos...</div>;
+    return <LoadingScreen />;
   }
 
   return (
@@ -252,8 +253,7 @@ const PostPage: React.FC = () => {
                 state={event.state}
                 startDate={event.startDate}
                 endDate={event.endDate}
-                onInfo={() => handleInfoClick(event)}
-              />
+                onInfo={() => handleInfoClick({ ...event, guests: [], eventCategories: [] })} createdAt={new Date()} updatedAt={new Date()} id={""} location={""} hostId={""}              />
             ))
           )}
         </CardContainer>
@@ -279,7 +279,7 @@ const PostPage: React.FC = () => {
                   )}
                 </div>
                 <div className="event-details">
-                  <Typography variant="h6" component="h2">
+                  <Typography variant="h2" component="h2">
                     {selectedEvent.information.name || "No Name"}
                   </Typography>
                   <Typography variant="body1">

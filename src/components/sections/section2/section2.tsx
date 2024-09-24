@@ -109,21 +109,21 @@ interface Seccion {
 const Seccion1: React.FC = () => {
   const secciones: Seccion[] = [
     {
-      titulo: "Aventureros:",
+      titulo: "Adventurers:",
       descripcion:
-        "Si disfrutas de actividades al aire libre como senderismo, ciclismo o deportes acuáticos.",
+        "If you enjoy outdoor activities such as hiking, cycling, or water sports.",
       icono: <Hiking style={{ fontSize: 50 }} />,
     },
     {
-      titulo: "Amantes del arte y la cultura:",
+      titulo: "Art and Culture Lovers:",
       descripcion:
-        "Para quienes desean asistir a talleres creativos, visitas a museos, o eventos culturales.",
+        "For those who want to attend creative workshops, museum visits, or cultural events.",
       icono: <Palette style={{ fontSize: 50 }} />,
     },
     {
-      titulo: "Socializadores:",
+      titulo: "Socializers:",
       descripcion:
-        "Perfecto para aquellos que buscan ampliar su círculo social en un ambiente relajado y amistoso.",
+        "Perfect for those looking to expand their social circle in a relaxed and friendly environment.",
       icono: <People style={{ fontSize: 50 }} />,
     },
   ];
@@ -132,7 +132,7 @@ const Seccion1: React.FC = () => {
     <Container>
       <ContentWrapper>
         <TextSection>
-          <SectionTitle>¿Para quién es ParchingApp?</SectionTitle>
+          <SectionTitle>Who is ParchingApp for?</SectionTitle>
         </TextSection>
         {secciones.map((seccion, index) => (
           <StyledSection key={index}>

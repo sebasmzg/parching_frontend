@@ -23,7 +23,7 @@ const Image = styled.img`
 const Content = styled.div`
   padding: 15px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   height: 100%;
   color: #013b58;
@@ -51,10 +51,6 @@ const Info = styled.div`
 const InfoIcon = styled(AiOutlineInfoCircle)`
   color: #013b58;
   font-size: 2.5em;
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
   cursor: pointer;
   transition: transform 0.3s;
 
@@ -86,25 +82,8 @@ const EventCard: React.FC<EventCardProps> = ({
       )}
       <Content>
         <Title>{information?.name || "No Name"}</Title>
-        <Info>
-          <div>
-            <strong>Location:</strong> {information?.location || "No Location"}
-          </div>
-          <div>
-            <strong>Description:</strong> {information?.email || "No Description"}
-          </div>
-          <div>
-            <strong>Capacity:</strong> {capacity || "No Capacity"}
-          </div>
-          <div>
-            <strong>Start Date:</strong> {new Date(startDate).toLocaleDateString() || "No Start Date"}
-          </div>
-          <div>
-            <strong>End Date:</strong> {new Date(endDate).toLocaleDateString() || "No End Date"}
-          </div>
-        </Info>
+        <InfoIcon onClick={onInfo} />
       </Content>
-      <InfoIcon onClick={onInfo} />
     </CardContainer>
   );
 };

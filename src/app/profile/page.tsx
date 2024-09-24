@@ -44,6 +44,7 @@ const ProfilePage: React.FC = () => {
     }
   }, [showCreatedEvents, userId]);
 
+
   return (
     <>
       <NavBar />
