@@ -1,11 +1,13 @@
-'use client'
+"use client";
 
+import NavBar from "@/components/common/navbar/navBar";
 import EventFormPage from "@/components/eventsForm/eventForm";
 
-
 export default function EventsFormPage() {
-    return( 
-    <EventFormPage />
-);
-    
+  return (
+    <>
+      <NavBar />
+      <EventFormPage />
+    </>
+  );
 }

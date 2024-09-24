@@ -21,6 +21,7 @@ import { ApiService } from "@/services/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, setLoading, setError } from "@/store/authslice";
 import { RootState } from "@/store/store";
+import Image from "next/image";
 
 
 const Login: React.FC = () => {
@@ -195,7 +196,7 @@ const Login: React.FC = () => {
         </Typography>
 
         <GoogleButton onClick={handleGoogleLogin} disabled={loading}>
-          <img src="/assets/img/google.png" alt="Google logo" />
+          <Image src="/assets/img/google.png" alt="Google logo" width={40} height={40}/>
         </GoogleButton>
 
         <FooterBox>

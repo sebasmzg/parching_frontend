@@ -18,8 +18,7 @@ import {
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { ApiService } from "@/services/actions";
-
-
+import Image from "next/image";
 
 // Component
 
@@ -307,7 +306,7 @@ const Register: React.FC = () => {
         </Typography>
 
         <GoogleButton onClick={handleGoogleLogin}>
-          <img src="/assets/img/google.png" alt="Google logo" />
+          <Image src={"/assets/img/google.png"} alt="Google logo" width={24} height={24} />
         </GoogleButton>
 
         <FooterBox>
