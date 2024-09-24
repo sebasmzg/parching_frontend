@@ -176,7 +176,7 @@ export class ApiServiceEvent {
       "https://parching-app-backend.onrender.com/api/";
   }
 
-  async getAllEvents(state: string = "active", userId?: string, categoryId?: string, role?: string): Promise<IEvent[]> {
+  async getAllEvents(state: string = "active"): Promise<IEvent[]> {
     try {
       const res = await fetch(`${this.baseUrl}events?eventsState=${state}`, {
         method: "GET",

@@ -38,7 +38,7 @@ const Title = styled.h2`
   font-weight: bold;
 `;
 
-const Info = styled.div`
+/* const Info = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
@@ -46,7 +46,7 @@ const Info = styled.div`
   div {
     color: #013b58;
   }
-`;
+`; */
 
 const InfoIcon = styled(AiOutlineInfoCircle)`
   color: #013b58;
@@ -66,9 +66,6 @@ interface EventCardProps extends IEvent {
 const EventCard: React.FC<EventCardProps> = ({
   images,
   information,
-  capacity,
-  startDate,
-  endDate,
   onInfo,
 }) => {
   const mainImage = images && images.length > 0 ? images[0].image : "";

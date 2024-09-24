@@ -200,7 +200,7 @@ const Login: React.FC = () => {
 
         <FooterBox>
           <StyledTypography variant="body2">
-            Don't have an account?{" "}
+            Dont have an account?
             <Link href="/signup" underline="none">
               Sign up
             </Link>

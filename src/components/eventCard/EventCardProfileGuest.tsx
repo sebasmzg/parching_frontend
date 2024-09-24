@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { InfoCircle } from '@styled-icons/boxicons-regular'; 
 import { IEvent, IEventID } from '@/services/models';
 import EventCardProfile from './EventCardProfile'; 
-import { Dialog, Button, Typography } from '@mui/material';
+import { Dialog, Typography } from '@mui/material';
 import styled from 'styled-components';
 
 // Estilo del contenido del diálogo

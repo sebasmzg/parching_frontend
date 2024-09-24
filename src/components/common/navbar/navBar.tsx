@@ -7,8 +7,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
 import AccountMenu from "./menu/menu";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Translate from "@mui/icons-material/Translate";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useSelector } from "react-redux"; 

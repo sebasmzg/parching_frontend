@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Edit } from '@styled-icons/boxicons-regular';
 import { IEvent } from '@/services/models';
 import EventCardProfile from './EventCardProfile'; // Asegúrate de importar el componente base

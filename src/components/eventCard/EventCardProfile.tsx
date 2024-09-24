@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Edit } from '@styled-icons/boxicons-regular';
 import { IEvent } from '@/services/models'; // Asegúrate de importar la interfaz IEvent
 
 // Paleta de colores
@@ -49,7 +48,7 @@ const IconContainer = styled.div`
 `;
 
 // Iconos estilizados
-const StyledEdit = styled(Edit)`
+/* const StyledEdit = styled(Edit)`
   width: 24px;
   color: ${colors.dark};
   cursor: pointer;
@@ -58,7 +57,7 @@ const StyledEdit = styled(Edit)`
   &:hover {
     color: ${colors.accent};
   }
-`;
+`; */
 
 // Estilos para el texto
 const EventName = styled.h3`
@@ -90,7 +89,7 @@ interface EventCardProps {
 }
 
 // Componente de tarjeta de evento
-const EventCardProfile: React.FC<EventCardProps> = ({ event, icon, onEdit, onDetails }) => {
+const EventCardProfile: React.FC<EventCardProps> = ({ event, icon }) => {
   return (
     <EventCardComponent>
       <EventImage src={event.images[0]?.image} alt="Event" /> {/* Muestra la primera imagen */}

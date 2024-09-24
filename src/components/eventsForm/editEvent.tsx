@@ -95,8 +95,11 @@ const getEvent = async (id: string) => {
   const apiServiceEvent = new ApiServiceEvent();
   return await apiServiceEvent.getEventById(id);
 };
+type Params = {
+  id: string;
+};
 
-export const generateMetadata = async ({ params }: { params: any }) => {
+export const generateMetadata = async ({ params }: { params: Params }) => {
   const { id } = params;
   const event = await getEvent(id);
 
@@ -113,7 +116,9 @@ export const generateMetadata = async ({ params }: { params: any }) => {
   };
 };
 
-const EditEventPage = ({ params }: { params: any }) => {
+
+
+const EditEventPage = ({ params }: { params: Params }) => {
   const { id } = params;
   const [formData, setFormData] = useState<IEventUpdate | null>(null);
   const [eventId, setEventId] = useState<string | null>(null);

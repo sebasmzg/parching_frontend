@@ -144,5 +144,5 @@ export interface ICategory {
     updatedAt:     Date;
     id:            string;
     name:          string;
-    formTemplates: any[];
+    formTemplates: string[];
 }

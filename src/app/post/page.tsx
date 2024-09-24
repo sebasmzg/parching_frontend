@@ -5,7 +5,7 @@ import EventCard from "@/components/eventCard/EventCard";
 import styled from "styled-components";
 import NavBar from "@/components/common/navbar/navBar";
 import Footer from "@/components/common/footer/footer";
-import { IEvent, IEventID } from "@/services/models";
+import { ICategory, IEvent, IEventID } from "@/services/models";
 import { ApiServiceEvent, ApiServiceCategory } from "@/services/actions";
 import CategoryButton from "@/components/categories/buttons";
 import { Dialog, Button, Typography } from "@mui/material";
@@ -112,7 +112,7 @@ const DialogContent = styled.div`
 
 const PostPage: React.FC = () => {
   const [events, setEvents] = useState<IEvent[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<IEventID | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -269,14 +269,16 @@ const PostPage: React.FC = () => {
             {selectedEvent && (
               <>
                 <div className="event-image">
-                  {selectedEvent.images && selectedEvent.images.length > 0 ? (
-                    <img
+                    {selectedEvent.images && selectedEvent.images.length > 0 ? (
+                    <Image
                       src={selectedEvent.images[0].image}
                       alt={selectedEvent.information.name}
+                      layout="fill"
+                      objectFit="cover"
                     />
-                  ) : (
+                    ) : (
                     <span>No image available for this event.</span>
-                  )}
+                    )}
                 </div>
                 <div className="event-details">
                   <Typography variant="h2" component="h2">
