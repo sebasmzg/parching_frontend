@@ -68,7 +68,7 @@ const NavBar: React.FC = () => {
                   }}
                 >
                   <IconButton size="small" sx={{ mx: 2, color: "black" }}>
-                    <Translate />
+                    {/* <Translate /> */}
                   </IconButton>
                   <Button
                     variant="outlined"

@@ -154,7 +154,7 @@ const PostPage: React.FC = () => {
     };
 
     fetchData();
-  }, [apiServiceEvent, apiServiceCategory]);
+  }, []);
 
   // Manejar el clic en un botón de categoría
   const handleCategoryClick = async (categoryId: string) => {
@@ -165,6 +165,8 @@ const PostPage: React.FC = () => {
         categoryId
       );
       setEvents(filteredEvents);
+      console.log("Filtered events:", filteredEvents);
+      
     } catch (error) {
       console.error("Error fetching filtered events:", error);
     }
